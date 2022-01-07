@@ -1,0 +1,50 @@
+Package: tipsae
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Silvia",
+           family = "De Nicolò",
+           role = c("aut", "cre"),
+           email = "silvia.denicolo@phd.unipd.it",
+           comment = c(ORCID = "YOUR-ORCID-ID")), 
+           person(given = "Aldo",
+           family = "Gardini",
+           role = c("aut"),
+           email = "aldo.gardini2@unibo.it",
+           comment = c(ORCID = "YOUR-ORCID-ID")))
+Description: What the package does (one paragraph).
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Biarch: true
+Depends: 
+    R (>= 3.5.0),
+    shiny (>= 1.0.3)
+Imports: 
+    methods,
+    Rcpp (>= 0.12.0),
+    RcppParallel (>= 5.0.1),
+    rstan (>= 2.18.1),
+    rstantools (>= 2.1.1),
+    loo (>= 2.3.1),
+    ggplot2 (>= 3.3.2), 
+    gridExtra (>= 2.3),
+    maptools (>= 1.0.2),
+    sp, 
+    spdep, 
+    broom,
+    nlme (>= 3.1.152), 
+    stats,
+    spam,
+    ggpubr,
+    callr
+LinkingTo: 
+    BH (>= 1.66.0),
+    Rcpp (>= 0.12.0),
+    RcppEigen (>= 0.3.3.3.0),
+    RcppParallel (>= 5.0.1),
+    rstan (>= 2.18.1),
+    StanHeaders (>= 2.18.0)
+SystemRequirements: GNU make
