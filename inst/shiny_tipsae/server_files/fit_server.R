@@ -92,9 +92,7 @@ observeEvent(input$fit_model, {
   if(input$size_col != "Unspecified"){
     domain_size <- input$size_col
   }
-  print(domain_size)
   domain_name <- NULL
-  print(input$domain_col)
   if(input$domain_col != "Unspecified"){
     domain_name <- input$domain_col
   }
@@ -154,7 +152,7 @@ observeEvent(input$fit_model, {
         data = input_stan$data,
         likelihood = input_stan$likelihood,
         prior_reff = input_stan$prior_reff,  #c("normal", "t", "VG")
-        prior_coeff = input_stan$prior_coeff, #c("normal", "HorseShoe")
+        #prior_coeff = input_stan$prior_coeff, #c("normal", "HorseShoe")
         spatial_error = input_stan$spatial_error,
         spatial_df = input_stan$spatial_df,
         temporal_error = input_stan$temporal_error,
@@ -214,7 +212,6 @@ output$choice_str_reff <- shiny::renderUI({
 
 # Condition: TRUE if at least one model can be fitted
 output$cond_est1 <- shiny::reactive({
-  print(!is.null(allowed_lik()))
   !is.null(allowed_lik())
 })
 shiny::outputOptions(output, 'cond_est1', suspendWhenHidden = FALSE)

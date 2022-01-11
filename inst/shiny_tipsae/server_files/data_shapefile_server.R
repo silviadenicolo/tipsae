@@ -14,7 +14,6 @@ map_shp <- shiny::reactive({
     shpName <- shpDF$name[grep(x = shpDF$name, pattern = "*.shp")]
     shpPath <- paste(uploadDirectory, shpName, sep = "/" )
     setwd(prevWD)
-    print(shpName)
     check_shp_file <- length(shpName) == 0
     shinyFeedback::feedbackDanger("shpFile", check_shp_file,
                                   "The object contained in the '.shp'
@@ -71,7 +70,6 @@ map_shp_matching <- shiny::reactive({
       # fortify
       spatial_df@data[colnames(map_data)] <- map_data
 
-      print(spatial_df@data)
       spatial_df_tidy <- broom::tidy(spatial_df, region = input$choice_match)
       spatial_df_tidy <- merge(spatial_df_tidy,
                                spatial_df@data,

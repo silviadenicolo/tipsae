@@ -1,18 +1,18 @@
 Package: tipsae
-Title: The tipsae Package: Tools for Handling Indices and Proportions in Small Area Estimation
+Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
            role = c("aut", "cre"),
            email = "silvia.denicolo@phd.unipd.it",
-           comment = c(ORCID = "0000-0001-5052-6527")), 
+           comment = c(ORCID = "YOUR-ORCID-ID")), 
            person(given = "Aldo",
            family = "Gardini",
            role = c("aut"),
            email = "aldo.gardini2@unibo.it",
-           comment = c(ORCID = "0000-0002-2164-5815")))
-Description: The tipsae package is a dedicated tool for mapping proportions and indicators defined on the unit interval, widely used to measure, for instance, unemployment, educational attainment and also disease prevalence. It implements Beta-based small area methods, particularly indicated for unit interval responses, comprising the classical Beta regression models (see "Properties of the beta regression model for small area estimation of proportions and application to estimation of poverty rates" by Janicki (2020) doi:10.1080/03610926.2019.1570266), the Flexible Beta model and Zero and/or One Inflated extensions. Such methods, developed within a Bayesian framework, come equipped with a set of diagnostics and complementary tools, visualizing and exporting functions. A customized parallel computing is built-in to reduce the computational time. The features of the tipsae package assist the user in carrying out a complete SAE analysis through the entire process of estimation, validation and results presentation, making the application of Bayesian algorithms and complex SAE methods straightforward. A Shiny application with a user-friendly interface can be launched to further simplify the process.
+           comment = c(ORCID = "YOUR-ORCID-ID")))
+Description: What the package does (one paragraph).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
