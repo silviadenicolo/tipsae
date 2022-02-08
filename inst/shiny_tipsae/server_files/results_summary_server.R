@@ -13,18 +13,21 @@ res_model <- shiny::eventReactive(input$compute_results,{
   if (out_summary$model_settings$temporal_error) {
     data$Time <- out_summary$data_obj$times
   }
-  if (is.null(out_summary$data_obj$domain_size_n)) {
-    data$size <- NA
-  }else{
-    data$size <- out_summary$data_obj$domain_size_n
-  }
 
   data$Direct <- out_summary$data_obj$y
   data$is_oos <- out_summary$is_oos
+  if (is.null(out_summary$data_obj$domain_size_n)) {
+    data$size <- NA
+  }else{
+    data$size[!out_summary$is_oos] <- out_summary$data_obj$domain_size_n
+  }
   data[, c("Sd_direct", "Sd_reduction", "Mod_Est_Mean",
            "Mod_Est_SD", "Mod_Est_q1", "Mod_Est_q2",
            "C_Mod_Est_Mean", "C_Mod_Est_SD", "C_Mod_Est_q1",
            "C_Mod_Est_q2","Residuals","bayes_pvalues")] <- NA
+
+
+
   # sd
   data[!out_summary$is_oos, "Sd_direct"] <- out_summary$sd_dir
   data[!out_summary$is_oos, "Sd_reduction"] <- out_summary$sd_reduction

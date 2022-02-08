@@ -2,6 +2,11 @@
 
 # creation reactive object with loaded data
 loaded_data <- shiny::reactive({
+  if(input$load_emilia_cs > 0) {
+    read.csv(
+      file = system.file("extdata","emilia_cs.csv", package = "tipsae")
+    )
+  }else{
   if (is.null(input$file1$datapath)) {
     return(NULL)
   } else {
@@ -20,7 +25,7 @@ loaded_data <- shiny::reactive({
         dec = input$dec_file1
       )
     }
-  }
+  }}
 })
 
 # Freeze the input metadata: reaction to the 'update_data1' button
@@ -87,7 +92,6 @@ organized_data <- shiny::eventReactive(input$update_data1, {
   }
   # check smooth
   check_smooth <- FALSE
-  print(input$need_smooth)
   if(input$need_smooth == "Yes"){
     if(input$type_disp == "neff"){
       check_smooth <- TRUE
@@ -96,7 +100,6 @@ organized_data <- shiny::eventReactive(input$update_data1, {
       check_smooth <- TRUE
     }
   }
-  print(check_smooth)
   if (check_resp || check_cov || check_cov2 || check_var1 || check_var2 ||
       check_size || check_time || check_smooth || check_names) {
     # with an error return NULL
@@ -172,6 +175,13 @@ output$size_name <- shiny::renderUI({
 })
 
 ## Output: logical statements ------
+
+# condition: TRUE if example data is loaded
+output$example_data <- shiny::reactive({
+  input$load_emilia_cs > 0
+})
+shiny::outputOptions(output, 'example_data', suspendWhenHidden = FALSE)
+
 
 # condition: TRUE if data is loaded
 output$cond_data <- shiny::reactive({

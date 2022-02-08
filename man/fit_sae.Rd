@@ -2,19 +2,17 @@
 % Please edit documentation in R/fit_sae.R
 \name{fit_sae}
 \alias{fit_sae}
-\title{Bayesian proportions/(0,1)-measures small area model with Stan}
+\title{Fitting a Small Area Model}
 \usage{
 fit_sae(
   formula_fixed,
+  data,
   domains = NULL,
   disp_direct,
   type_disp = "neff",
   domain_size = NULL,
-  data,
   likelihood = "beta",
   prior_reff = "normal",
-  prior_coeff = "normal",
-  p0_HorseShoe = NULL,
   spatial_error = FALSE,
   spatial_df = NULL,
   temporal_error = FALSE,
@@ -26,19 +24,103 @@ fit_sae(
 )
 }
 \arguments{
-\item{formula_fixed}{Linear regression formula at the linking level.}
+\item{formula_fixed}{An object of class \code{"formula"} specifying the linear regression fixed part at the linking level.}
 
-\item{data}{Data frame containing direct estimates and covariates.}
+\item{data}{An object of class \code{"data.frame"} containing all relevant quantities.}
 
-\item{likelihood}{Selection between different likelihood assumptions at sampling level.}
+\item{domains}{Data column name displaying the domain names. If \code{NULL} (default) the domains are denoted with a progressive number.}
 
-\item{...}{Arguments passed to \code{rstan::sampling} (e.g. iter, chains).}
+\item{disp_direct}{Data column name displaying given values of sampling dispersion for each domain.}
 
-\item{type}{Selection between different parametrizations.}
+\item{type_disp}{Parametrization of the dispersion parameter. The choices are variance (\code{"var"}) or \eqn{\phi_d} + 1 (\code{"neff"}) parameter.}
+
+\item{domain_size}{Data column name indicating domain sizes (optional).}
+
+\item{likelihood}{Sampling likelihood to be used. The choices are \code{"beta"} (default), \code{"flexbeta"}, \code{"Infbeta0"}, \code{"Infbeta1"} and \code{"Infbeta01"}.}
+
+\item{prior_reff}{Prior distribution of the unstructured random effect. The choices are: \code{"normal"}, \code{"t"}, \code{"VG"}.}
+
+\item{spatial_error}{Logical indicating whether to include a spatially structured random effect.}
+
+\item{spatial_df}{Object of class \code{SpatialPolygonsDataFrame} with the shapefile of the studied region. Required if \code{spatial_error = TRUE}.`}
+
+\item{temporal_error}{Logical indicating whether to include a temporally structured random effect.}
+
+\item{temporal_variable}{Data column name indicating temporal variable. Required if \code{temporal_error = TRUE}.}
+
+\item{adapt_delta}{HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.}
+
+\item{max_treedepth}{HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.}
+
+\item{init}{Initial values specification. See the detailed documentation for 
+    the init argument in \code{\link[rstan]{stan}}.}
+
+\item{...}{Arguments passed to \code{\link[rstan]{sampling}} (e.g. iter, chains).}
 }
 \value{
-An object of class \code{fitsae} containing an object of class \code{stanfit}returned by \code{rstan::sampling}
+A list of class \code{fitsae} containing the following objects:
+\describe{
+\item{\code{model_settings}}{A list summarizing all the assumptions of the model: sampling likelihood, presence of intercept, dispersion parametrization, random effects priors and possible structures.}
+\item{\code{data_obj}}{A list containing input objects including in-sample and out-of-sample relevant quantities.}
+\item{\code{stanfit}}{A \code{stanfit} object, outcome of \code{\link[rstan]{sampling}} function containing full posterior draws. For details, see \code{rstan} documentation.}
+\item{\code{pars_interest}}{A vector containing the names of parameters whose posterior samples are stored.}
+\item{\code{call}}{Image of the function call that produced the \code{fitsae} object.}
+}
 }
 \description{
-Bayesian proportions/(0,1)-measures small area model with Stan
+\code{fit_sae} is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
+}
+\examples{
+\donttest{
+library(tipsae)
+
+# loading toy cross sectional dataset
+data("emilia_cs")
+
+# fitting a cross sectional model
+fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+                    type_disp = "var", disp_direct = "vars", domain_size = "n",
+                    seed = 0)
+
+}
+
+# Spatio-temporal model: it might require time to be fitted
+
+\dontrun{
+# loading toy panel dataset
+data("emilia")
+# loading the shapefile of the concerned areas
+data("emilia_shp")
+
+# ordering the shapefile consistently with the dataset order
+emilia_shp@data <- emilia_shp@data[match(unique(emilia$id), emilia_shp@data$NAME_DISTRICT),]
+
+# fitting a spatio-temporal model
+fit_ST <- fit_sae(formula_fixed = hcr ~ x,
+                  domains = "id",
+                  disp_direct = "vars",
+                  type_disp = "var",
+                  domain_size = "n",
+                  data = emilia,
+                  spatial_error = TRUE,
+                  spatial_df = emilia_shp,
+                  temporal_error = TRUE,
+                  temporal_variable = "year",
+                  max_treedepth = 15,
+                  seed = 0)
+}
+
+
+}
+\references{
+\insertRef{janicki2020properties}{tipsae}
+
+\insertRef{carpenter2017stan}{tipsae}
+
+\insertRef{morris2019bayesian}{tipsae}
+
+\insertRef{DeNicolo2021}{tipsae}
+}
+\seealso{
+\code{\link[rstan]{sampling}} for sampler options and \code{\link{summary.fitsae}} for handling the output.
 }

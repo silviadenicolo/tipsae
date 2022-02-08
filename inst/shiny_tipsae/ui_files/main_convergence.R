@@ -39,7 +39,7 @@ shiny::tagList(
                 inline = F
               ),
               status = "primary",
-              icon = shiny::icon("gear"), width = "300px",
+              icon = shiny::icon("cog"), width = "300px",
               tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
             )
           ),

@@ -1,10 +1,44 @@
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Variance Smoothing and Effective Sample Sizes Estimation
 #'
+#' The `smoothing()` function implements three methods, all yielding refined estimates of either variance or effective sample size, to account for indicators with different variance functions. The output estimates are ready to be used as known parameters in an area-level model, and they need to be added to the analysed `data.frame` object. All the implemented methods enable the estimation of the effective sample sizes, whereas `"ols"` and `"gls"` also perform a variance smoothing procedure.
 #'
-#' @param direct_estimates Linear regression formula at the linking level.
-#' @return An object of class `smoothing.fitsae`.
+#' @param data A `data.frame` object including the direct estimates.
+#' @param direct_estimates Character string specifying the variable in `data` denoting the direct estimates.
+#' @param method The method to be used. The choices are `"kish"`,`"ols"` and `"gls"`.
+#' @param area_id Character string indicating the variable with domain names included in `data`, to be specified if method `"kish"` is selected.
+#' @param raw_variance Character string indicating the variable name for raw variance estimates included in `data` object, to be specified if methods `"ols"` or `"gls"` are selected.
+#' @param areas_sample_sizes Character string indicating the variable name for domain sample sizes included in `data` object, to be specified if methods `"ols"` or `"gls"` are selected.
+#' @param additional_covariates A vector of character strings indicating the variable names of possible additional covariates, included in `data`, to be added to the smoothing procedure if methods `"ols"` or `"gls"` are selected.
+#' @param var_function  An object of class `function` denoting the variance function of the response variable. The default option (`NULL`) matches the proportion case being equal to `function(x) x * (1 - x)`.
+#' @param survey_data An additional dataset to be specified when method `"kish"` is selected, defined at sampling unit level (e.g., households) and comprising sampling weights, unit sizes and domain names.
+#' @param survey_area_id Character string indicating the variable denoting the domain names included in the `survey_data` object.
+#' @param weights Character string indicating the variable including sampling weights in `survey_data` object.
+#' @param sizes Character string indicating the variable including unit sizes in `survey_data` object.
+#' @return An object of class `smoothing.fitsae`, being a list of vectors including dispersion parameters estimates: both the variances and the effective sample sizes. When `"ols"` or `"gls"` method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from `nlme` package.
+
+#'
+#' @seealso \code{\link[nlme]{gls}} for details on estimation procedure for `"ols"` and `"gls"` methods.
+#'
+#' @references
+#' \insertRef{kish1992weighting}{tipsae}
+#'
+#' \insertRef{fabrizi2011hierarchical}{tipsae}
+#'
+#' @examples \donttest{
+#'
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # perform smoothing procedure
+#' smoo <- smoothing(emilia_cs, direct_estimates = "hcr", area_id = "id",
+#'                   raw_variance = "vars", areas_sample_sizes = "n",
+#'                   var_function = NULL, method = "ols")}
+#'
 #' @export
 #'
+
 smoothing <- function(data,  # ordered as area id factor!
                       direct_estimates,
                       area_id = NULL,

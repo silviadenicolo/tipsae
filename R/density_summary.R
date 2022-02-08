@@ -1,14 +1,32 @@
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Density Plot Function for a `summary_fitsae` Object
 #'
-#' @param x Object of class 'summary.fitsae'.
-#' @param grid, logical, indicating whether displaying plots in a grid (TRUE) or in sequence (FALSE).
-#' @return Two ggplot2 objects stored in a grid or in sequence.
+#' The method `density()` provides, in a grid (default) or sequence, the density plot of direct estimates versus HB model estimates and the density plot of standardized posterior means of the random effects versus standard normal.
 #'
+#' @inheritParams plot.summary_fitsae
+#' @return Two `ggplot2` objects in a grid or in sequence.
+#' @seealso \code{\link{summary.fitsae}} to produce the input object.
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # visualize estimates and random effect densities via density() function
+#' density(summ_beta)}
 #' @export
 #'
 
-
-density.summary_fitsae <- function(x, grid = TRUE, ...) {
+density.summary_fitsae <- function(x,
+                                   grid = TRUE,
+                                   ...) {
   if (class(x) != "summary_fitsae")
     stop("Indicated object does not have 'summary_fitsae' class.")
 

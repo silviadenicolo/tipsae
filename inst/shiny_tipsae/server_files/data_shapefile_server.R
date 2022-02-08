@@ -2,6 +2,9 @@
 
 ## Creation reactive object with the SpatialPlygonDataFrame
 map_shp <- shiny::reactive({
+  if(input$load_emilia_cs > 0) {
+    shpFile <- readRDS(system.file("extdata","emilia_shp.rds", package = "tipsae"))
+  }else{
   # Active if the user need a .shp file
   if (!is.null(input$shpFile)) {
     shpDF <- input$shpFile
@@ -43,6 +46,7 @@ map_shp <- shiny::reactive({
     } else {# NULL until the a path is specified
       return(NULL)
     }
+  }
   }
 })
 

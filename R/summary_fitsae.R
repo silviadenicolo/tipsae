@@ -1,12 +1,66 @@
-# Save this file as `R/summarysae.R`
-
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Summary Method for `fitsae` Objects
 #'
-#' @param x Model fitted via 'fit_sae' function, having class 'fitsae'.
-#' @return A list containing diagnostics objects.
+#' Summarizing the small area model fitting through the distributions of estimated parameters and derived diagnostics using posterior draws.
+#'
+#' If printed, the produced summary displays: \itemize{\item Posterior summaries about the fixed effect coefficients and the scale parameters related to unstructured and possible structured random effects. \item Model diagnostics summaries of (a) model residuals; (b) standard deviation reductions; (c) Bayesian P-values obtained with the MCMC samples. \item Shrinking Bound Rate. \item \code{\link[loo]{loo}} information criteria and related diagnostics from the `loo` package.}
+#'
+#'
+#' @param object An instance of class `fitsae`.
+#' @param compute_loo Logical, indicating whether to compute \code{\link[loo]{loo}} diagnostics or not.
+#' @param ... Currently unused.
+#' @inheritParams rstan::`summary,stanfit-method`
+#' @return A list of class `summary_fitsae` containing diagnostics objects:
+#' \describe{
+#'   \item{`raneff`}{A list of `data.frame` objects storing the random effects posterior summaries divided for each type: `$unstructured`, `$temporal`, and `$spatial`.}
+#'   \item{`fixed_coeff`}{Posterior summaries of fixed coefficients.}
+#'   \item{`var_comp`}{Posterior summaries of model variance parameters.}
+#'   \item{`model_estimates`}{Posterior summaries of the parameter of interest \eqn{\theta_d} for each in-sample domain \eqn{d}.}
+#'   \item{`model_estimates_oos`}{Posterior summaries of the parameter of interest \eqn{\theta_d} for each out-of-sample domain \eqn{d}.}
+#'   \item{`is_oos`}{Logical vector defining whether each domain is out-of-sample or not.}
+#'   \item{`direct_est`}{Vector of input direct estimates.}
+#'   \item{`post_means`}{Model-based estimates, i.e. posterior means of the parameter of interest \eqn{\theta_d} for each domain \eqn{d}.}
+#'   \item{`sd_reduction`}{Standard deviation reduction, see details section.}
+#'   \item{`sd_dir`}{Standard deviation of direct estimates, given as input if `type_disp="var"`.}
+#'   \item{`loo`}{The object of class `loo`, for details see `loo` package documentation. }
+#'   \item{`shrink_rate`}{Shrinking Bound Rate, see details section.}
+#'   \item{`residuals`}{Residuals related to model-based estimates.}
+#'   \item{`bayes_pvalues`}{Bayesian p-values obtained via MCMC samples, see details section.}
+#'   \item{`y_rep`}{An array with values generated from the posterior predictive distribution, enabling the implementation of posterior predictive checks.}
+#'   \item{`diag_summ`}{Summaries of residuals, standard deviation reduction and Bayesian p-values across the whole domain set.}
+#'   \item{`data_obj`}{A list containing input objects including in-sample and out-of-sample relevant quantities.}
+#'   \item{`model_settings`}{A list summarizing all the assumptions of the input model: sampling likelihood, presence of intercept, dispersion parametrization, random effects priors and possible structures.}
+#'   \item{`call`}{Image of the function call that produced the input `fitsae` object.}
+#' }
+#'
+#' @seealso \code{\link{fit_sae}} to estimate the model and the generic methods \code{\link{plot.summary_fitsae}} and \code{\link{density.summary_fitsae}}, and functions \code{\link{map}}, \code{\link{benchmark}} and \code{\link{extract}}.
+#'
+#' @references
+#'
+#' \insertRef{janicki2020properties}{tipsae}
+#'
+#' \insertRef{vehtari2017practical}{tipsae}
+#'
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics via summary() function
+#' summ_beta <- summary(fit_beta)
+#' summ_beta}
 #' @export
-summary.fitsae <-
-  function(object, probs = c(0.025, 0.25, 0.50, 0.75, 0.975), compute_loo = TRUE, ...) {
+#'
+summary.fitsae <-function(object,
+           probs = c(0.025, 0.25, 0.50, 0.75, 0.975),
+           compute_loo = TRUE,
+           ...) {
+
     #`%!in%` <- Negate(`%in%`)
     if (class(object) != "fitsae") stop("Indicated object does not have 'fitsae' class.")
     #extracting model-based estimates of the main parameters
@@ -86,10 +140,10 @@ summary.fitsae <-
       s_est <- par[grepl("^s", par) & !grepl("^sigma_v", par) & !grepl("^sigma_s", par) & !grepl("^sigma_t", par)]
       post_summ_raneff_s <- smry[s_est, col_take]
       if (object$model_setting$temporal_error) {
-        post_summ_raneff_s <- cbind(Domains = unique(object$data_obj$domains[!(object$data_obj$is_oos)]),
+        post_summ_raneff_s <- cbind(Domains = unique(object$data_obj$domains),
                                   as.data.frame(post_summ_raneff_s))
       }else{
-        post_summ_raneff_s <- cbind(Domains = object$data_obj$domains[!(object$data_obj$is_oos)],
+        post_summ_raneff_s <- cbind(Domains = object$data_obj$domains,
                                   as.data.frame(post_summ_raneff_s))
       }
       reffs <- c(reffs, list(spatial = post_summ_raneff_s))

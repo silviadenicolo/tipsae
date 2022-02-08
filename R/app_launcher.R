@@ -1,3 +1,9 @@
+#' Lauch Shiny App to Performs Small Area Estimation
+#'
+#' The command launches a Shiny application that assists the user from the data loading step to the export of the outputs. See the vignette for further details.
+#'
+#'
+#'
 #' @export
 runShiny_tipsae <- function() {
   appDir <- system.file("shiny_tipsae", package = "tipsae")

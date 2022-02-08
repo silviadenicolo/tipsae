@@ -1,14 +1,40 @@
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Map Relevant Quantities from a Small Area Model
 #'
-#' @param x Object of class 'summary.fitsae'.
-#' @param map_obj sp spatial polygons object.
-#' @param id id vector ordererd as 'saefit' areas.
-#' @param map_dom_id denoting name of domains ID variable in patial polygons object.
-#' @param color vector of two color strings denoting extreme bounds of colors scale to be used.
-#' @param label_names target parameter name to display as legend title, the default one is "Model-based est.".
-#' @return map ggplot2 object (geom_polygon) with colors scaled legend.
+#' The `map()` function enables to plot maps containing relevant model outputs by accounting for their geographical dimension. The shapefile of the area must be provided via a `SpatialPolygonsDataFrame` object.
+#'
+#' @param x An object of class `summary_fitsae` or `benchmark_fitsae`.
+#' @param spatial_df A object of class `SpatialPolygonsDataFrame` (spatial polygons object) from `sp` package, accounting for the geographical dimension of the domains.
+#' @param spatial_id_domains A character string indicating the name of `spatial_df` variable containing area denominations, in order to correctly match the areas.
+#' @param match_names An encoding two-columns `data.frame`: the first with the original data coding (domains) and the second one with corresponding `spatial_df` object labels. This argument has to be specified only if `spatial_df` object labels do not match the ones provided through the original dataset.
+#' @param color_palette A vector with two color strings denoting the extreme bounds of colors range to be used.
+#' @param quantity A string indicating the quantity to be mapped. When a `summary_fitsae` is given as input, it can be selected among `"HB_est"` (model-based estimates), `"SD"`(posterior standard deviations) and `"Direct_est"`(direct estimates). While when a `benchmark_fitsae` class object is given as input, this argument turns automatically to `"Bench_est"`, displaying the benchmarked estimates.
+#' @param time A string indicating the year of interest for the quantities to be treated, in case of temporal or spatio-temporal objects.
+#' @return A map `ggplot2` object with colors scaled legend.
+#'
+#' @seealso \code{\link{summary.fitsae}} to produce the input object and \code{\link[sp]{SpatialPolygonsDataFrame}} to manage the shapefile.
+#'
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # load shapefile of concerned areas
+#' data("emilia_shp")
+#'
+#' # plot the map using model diagnostics and areas shapefile
+#' map(x = summ_beta,
+#'    spatial_df = emilia_shp,
+#'    spatial_id_domains = "NAME_DISTRICT")}
 #' @export
-#'
 
 
 map <- function(x,

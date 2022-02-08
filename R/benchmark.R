@@ -1,9 +1,72 @@
 
 
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Benchmarking Procedure for Model-Based Estimates
 #'
-#' @param x Object of class 'summary_fitsae'.
-#' @return 'benchmark' object.
+#' The `benchmark()` function gives the chance to perform a benchmarking procedure on model-based estimates. Benchmarking could target solely the point estimates (single benchmarking) or, alternatively, also the ensemble variability (double benchmarking). Furthermore, an estimate of the overall posterior risk is provided, aggregated for all areas. This value is only yielded when in-sample areas are treated and a single benchmarking is performed.
+#'
+#' The function allows performing three different benchmarking methods, according to the argument method.  \itemize{\item The `"ratio"` and `"raking"` methods provide benchmarked estimates that minimize the posterior expectation of the weighted squared error loss, see Datta et al. (2011) and `tipsae` vignette.  \item The `"double"` method accounts for a further benchmark on the weighted ensemble variability, where `H` is a prespecified value of the estimators variability.}
+#'
+#' @inheritParams plot.summary_fitsae
+#' @param bench A numeric value denoting the benchmark for the whole set of areas or a subset of areas.
+#' @param share A numeric vector of areas weights, in case of proportions it denotes the population shares.
+#' @param method The method to be specified among `"raking"`, `"ratio"` and `"double"`, see details.
+#' @param H A numeric value denoting an additional benchmark, to be specified when the  `"double"` method is selected, corresponding to the ensemble variability.
+#' @param time A character string indicating the time period to be considered, in case of temporal models, where a benchmark can be specified only for one time period at a time.
+#' @param areas If `NULL` (default option), benchmarking is done on the whole set of areas, alternatively it can be done on a subset of them by indicating a vector containing the names of subset areas.
+#' @return A `benchmark_fitsae` object being a list of the following elements:
+#' \describe{
+#'   \item{`bench_est`}{A vector including the benchmarked estimates for each considered domain.}
+#'   \item{`post_risk`}{A numeric value indicating an estimate of the overall posterior risk, aggregated for all areas. This value is only yielded when in-sample areas are treated and a single benchmarking is performed.}
+#'   \item{`method`}{The benchmarking method performed as selected in the input argument.}
+#'   \item{`time`}{The time considered as selected in the input argument.}
+#'   \item{`areas`}{The areas considered as selected in the input argument.}
+#'   \item{`data_obj`}{A list containing input objects including in-sample and out-of-sample relevant quantities.}
+#'   \item{`model_settings`}{A list summarizing all the assumptions of the model: sampling likelihood, presence of intercept, dispersion parametrization, random effects priors and possible structures.}
+#'   \item{`model_estimates`}{Posterior summaries of target parameters for in-sample areas.}
+#'   \item{`model_estimates_oos`}{Posterior summaries of target parameters for out-of-sample areas.}
+#'   \item{`is_oos`}{Logical vector defining whether each domain is out-of-sample or not.}
+#'   \item{`direct_est`}{Vector of direct estimates for in-sample areas.}
+#' }
+#'
+#' @seealso \code{\link{summary.fitsae}} to produce the input object.
+#'
+#' @references
+#' \insertRef{datta2011bayesian}{tipsae}
+#'
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # creating a subset of the areas whose estimates have to be benchmarked
+#' subset <- c("RIMINI", "RICCIONE", "RUBICONE", "CESENA - VALLE DEL SAVIO")
+#'
+#' # creating population shares of the subset areas
+#' pop <- emilia_cs$pop[emilia_cs$id %in% subset]
+#' shares_subset <- pop/sum(pop)
+#'
+#' # perform benchmarking procedure
+#' bmk_subset <- benchmark(summ_beta,
+#'                         bench = 0.13,
+#'                         share = shares_subset,
+#'                         method = "raking",
+#'                         areas = subset)
+#'
+#' # check benchmarked estimates and posterior risk
+#' bmk_subset$bench_est
+#' bmk_subset$post_risk}
+#'
+#'
+#'
 #' @export
 #'
 benchmark <- function(x,

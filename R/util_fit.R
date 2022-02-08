@@ -79,7 +79,6 @@ arrange_spatial_structure <- function(spatial_error,
     # design matrix with island-specific intercepts
     intercept_islands <- NULL
     islands <- sum(group_sizes > 1)
-    # better testing
     if (islands > 1) {
       intercept_islands <- model.matrix( ~ factor(comp$comp.id) - 1)
       sizes_islands <- colSums(intercept_islands)

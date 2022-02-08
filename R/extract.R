@@ -1,4 +1,31 @@
+#'
+#' Extract Posterior Summaries of Target Parameters
+#'
+#' The `extract()` function provides the posterior summaries of target parameters, including model-based estimates, and possibly benchmarked estimates, related to a fitted small area model.
+#' @inheritParams map
+#' @return An object of class `estimates_fitsae`, being a list of two data frames, distinguishing between `$in_sample` and `$out_of_sample` areas, which gathers domains name, direct and HB estimates, as well as posterior summaries of target parameters. When the input is a `benchmark_fitsae` object, benchmarked estimates are also included.
 #' @export
+#'
+#' @seealso \code{\link{summary.fitsae}} and \code{\link{benchmark}} to produce the input object.
+#'
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # extract model estimates
+#' HB_estimates <- extract(summ_beta)
+#' head(HB_estimates)
+#' }
 #'
 
 extract <- function(x) {

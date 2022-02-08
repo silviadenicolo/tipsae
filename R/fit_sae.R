@@ -1,24 +1,95 @@
 # Save this file as `R/fit_sae.R`
 
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Fitting a Small Area Model
+#'
+#' `fit_sae()` is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
 #'
 #' @export
-#' @param formula_fixed Linear regression formula at the linking level.
-#' @param data Data frame containing direct estimates and covariates.
-#' @param likelihood Selection between different likelihood assumptions at sampling level.
-#' @param type Selection between different parametrizations.
-#' @param ... Arguments passed to `rstan::sampling` (e.g. iter, chains).
-#' @return An object of class `fitsae` containing an object of class `stanfit`returned by `rstan::sampling`
+#' @param formula_fixed An object of class `"formula"` specifying the linear regression fixed part at the linking level.
+#' @param data  An object of class `"data.frame"` containing all relevant quantities.
+#' @param domains Data column name displaying the domain names. If `NULL` (default), the domains are denoted with a progressive number.
+#' @param disp_direct Data column name displaying given values of sampling dispersion for each domain.
+#' @param type_disp Parametrization of the dispersion parameter. The choices are variance (`"var"`) or \eqn{\phi_d} + 1 (`"neff"`) parameter.
+#' @param domain_size Data column name indicating domain sizes (optional).
+#' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
+#' @param prior_reff Prior distribution of the unstructured random effect. The choices are: `"normal"`, `"t"`, `"VG"`.
+#' @param spatial_error Logical indicating whether to include a spatially structured random effect.
+#' @param spatial_df Object of class `SpatialPolygonsDataFrame` with the shapefile of the studied region. Required if `spatial_error = TRUE`.`
+#' @param temporal_error Logical indicating whether to include a temporally structured random effect.
+#' @param temporal_variable Data column name indicating temporal variable. Required if `temporal_error = TRUE`.
+#' @param adapt_delta HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.
+#' @param max_treedepth HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.
+#' @inheritParams rstan::sampling
+#' @param ... Arguments passed to \code{\link[rstan]{sampling}} (e.g. iter, chains).
+#' @return A list of class `fitsae` containing the following objects:
+#' \describe{
+#'   \item{`model_settings`}{A list summarizing all the assumptions of the model: sampling likelihood, presence of intercept, dispersion parametrization, random effects priors and possible structures.}
+#'   \item{`data_obj`}{A list containing input objects including in-sample and out-of-sample relevant quantities.}
+#'   \item{`stanfit`}{A `stanfit` object, outcome of \code{\link[rstan]{sampling}} function containing full posterior draws. For details, see \code{\link[rstan]{stan}} documentation.}
+#'   \item{`pars_interest`}{A vector containing the names of parameters whose posterior samples are stored.}
+#'   \item{`call`}{Image of the function call that produced the `fitsae` object.}
+#' }
+#' @seealso \code{\link[rstan]{sampling}} for sampler options and \code{\link{summary.fitsae}} for handling the output.
+#'
+#' @examples
+#' \donttest{
+#' library(tipsae)
+#'
+#' # loading toy cross sectional dataset
+#' data("emilia_cs")
+#'
+#' # fitting a cross sectional model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#'}
+#'
+#' # Spatio-temporal model: it might require time to be fitted
+#'
+#'\dontrun{
+#' # loading toy panel dataset
+#' data("emilia")
+#' # loading the shapefile of the concerned areas
+#' data("emilia_shp")
+#'
+#' # ordering the shapefile consistently with the dataset order
+#' emilia_shp@data <- emilia_shp@data[match(unique(emilia$id), emilia_shp@data$NAME_DISTRICT),]
+#'
+#' # fitting a spatio-temporal model
+#' fit_ST <- fit_sae(formula_fixed = hcr ~ x,
+#'                   domains = "id",
+#'                   disp_direct = "vars",
+#'                   type_disp = "var",
+#'                   domain_size = "n",
+#'                   data = emilia,
+#'                   spatial_error = TRUE,
+#'                   spatial_df = emilia_shp,
+#'                   temporal_error = TRUE,
+#'                   temporal_variable = "year",
+#'                   max_treedepth = 15,
+#'                   seed = 0)
+#'}
 #'
 #'
-
+#' @references
+#'
+#' \insertRef{janicki2020properties}{tipsae}
+#'
+#' \insertRef{carpenter2017stan}{tipsae}
+#'
+#' \insertRef{morris2019bayesian}{tipsae}
+#'
+#' \insertRef{DeNicolo2021}{tipsae}
+#'
+#'
 
 fit_sae <- function(formula_fixed,
+                    data,
                     domains = NULL,
                     disp_direct,
                     type_disp = "neff", #c("neff", "var"),
                     domain_size = NULL,
-                    data,
                     likelihood = "beta", # c("beta", "flexbeta", "Infbeta0","Infbeta1","Infbeta01","Infbeta0alt"),
                     prior_reff = "normal",  #c("normal", "t", "VG")
                     spatial_error = FALSE,

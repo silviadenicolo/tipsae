@@ -1,38 +1,41 @@
 shiny::tagList(
-  shiny::wellPanel(
-    shiny::fluidRow(# row with options on the read.csv function
-      shiny::column(width = 2,
-                    shiny::radioButtons(# header?
-                      "header_pres",
-                      "A header is present:",
-                      c("Yes" = TRUE, "No" = FALSE),
-                      inline = T
-                    )
-      ),
-      shiny::column(width = 2,
-                    shiny::selectizeInput(# sep
-                      inputId = "sep_file1",
-                      label = "Choose the column separator:",
-                      multiple = FALSE,
-                      choices = c("," = ",", ";" = ";", "." = ".",
-                                  ":" = ":", "Space" = " ", "Tab" = "\t")
-                    )
-      ),
-      shiny::column(width = 2,
-                    shiny::selectInput(# dec
-                      inputId = "dec_file1",
-                      label = "Choose the decimal separator:",
-                      multiple = FALSE,
-                      choices = c(",","."),
-                      selected = "."
-                    )
+  shiny::conditionalPanel(
+    condition = "output.example_data==false",
+    shiny::wellPanel(
+     shiny::fluidRow(# row with options on the read.csv function
+       shiny::column(width = 2,
+                     shiny::radioButtons(# header?
+                        "header_pres",
+                        "A header is present:",
+                        c("Yes" = TRUE, "No" = FALSE),
+                        inline = T
+                      )
+        ),
+        shiny::column(width = 2,
+                      shiny::selectizeInput(# sep
+                        inputId = "sep_file1",
+                        label = "Choose the column separator:",
+                        multiple = FALSE,
+                        choices = c("," = ",", ";" = ";", "." = ".",
+                                    ":" = ":", "Space" = " ", "Tab" = "\t")
+                      )
+        ),
+        shiny::column(width = 2,
+                      shiny::selectInput(# dec
+                        inputId = "dec_file1",
+                        label = "Choose the decimal separator:",
+                        multiple = FALSE,
+                        choices = c(",","."),
+                        selected = "."
+                      )
       ),
       shiny::column(width = 5,offset = 1,
                     shiny::fileInput(buttonLabel = "Browse",## input .csv file with data
                       inputId = "file1",
                       label = "Search for the data file (.csv or .txt files are requested)",
                       accept = c(".csv", ".txt")
-                    )
+                      )
+        )
       )
     )
   ),

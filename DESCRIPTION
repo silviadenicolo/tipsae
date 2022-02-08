@@ -1,24 +1,27 @@
 Package: tipsae
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Tools for Handling Indices and Proportions in Small Area Estimation
+Version: 0.0.3
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
            role = c("aut", "cre"),
            email = "silvia.denicolo@phd.unipd.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")), 
+           comment = c(ORCID = "0000-0001-5052-6527")), 
            person(given = "Aldo",
            family = "Gardini",
            role = c("aut"),
            email = "aldo.gardini2@unibo.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")))
-Description: What the package does (one paragraph).
+           comment = c(ORCID = "0000-0002-2164-5815")))
+Description: It allows for mapping proportions and indicators defined on the unit interval. It implements Beta-based small area methods comprising the classical Beta regression models, the Flexible Beta model and Zero and/or One Inflated extensions (Janicki 2020 <doi:10.1080/03610926.2019.1570266>). Such methods, developed within a Bayesian framework through Stan <https://mc-stan.org/>, come equipped with a set of diagnostics and complementary tools, visualizing and exporting functions. A Shiny application with a user-friendly interface can be launched to further simplify the process.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+VignetteBuilder: R.rsp
+RdMacros: Rdpack
 Biarch: true
+NeedsCompilation: yes
 Depends: 
     R (>= 3.5.0),
     shiny (>= 1.0.3)
@@ -32,6 +35,7 @@ Imports:
     ggplot2 (>= 3.3.2), 
     gridExtra (>= 2.3),
     maptools (>= 1.0.2),
+    rgeos,
     sp, 
     spdep, 
     broom,
@@ -39,7 +43,10 @@ Imports:
     stats,
     spam,
     ggpubr,
-    callr
+    callr,
+    Rdpack
+Suggests: 
+    R.rsp
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),

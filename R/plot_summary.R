@@ -1,15 +1,35 @@
-#' Bayesian proportions/(0,1)-measures small area model with Stan
+#' Plot Function for a `summary_fitsae` Object
 #'
-#' @param x Object of class 'summary.fitsae'.
-#' @param areas_sample_size Areas-specific sample sizes.
-#' @param size, denoting size of scatterplots points (geom_point).
-#' @param alpha, denoting  opacity of scatterplots points (geom_point).
-#' @param n_bins, denoting number of bins used for histogram.
-#' @param grid, logical, indicating whether displaying plots in a grid (TRUE) or in sequence (FALSE).
-#' @param label_names, model name to display in boxplot x-axis label.
-#' @return Four ggplot2 objects stored in a grid.
+#' The generic method `plot()` provides, in a grid (default) or sequence, (a) a scatterplot of direct estimates versus model-based estimates, visually capturing the shrinking process, (b) a Bayesian P-values histogram, (c) a boxplot of standard deviation reduction values, and, if areas sample sizes are provided as input in `fit_sae()`, (d) a scatterplot of model residuals versus sample sizes, in order to check for design-consistency i.e., as long as sizes increase residuals should converge to zero.
+#'
+#' @param x Object of class `summary_fitsae`.
+#' @param size Aesthetic option denoting the size of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
+#' @param alpha Aesthetic option denoting the opacity of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
+#' @param n_bins Denoting the number of bins used for histogram.
+#' @param grid Logical indicating whether plots are displayed in a grid (`TRUE`) or in sequence (`FALSE`).
+#' @param label_names Character string indicating the model name to display in boxplot x-axis label.
+#' @param ... Currently unused.
+#' @return Four `ggplot2` objects in a grid.
+#'
+#' @seealso \code{\link{summary.fitsae}} to produce the input object.
+#' @examples \donttest{
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # visualize diagnostics via plot() function
+#' plot(summ_beta)}
+#'
 #' @export
-#'
 
 plot.summary_fitsae <- function(x,
                    size = 2.5,
