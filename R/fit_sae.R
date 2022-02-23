@@ -1,5 +1,3 @@
-# Save this file as `R/fit_sae.R`
-
 #' Fitting a Small Area Model
 #'
 #' `fit_sae()` is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
@@ -32,7 +30,6 @@
 #' @seealso \code{\link[rstan]{sampling}} for sampler options and \code{\link{summary.fitsae}} for handling the output.
 #'
 #' @examples
-#' \donttest{
 #' library(tipsae)
 #'
 #' # loading toy cross sectional dataset
@@ -41,12 +38,11 @@
 #' # fitting a cross sectional model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
 #'
-#'}
 #'
 #' # Spatio-temporal model: it might require time to be fitted
-#'
 #'\dontrun{
 #' # loading toy panel dataset
 #' data("emilia")

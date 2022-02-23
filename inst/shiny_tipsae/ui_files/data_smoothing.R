@@ -1,5 +1,5 @@
 shiny::tagList(
-  shiny::h4("The smoothing procedure for the dispersion parameters was required.
+  shiny::h4("The smoothing procedure for the dispersion parameters has been required.
                   Note that only a simplified smoothing procedure is provided in the Shiny app.
                   See the function smoothing() of the tipsae package to implement more sophisticated methodologies."),
   shiny::hr(style = "border-top: 1px solid #000000;"),

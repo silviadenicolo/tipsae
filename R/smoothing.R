@@ -14,8 +14,8 @@
 #' @param survey_area_id Character string indicating the variable denoting the domain names included in the `survey_data` object.
 #' @param weights Character string indicating the variable including sampling weights in `survey_data` object.
 #' @param sizes Character string indicating the variable including unit sizes in `survey_data` object.
-#' @return An object of class `smoothing.fitsae`, being a list of vectors including dispersion parameters estimates: both the variances and the effective sample sizes. When `"ols"` or `"gls"` method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from `nlme` package.
-
+#'
+#' @return An object of class `smoothing_fitsae`, being a list of vectors including dispersion parameters estimates: both the variances and the effective sample sizes. When `"ols"` or `"gls"` method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from `nlme` package.
 #'
 #' @seealso \code{\link[nlme]{gls}} for details on estimation procedure for `"ols"` and `"gls"` methods.
 #'
@@ -24,7 +24,7 @@
 #'
 #' \insertRef{fabrizi2011hierarchical}{tipsae}
 #'
-#' @examples \donttest{
+#' @examples
 #'
 #' library(tipsae)
 #'
@@ -34,7 +34,7 @@
 #' # perform smoothing procedure
 #' smoo <- smoothing(emilia_cs, direct_estimates = "hcr", area_id = "id",
 #'                   raw_variance = "vars", areas_sample_sizes = "n",
-#'                   var_function = NULL, method = "ols")}
+#'                   var_function = NULL, method = "ols")
 #'
 #' @export
 #'

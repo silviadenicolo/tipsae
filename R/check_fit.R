@@ -1,3 +1,6 @@
+# Only internal
+
+
 check_par_fit <- function(formula_fixed,
                           terms_formula,
                           domains,
@@ -109,7 +112,6 @@ check_par_fit <- function(formula_fixed,
         stop("The input of the argument 'spatial_df' must be have the same number of rows of 'data'")
       }
     }
-    # forse anche check uni
   }
   if (temporal_error && is.null(temporal_variable)) {
     stop(
@@ -120,9 +122,6 @@ check_par_fit <- function(formula_fixed,
       stop("The argument 'temporal_variable' must be a string indicating a valid name in the data.")
     }
   }
-  # if (temporal_error && spatial_error) {
-  #   stop("Only one structured random effect can be included.")
-  # }
   if (temporal_error && is.null(domains)) {
     stop("When a temporal random effect is considered, the argument 'domains' must be specified.")
   }

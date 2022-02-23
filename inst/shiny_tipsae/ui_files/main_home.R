@@ -17,7 +17,8 @@ shiny::tagList(
                              shiny::HTML("De Nicol&ograve")," et al., to appear) "
             ))
             ),
-  shiny::h4("Moreover, the models may account for possibly spatial and/or temporal dependency structures. For further details see the package vignette."),
+  shiny::h4("Moreover, the models may account for possibly spatial and/or temporal dependency structures. For further details see the package ",
+            shiny::tags$a(href = "https://cran.r-project.org/web/packages/tipsae/vignettes/tipsae_vignette.pdf", "vignette"),"."),
   shiny::br(),
   shiny::h4("Offered methods include:"),
   shiny::h4(
@@ -40,8 +41,8 @@ shiny::tagList(
                    shiny::strong(style = "color: #bbd9ec;", "Results"), "tab.")
   )
   ),
-  shiny::h4("If you want to start analysizing your data move to the", shiny::strong(style = "color: #bbd9ec;", "Data"), "tab. Otherwise press the following button to load the example data (and the related shapefile):"),
-  shiny::fluidRow(style = 'padding-left:15px', shiny::actionButton("load_emilia_cs", label = "Cross-section emila dataset"))
+  shiny::h4("If you want to start analysizing your data move to the", shiny::strong(style = "color: #bbd9ec;", "Data"), "tab. Otherwise press the following button to load the example data (see the documentation of the emilia_cs data) and the related shapefile:"),
+  shiny::fluidRow(style = 'padding-left:15px', shiny::actionButton("load_emilia_cs", label = "Load dataset"))
 
 
 )

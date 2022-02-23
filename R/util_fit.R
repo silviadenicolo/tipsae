@@ -1,5 +1,5 @@
 
-
+# Internal functions
 
 create_data <-  function(formula_fixed,
                          terms_formula,

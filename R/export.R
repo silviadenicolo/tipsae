@@ -10,7 +10,7 @@
 #'
 #' @seealso \code{\link{extract}} to produce the input object and \code{\link[utils]{write.csv}}.
 #'
-#' @examples \donttest{
+#' @examples \dontrun{
 #' library(tipsae)
 #'
 #' # loading toy dataset
@@ -28,7 +28,8 @@
 #' HB_estimates <- extract(summ_beta)
 #'
 #' # export model estimates
-#' export(HB_estimates, file = "results.csv", type = "all")}
+#' export(HB_estimates, file = "results.csv", type = "all")
+#' }
 #'
 #'
 #' @export

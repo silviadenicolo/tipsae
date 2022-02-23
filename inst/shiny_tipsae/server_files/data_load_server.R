@@ -3,8 +3,8 @@
 # creation reactive object with loaded data
 loaded_data <- shiny::reactive({
   if(input$load_emilia_cs > 0) {
-    read.csv(
-      file = system.file("extdata","emilia_cs.csv", package = "tipsae")
+    readRDS(
+      file = system.file("extdata","emilia_cs.rds", package = "tipsae")
     )
   }else{
   if (is.null(input$file1$datapath)) {

@@ -9,10 +9,11 @@
 #' @param grid Logical indicating whether plots are displayed in a grid (`TRUE`) or in sequence (`FALSE`).
 #' @param label_names Character string indicating the model name to display in boxplot x-axis label.
 #' @param ... Currently unused.
+#'
 #' @return Four `ggplot2` objects in a grid.
 #'
 #' @seealso \code{\link{summary.fitsae}} to produce the input object.
-#' @examples \donttest{
+#' @examples
 #' library(tipsae)
 #'
 #' # loading toy dataset
@@ -21,13 +22,14 @@
 #' # fitting a model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
 #'
 #' # check model diagnostics
 #' summ_beta <- summary(fit_beta)
 #'
-#' # visualize diagnostics via plot() function
-#' plot(summ_beta)}
+#' # visualize diagnostics via plot() method
+#' plot(summ_beta)
 #'
 #' @export
 

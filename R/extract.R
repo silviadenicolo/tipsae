@@ -8,7 +8,7 @@
 #'
 #' @seealso \code{\link{summary.fitsae}} and \code{\link{benchmark}} to produce the input object.
 #'
-#' @examples \donttest{
+#' @examples
 #' library(tipsae)
 #'
 #' # loading toy dataset
@@ -17,7 +17,8 @@
 #' # fitting a model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
 #'
 #' # check model diagnostics
 #' summ_beta <- summary(fit_beta)
@@ -25,7 +26,7 @@
 #' # extract model estimates
 #' HB_estimates <- extract(summ_beta)
 #' head(HB_estimates)
-#' }
+#'
 #'
 
 extract <- function(x) {

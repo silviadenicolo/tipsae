@@ -33,7 +33,7 @@
 #' @references
 #' \insertRef{datta2011bayesian}{tipsae}
 #'
-#' @examples \donttest{
+#' @examples
 #' library(tipsae)
 #'
 #' # loading toy dataset
@@ -42,7 +42,8 @@
 #' # fitting a model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
 #'
 #' # check model diagnostics
 #' summ_beta <- summary(fit_beta)
@@ -52,10 +53,10 @@
 #'
 #' # creating population shares of the subset areas
 #' pop <- emilia_cs$pop[emilia_cs$id %in% subset]
-#' shares_subset <- pop/sum(pop)
+#' shares_subset <- pop / sum(pop)
 #'
 #' # perform benchmarking procedure
-#' bmk_subset <- benchmark(summ_beta,
+#' bmk_subset <- benchmark(x = summ_beta,
 #'                         bench = 0.13,
 #'                         share = shares_subset,
 #'                         method = "raking",
@@ -63,7 +64,9 @@
 #'
 #' # check benchmarked estimates and posterior risk
 #' bmk_subset$bench_est
-#' bmk_subset$post_risk}
+#' bmk_subset$post_risk
+#'
+#'
 #'
 #'
 #'

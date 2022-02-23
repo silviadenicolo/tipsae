@@ -40,7 +40,7 @@
 #'
 #' \insertRef{vehtari2017practical}{tipsae}
 #'
-#' @examples \donttest{
+#' @examples
 #' library(tipsae)
 #'
 #' # loading toy dataset
@@ -49,14 +49,15 @@
 #' # fitting a model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
 #'
-#' # check model diagnostics via summary() function
+#' # check model diagnostics via summary() method
 #' summ_beta <- summary(fit_beta)
-#' summ_beta}
+#' summ_beta
 #' @export
 #'
-summary.fitsae <-function(object,
+summary.fitsae <- function(object,
            probs = c(0.025, 0.25, 0.50, 0.75, 0.975),
            compute_loo = TRUE,
            ...) {

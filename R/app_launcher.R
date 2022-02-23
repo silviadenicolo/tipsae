@@ -4,6 +4,21 @@
 #'
 #'
 #'
+#'@return
+#'No value returned.
+#'
+#'
+#'@examples
+#'
+#'library(tipsae)
+#'
+#' # Starting the Shiny application
+#'if(interactive()){
+#'  runShiny_tipsae()
+#'}
+#'
+#'
+#'
 #' @export
 runShiny_tipsae <- function() {
   appDir <- system.file("shiny_tipsae", package = "tipsae")
