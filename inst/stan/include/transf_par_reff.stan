@@ -6,7 +6,7 @@ if(spatial_err == 0 && temporal_err == 0) { // no spatial/temporal error: reffs 
 }else{
   if(spatial_err==1 && temporal_err==0) { // spatial error
     for(i in 1:D){// definition of s - reordering wrt the domains
-      s[i] = sigma_s[1] * s_raw[indices_spat[i]] / scales_ICAR[indices_spat[i]];
+      s[indices_spat[i]] = sigma_s[1] * s_raw[i] / scales_ICAR[i];
     }
     for(i in 1:M_is){// reffs is the sum of unstructured and spatial errors
       reffs[i] = v[i] + s[indices_is[i]];

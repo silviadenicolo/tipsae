@@ -28,7 +28,7 @@ fit_sae(
 
 \item{data}{An object of class \code{"data.frame"} containing all relevant quantities.}
 
-\item{domains}{Data column name displaying the domain names. If \code{NULL} (default) the domains are denoted with a progressive number.}
+\item{domains}{Data column name displaying the domain names. If \code{NULL} (default), the domains are denoted with a progressive number.}
 
 \item{disp_direct}{Data column name displaying given values of sampling dispersion for each domain.}
 
@@ -62,16 +62,15 @@ A list of class \code{fitsae} containing the following objects:
 \describe{
 \item{\code{model_settings}}{A list summarizing all the assumptions of the model: sampling likelihood, presence of intercept, dispersion parametrization, random effects priors and possible structures.}
 \item{\code{data_obj}}{A list containing input objects including in-sample and out-of-sample relevant quantities.}
-\item{\code{stanfit}}{A \code{stanfit} object, outcome of \code{\link[rstan]{sampling}} function containing full posterior draws. For details, see \code{rstan} documentation.}
+\item{\code{stanfit}}{A \code{stanfit} object, outcome of \code{\link[rstan]{sampling}} function containing full posterior draws. For details, see \code{\link[rstan]{stan}} documentation.}
 \item{\code{pars_interest}}{A vector containing the names of parameters whose posterior samples are stored.}
 \item{\code{call}}{Image of the function call that produced the \code{fitsae} object.}
 }
 }
 \description{
-\code{fit_sae} is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
+\code{fit_sae()} is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy cross sectional dataset
@@ -80,12 +79,11 @@ data("emilia_cs")
 # fitting a cross sectional model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
-}
 
 # Spatio-temporal model: it might require time to be fitted
-
 \dontrun{
 # loading toy panel dataset
 data("emilia")

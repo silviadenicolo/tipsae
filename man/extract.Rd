@@ -16,7 +16,6 @@ An object of class \code{estimates_fitsae}, being a list of two data frames, dis
 The \code{extract()} function provides the posterior summaries of target parameters, including model-based estimates, and possibly benchmarked estimates, related to a fitted small area model.
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -25,7 +24,8 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
 # check model diagnostics
 summ_beta <- summary(fit_beta)
@@ -33,7 +33,7 @@ summ_beta <- summary(fit_beta)
 # extract model estimates
 HB_estimates <- extract(summ_beta)
 head(HB_estimates)
-}
+
 
 }
 \seealso{

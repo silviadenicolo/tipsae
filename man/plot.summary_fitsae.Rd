@@ -36,7 +36,6 @@ Four \code{ggplot2} objects in a grid.
 The generic method \code{plot()} provides, in a grid (default) or sequence, (a) a scatterplot of direct estimates versus model-based estimates, visually capturing the shrinking process, (b) a Bayesian P-values histogram, (c) a boxplot of standard deviation reduction values, and, if areas sample sizes are provided as input in \code{fit_sae()}, (d) a scatterplot of model residuals versus sample sizes, in order to check for design-consistency i.e., as long as sizes increase residuals should converge to zero.
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -45,13 +44,14 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
 # check model diagnostics
 summ_beta <- summary(fit_beta)
 
-# visualize diagnostics via plot() function
-plot(summ_beta)}
+# visualize diagnostics via plot() method
+plot(summ_beta)
 
 }
 \seealso{

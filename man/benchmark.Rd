@@ -52,7 +52,6 @@ The \code{benchmark()} function gives the chance to perform a benchmarking proce
 The function allows performing three different benchmarking methods, according to the argument method.  \itemize{\item The \code{"ratio"} and \code{"raking"} methods provide benchmarked estimates that minimize the posterior expectation of the weighted squared error loss, see Datta et al. (2011) and \code{tipsae} vignette.  \item The \code{"double"} method accounts for a further benchmark on the weighted ensemble variability, where \code{H} is a prespecified value of the estimators variability.}
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -61,7 +60,8 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
 # check model diagnostics
 summ_beta <- summary(fit_beta)
@@ -71,10 +71,10 @@ subset <- c("RIMINI", "RICCIONE", "RUBICONE", "CESENA - VALLE DEL SAVIO")
 
 # creating population shares of the subset areas
 pop <- emilia_cs$pop[emilia_cs$id \%in\% subset]
-shares_subset <- pop/sum(pop)
+shares_subset <- pop / sum(pop)
 
 # perform benchmarking procedure
-bmk_subset <- benchmark(summ_beta,
+bmk_subset <- benchmark(x = summ_beta,
                         bench = 0.13,
                         share = shares_subset,
                         method = "raking",
@@ -82,7 +82,9 @@ bmk_subset <- benchmark(summ_beta,
 
 # check benchmarked estimates and posterior risk
 bmk_subset$bench_est
-bmk_subset$post_risk}
+bmk_subset$post_risk
+
+
 
 
 

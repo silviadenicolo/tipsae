@@ -52,7 +52,6 @@ Summarizing the small area model fitting through the distributions of estimated 
 If printed, the produced summary displays: \itemize{\item Posterior summaries about the fixed effect coefficients and the scale parameters related to unstructured and possible structured random effects. \item Model diagnostics summaries of (a) model residuals; (b) standard deviation reductions; (c) Bayesian P-values obtained with the MCMC samples. \item Shrinking Bound Rate. \item \code{\link[loo]{loo}} information criteria and related diagnostics from the \code{loo} package.}
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -61,11 +60,12 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
-# check model diagnostics via summary() function
+# check model diagnostics via summary() method
 summ_beta <- summary(fit_beta)
-summ_beta}
+summ_beta
 }
 \references{
 \insertRef{janicki2020properties}{tipsae}

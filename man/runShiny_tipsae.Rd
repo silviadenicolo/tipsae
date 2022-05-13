@@ -6,6 +6,21 @@
 \usage{
 runShiny_tipsae()
 }
+\value{
+No value returned.
+}
 \description{
-The command launch a Shiny application that assists the user from the data loading step to the export of the outputs. See the vignette for further details.
+The command launches a Shiny application that assists the user from the data loading step to the export of the outputs. See the vignette for further details.
+}
+\examples{
+
+library(tipsae)
+
+# Starting the Shiny application
+if(interactive()){
+ runShiny_tipsae()
+}
+
+
+
 }

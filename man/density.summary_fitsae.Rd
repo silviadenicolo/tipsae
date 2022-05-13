@@ -20,7 +20,6 @@ Two \code{ggplot2} objects in a grid or in sequence.
 The method \code{density()} provides, in a grid (default) or sequence, the density plot of direct estimates versus HB model estimates and the density plot of standardized posterior means of the random effects versus standard normal.
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -29,13 +28,14 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
 # check model diagnostics
 summ_beta <- summary(fit_beta)
 
 # visualize estimates and random effect densities via density() function
-density(summ_beta)}
+density(summ_beta)
 }
 \seealso{
 \code{\link{summary.fitsae}} to produce the input object.

@@ -36,7 +36,6 @@ A map \code{ggplot2} object with colors scaled legend.
 The \code{map()} function enables to plot maps containing relevant model outputs by accounting for their geographical dimension. The shapefile of the area must be provided via a \code{SpatialPolygonsDataFrame} object.
 }
 \examples{
-\donttest{
 library(tipsae)
 
 # loading toy dataset
@@ -45,7 +44,8 @@ data("emilia_cs")
 # fitting a model
 fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-                    seed = 0)
+                    # MCMC setting to obtain a fast example. Remove next line for reliable results.
+                    chains = 1, iter = 300, seed = 0)
 
 # check model diagnostics
 summ_beta <- summary(fit_beta)
@@ -56,7 +56,7 @@ data("emilia_shp")
 # plot the map using model diagnostics and areas shapefile
 map(x = summ_beta,
    spatial_df = emilia_shp,
-   spatial_id_domains = "NAME_DISTRICT")}
+   spatial_id_domains = "NAME_DISTRICT")
 }
 \seealso{
 \code{\link{summary.fitsae}} to produce the input object and \code{\link[sp]{SpatialPolygonsDataFrame}} to manage the shapefile.

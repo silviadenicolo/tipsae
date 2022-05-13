@@ -22,7 +22,7 @@ A CSV file is created in the working directory, or at the given path, exporting 
 The function \code{export()} allows for exporting model estimates in CSV format.
 }
 \examples{
-\donttest{
+\dontrun{
 library(tipsae)
 
 # loading toy dataset
@@ -40,7 +40,8 @@ summ_beta <- summary(fit_beta)
 HB_estimates <- extract(summ_beta)
 
 # export model estimates
-export(HB_estimates, file = "results.csv", type = "all")}
+export(HB_estimates, file = "results.csv", type = "all")
+}
 
 
 }

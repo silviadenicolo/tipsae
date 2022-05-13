@@ -1359,8 +1359,8 @@ public:
                     for (int i = 1; i <= D; ++i) {
                         current_statement_begin__ = 182;
                         stan::model::assign(s, 
-                                    stan::model::cons_list(stan::model::index_uni(get_base1(indices_spat, i, "indices_spat", 1)), stan::model::nil_index_list()), 
-                                    ((get_base1(sigma_s, 1, "sigma_s", 1) * get_base1(s_raw, i, "s_raw", 1)) / get_base1(scales_ICAR, i, "scales_ICAR", 1)), 
+                                    stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
+                                    ((get_base1(sigma_s, 1, "sigma_s", 1) * get_base1(s_raw, get_base1(indices_spat, i, "indices_spat", 1), "s_raw", 1)) / get_base1(scales_ICAR, get_base1(indices_spat, i, "indices_spat", 1), "scales_ICAR", 1)), 
                                     "assigning variable s");
                     }
                     current_statement_begin__ = 184;
@@ -2595,8 +2595,8 @@ public:
                     for (int i = 1; i <= D; ++i) {
                         current_statement_begin__ = 182;
                         stan::model::assign(s, 
-                                    stan::model::cons_list(stan::model::index_uni(get_base1(indices_spat, i, "indices_spat", 1)), stan::model::nil_index_list()), 
-                                    ((get_base1(sigma_s, 1, "sigma_s", 1) * get_base1(s_raw, i, "s_raw", 1)) / get_base1(scales_ICAR, i, "scales_ICAR", 1)), 
+                                    stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
+                                    ((get_base1(sigma_s, 1, "sigma_s", 1) * get_base1(s_raw, get_base1(indices_spat, i, "indices_spat", 1), "s_raw", 1)) / get_base1(scales_ICAR, get_base1(indices_spat, i, "indices_spat", 1), "scales_ICAR", 1)), 
                                     "assigning variable s");
                     }
                     current_statement_begin__ = 184;
