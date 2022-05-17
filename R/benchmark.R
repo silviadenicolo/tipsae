@@ -182,7 +182,7 @@ check_bench<-function(x,
                       areas){
 
 
-  if (class(x) != "summary_fitsae")
+  if (!inherits(x, "summary_fitsae"))
     stop("Indicated object does not have 'summary_fitsae' class.")
 
   if (is.null(method) || is.null(share) || is.null(bench))

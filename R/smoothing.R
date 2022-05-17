@@ -174,7 +174,7 @@ check_smoo <- function(data,
                        weights,
                        sizes) {
 
-  if (class(data) != "data.frame")
+  if (!inherits(data, "data.frame"))
     stop("'data' is not a dataframe object.")
 
   if (!(direct_estimates %in% colnames(data)))
@@ -183,14 +183,13 @@ check_smoo <- function(data,
     )
 
   if (!is.null(var_function) &&
-      class(var_function) != "function")
+      !inherits(var_function, "function"))
     stop("'var_function' defined is not a function.")
 
   if (!(method %in% c("ols", "gls", "kish")))
     stop("'method' specified is not included in c('ols', 'gls', 'kish').")
 
   if (method == "kish") {
-
     if (!(area_id %in% colnames(data)))
       stop(
         "'area_id' must be valid columns names of 'data'."
@@ -201,7 +200,7 @@ check_smoo <- function(data,
         "'survey_data' object has to be indicated when choosing 'kish' method."
       )
 
-    if (class(survey_data) != "data.frame")
+    if (!inherits(survey_data, "data.frame"))
       stop("survey_data is not a dataframe object.")
 
     if (any(!(c(survey_area_id, weights, sizes) %in% colnames(survey_data))))

@@ -41,7 +41,7 @@ plot.summary_fitsae <- function(x,
                    label_names = NULL,
                    ...
                    ){
-  if (class(x) != "summary_fitsae")
+  if (!inherits(x, "summary_fitsae"))
     stop("Indicated object does not have 'summary_fitsae' class.")
 
   if (is.null(x$data_obj$domain_size_n))

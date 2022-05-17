@@ -63,7 +63,7 @@ map <- function(x,
                          "Bench_est" = rep(NA, nrow(spatial_df))
   )
 
-  if (class(x) == "benchmark_fitsae" & length(x$time) == 1) {
+  if (inherits(x, "benchmark_fitsae") & length(x$time) == 1) {
     if (is.null(time) || time != x$time) message("Time argument is forced to be the benchmarking time period.")
     time <- x$time
   }
@@ -83,7 +83,7 @@ map <- function(x,
 
 
   # fill the data.frame
-  if (class(x) == "summary_fitsae") {
+  if (inherits(x, "summary_fitsae")) {
     map_data$Domains[!is_oos] <- dat_is$Domains
     map_data$mean_HB[!is_oos] <- dat_is$mean
     map_data$sd_HB[!is_oos] <- dat_is$sd
@@ -94,7 +94,7 @@ map <- function(x,
       map_data$sd_HB[is_oos] <- NA
       map_data$Direct[is_oos] <- NA
     }
-  } else if (class(x) == "benchmark_fitsae") {
+  } else if (inherits(x, "benchmark_fitsae")) {
 
     if (quantity %in% c("HB_est", "Direct_est", "SD")) {
       quantity <- "Bench_est"
@@ -186,7 +186,7 @@ check_map_sae <- function(x,
                           time){
 
 
-  if (class(x) != "summary_fitsae" & class(x) != "benchmark_fitsae") {
+  if (!inherits(x, "summary_fitsae") & !inherits(x, "benchmark_fitsae")) {
     stop("Indicated object does not have 'summary_fitsae' or 'benchmark_fitsae' class.")
   }
   if (length(quantity) != 1) {
@@ -195,8 +195,7 @@ check_map_sae <- function(x,
   if (!quantity %in% c("HB_est", "Direct_est", "SD")) {
     stop("Argument 'quantity' must be fixed equal to 'HB_est', 'Direct_est', or 'SD'")
   }
-  if (class(spatial_df) != "SpatialPolygonsDataFrame" ||
-      attr(class(spatial_df), "package") != "sp") {
+  if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
     stop("'spatial_df' is not of class SpatialPolygonsDataFrame from the 'sp' package")
   }
   if (!x$model_settings$temporal_error) {
@@ -210,14 +209,14 @@ check_map_sae <- function(x,
           of the 'data' object in the fit_sae function.")
     }
   }
-  if (x$model_settings$temporal_error & ((is.null(time) & class(x) == "summary_fitsae") || (class(x) == "benchmark_fitsae" & length(x$time) != 1))) {
+  if (x$model_settings$temporal_error & ((is.null(time) & inherits(x, "summary_fitsae")) || (inherits(x, "benchmark_fitsae") & length(x$time) != 1))) {
     stop("When a temporal error is included in the model, the argument 'time' must be specified.")
   }
   if (!is.null(time)) {
     if (length(time) != 1) {
       stop("Only one value of 'time' must be considered.")
     }
-    if (!(time %in% unique(x$data_obj$times)) & !(class(x) == "benchmark_fitsae" & length(x$time) == 1)) {
+    if (!(time %in% unique(x$data_obj$times)) & !(inherits(x, "benchmark_fitsae") & length(x$time) == 1)) {
       stop("'time' must contain a value containing a time included in the input data.")
     }
   }

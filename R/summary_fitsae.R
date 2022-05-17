@@ -63,7 +63,7 @@ summary.fitsae <- function(object,
            ...) {
 
     #`%!in%` <- Negate(`%in%`)
-    if (class(object) != "fitsae") stop("Indicated object does not have 'fitsae' class.")
+    if (!inherits(object, "fitsae")) stop("Indicated object does not have 'fitsae' class.")
     #extracting model-based estimates of the main parameters
     pars_summary <- object$pars_interest[!(object$pars_interest %in% c("log_lik"))]
     smry <- rstan::summary(object$stanfit, pars = pars_summary, probs = probs)$summary
@@ -298,7 +298,7 @@ summary.fitsae <- function(object,
 #'
 
 print.summary_fitsae <- function(x, digits = 3L, ...) {
-  if (class(x) != "summary_fitsae")
+  if (!inherits(x, "summary_fitsae"))
     stop("Indicated object does not have 'summary_fitsae' class.")
   cat("Summary for the SAE model call:\n ")
   print(x$call)

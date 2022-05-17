@@ -20,7 +20,7 @@ check_par_fit <- function(formula_fixed,
                           max_treedepth,
                           init) {
   # formula_fixed
-  if (is.null(formula_fixed) || class(formula_fixed) != "formula") {
+  if (is.null(formula_fixed) || !inherits(formula_fixed, "formula")) {
     stop("Argument 'formula_fixed' must contain a formula object.")
   }
   # terms_formula
@@ -101,7 +101,7 @@ check_par_fit <- function(formula_fixed,
     )
   }
   if (spatial_error) {
-    if (class(spatial_df) != "SpatialPolygonsDataFrame") {
+    if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
       stop(
         "The input of the argument 'spatial_df' must be of class
         'SpatialPolygonsDataFrame' (see 'sp' package)"

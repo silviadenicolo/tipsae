@@ -28,7 +28,7 @@
 density.summary_fitsae <- function(x,
                                    grid = TRUE,
                                    ...) {
-  if (class(x) != "summary_fitsae")
+  if (!inherits(x, "summary_fitsae"))
     stop("Indicated object does not have 'summary_fitsae' class.")
 
   if (!grid) {

@@ -1,6 +1,6 @@
 Package: tipsae
 Title: Tools for Handling Indices and Proportions in Small Area Estimation
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
