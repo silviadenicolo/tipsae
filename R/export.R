@@ -49,14 +49,13 @@ export <- function(x,
   if (is.null(x$out_of_sample) & type == "all")
     type <- "in"
 
-
   if (type == "all") {
-    out <- rbind(ex$in_sample, ex$out_of_sample)
+    out <- rbind(x$in_sample, x$out_of_sample)
   } else {
     if (type == "out") {
-      out <- ex$out_of_sample
+      out <- x$out_of_sample
     } else {
-      out <- ex$in_sample
+      out <- x$in_sample
     }
   }
 

@@ -125,7 +125,7 @@ fit_sae <- function(formula_fixed,
 
 
   # creation data objects
-  data_obj <- create_data(formula_fixed,terms_formula, data, domain_size, domains, disp_direct)
+  data_obj <- create_data(formula_fixed, data, domain_size, domains, disp_direct)
 
   # spatial error
   data_spatial <- arrange_spatial_structure(spatial_error, spatial_df, data_obj)

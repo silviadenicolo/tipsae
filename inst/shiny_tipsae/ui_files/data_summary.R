@@ -23,7 +23,7 @@ shiny::tagList(
             shiny::uiOutput("choose_time_dist")
           }),
         status = "primary",
-        icon = shiny::icon("cog"), width = "400px",
+        icon = shiny::icon("gears"), width = "400px",
         tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
       )),
     shiny::div(
@@ -53,7 +53,7 @@ shiny::tagList(
           inline = F
         ),
         status = "primary",
-        icon = shiny::icon("cog"), width = "300px",
+        icon = shiny::icon("gears"), width = "300px",
         tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
       )),
     shiny::div(
@@ -95,7 +95,7 @@ shiny::tagList(
             inline = F
           ),
           status = "primary",
-          icon = shiny::icon("cog"), width = "300px",
+          icon = shiny::icon("gears"), width = "300px",
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
       shiny::div(
@@ -122,7 +122,7 @@ shiny::tagList(
             shiny::uiOutput("choose_time_map")
           }),
           status = "primary",
-          icon = shiny::icon("cog"), width = "300px",
+          icon = shiny::icon("gears"), width = "300px",
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
       shiny::div(
@@ -147,7 +147,7 @@ shiny::tagList(
           shiny::uiOutput("choice_traj_quantity_expl"),
           shiny::uiOutput("choose_domain_traj"),
           status = "primary",
-          icon = shiny::icon("cog"), width = "300px",
+          icon = shiny::icon("gears"), width = "300px",
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
       shiny::div(

@@ -30,7 +30,7 @@ shiny::tagList(
             ),
             shiny::uiOutput("choose_time_map_resid"),
             status = "primary",
-            icon = shiny::icon("cog"),
+            icon = shiny::icon("gears"),
             width = "300px",
             tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
           ), shiny::br(),shiny::br(),

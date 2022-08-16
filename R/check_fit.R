@@ -1,5 +1,5 @@
-# Only internal
 
+# Only internal
 
 check_par_fit <- function(formula_fixed,
                           terms_formula,

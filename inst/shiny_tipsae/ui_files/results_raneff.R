@@ -70,7 +70,7 @@ shiny::tagList(
           shiny::tags$h4(shiny::strong("Plot options")),
           shiny::uiOutput("choose_time_cat"),
           status = "primary",
-          icon = shiny::icon("cog"), width = "300px",
+          icon = shiny::icon("gears"), width = "300px",
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         ),shiny::br(),shiny::br(),
         shiny::plotOutput("cat_temp"),
@@ -87,7 +87,7 @@ shiny::tagList(
               shiny::tags$h4(shiny::strong("Plot options")),
               shiny::uiOutput("choose_time_map2"),
               status = "primary",
-              icon = shiny::icon("cog"), width = "300px",
+              icon = shiny::icon("gears"), width = "300px",
               tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
             ),shiny::br(),shiny::br(),
             shiny::plotOutput("map_temp"),
@@ -103,7 +103,7 @@ shiny::tagList(
               shiny::tags$h4("Plot options"),
               shiny::uiOutput("choose_domain_traj_raneff"),
               status = "primary",
-              icon = shiny::icon("cog"), width = "300px",
+              icon = shiny::icon("gears"), width = "300px",
               tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
             )),
           shiny::div(

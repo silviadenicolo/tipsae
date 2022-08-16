@@ -34,7 +34,7 @@ shiny::tagList(
               shiny::uiOutput("time_map_estimates")
             }),
             status = "primary",
-            icon = shiny::icon("cog"), width = "300px",
+            icon = shiny::icon("gears"), width = "300px",
             tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
           )),
         shiny::div(
@@ -61,7 +61,7 @@ shiny::tagList(
             shiny::uiOutput("time_cat_estimates")
           }),
           status = "primary",
-          icon = shiny::icon("cog"), width = "300px",
+          icon = shiny::icon("gears"), width = "300px",
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
       shiny::div(
@@ -85,7 +85,7 @@ shiny::tagList(
                                 width = '200px'),
             shiny::uiOutput("choose_domain_traj_estimate"),
             status = "primary",
-            icon = shiny::icon("cog"), width = "300px",
+            icon = shiny::icon("gears"), width = "300px",
             tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
           )),
         shiny::div(

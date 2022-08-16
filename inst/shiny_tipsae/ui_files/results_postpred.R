@@ -10,7 +10,7 @@ shiny::tagList(
                                         "Mean",
                                         "S.D.")),
         status = "primary",
-        icon = shiny::icon("cog"), width = "300px",
+        icon = shiny::icon("gears"), width = "300px",
         tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
       ),shiny::br(),shiny::br(),
       shiny::plotOutput("ppc_post"),
