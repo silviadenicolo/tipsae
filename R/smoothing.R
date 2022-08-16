@@ -111,6 +111,8 @@ smoothing <- function(data,  # ordered as area id factor!
    data$inv_deff = 1 / data$deff
 
    out = list(
+         method = method,
+         var_function = var_function,
          phi = data$inv_deff - 1,
          vars = var_function(data$direct_estimates) / data$inv_deff
      )
@@ -149,9 +151,12 @@ smoothing <- function(data,  # ordered as area id factor!
       inv_deff <- reg$coefficients[which(names(reg$coefficients) == "n")]
 
       out <- list(
+        method = method,
+        var_function = var_function,
         regression = reg,
         phi = data$n * inv_deff - 1,
-        vars = var_function(data$direct_estimates) / (data$n * inv_deff)
+        vars = var_function(data$direct_estimates) / (data$n * inv_deff),
+        raw_vars = data$raw_variance
       )
     }
 
@@ -231,5 +236,43 @@ check_smoo <- function(data,
 
   }
 
+
+}
+
+#' @export
+#'
+
+print.smoothing_fitsae <- function(x, digits = 3L, ...) {
+  if (!inherits(x, "smoothing_fitsae"))
+    stop("Indicated object does not have 'smoothing_fitsae' class.")
+  cat("####### Smoothing function \n")
+  cat("Method:",
+      x$method)
+  cat("\n")
+
+  cat("Variance function:\n")
+  cat("function(mu) ")
+  print(body(x$var_function))
+  cat("\n")
+
+  if (x$method %in% c("ols", "gls")) {
+    cat("### Generalized Variance Function regression \n")
+    print(summary(x$regression, digits = digits))
+    cat("\n")
+  }
+
+  cat("#### Smoothed variance estimates summary \n")
+  print(summary(x$vars, digits = digits))
+  cat("\n")
+
+  if (x$method %in% c("ols", "gls")) {
+    cat("#### Divergences with raw variance estimates \n")
+    print(summary(x$raw_vars - x$vars, digits = digits))
+    cat("\n")
+  }
+
+  cat("#### Smoothed phi estimates summary \n")
+  print(summary(x$phi, digits = digits))
+  cat("\n")
 
 }
