@@ -3,6 +3,7 @@
 S3method(density,summary_fitsae)
 S3method(plot,summary_fitsae)
 S3method(print,estimates_fitsae)
+S3method(print,smoothing_fitsae)
 S3method(print,summary_fitsae)
 S3method(summary,fitsae)
 export(benchmark)
