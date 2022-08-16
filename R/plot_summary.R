@@ -45,7 +45,7 @@ plot.summary_fitsae <- function(x,
     stop("Indicated object does not have 'summary_fitsae' class.")
 
   if (is.null(x$data_obj$domain_size_n))
-    message("To check for the design consistency the domains sample size is required. \n
+    message("When checking for design consistency, the domains sample size is required. \n
             Specify the argument 'domain_size' of the fit_sae() function.")
 
   if (!grid) {

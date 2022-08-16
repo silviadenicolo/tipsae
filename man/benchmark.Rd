@@ -8,7 +8,7 @@ benchmark(
   x,
   bench,
   share,
-  method = "raking",
+  method = c("raking", "ratio", "double"),
   H = NULL,
   time = NULL,
   areas = NULL

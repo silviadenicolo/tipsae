@@ -52,6 +52,7 @@ smoothing <- function(data,  # ordered as area id factor!
                       weights = NULL,
                       sizes= NULL) {
 
+  method <- match.arg(method)
   check_smoo(data,
              direct_estimates,
              area_id,
@@ -145,9 +146,6 @@ smoothing <- function(data,  # ordered as area id factor!
         reg <- nlme::gls(as.formula(paste0("y ~ -1", str)),
                          data = regdata, na.action = na.omit)}
 
-
-      print(summary(reg))
-
       inv_deff <- reg$coefficients[which(names(reg$coefficients) == "n")]
 
       out <- list(
@@ -190,9 +188,6 @@ check_smoo <- function(data,
   if (!is.null(var_function) &&
       !inherits(var_function, "function"))
     stop("'var_function' defined is not a function.")
-
-  if (!(method %in% c("ols", "gls", "kish")))
-    stop("'method' specified is not included in c('ols', 'gls', 'kish').")
 
   if (method == "kish") {
     if (!(area_id %in% colnames(data)))
@@ -256,23 +251,57 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
   cat("\n")
 
   if (x$method %in% c("ols", "gls")) {
-    cat("### Generalized Variance Function regression \n")
+    cat("### Generalized Variance Function regression: \n")
     print(summary(x$regression, digits = digits))
     cat("\n")
   }
 
-  cat("#### Smoothed variance estimates summary \n")
+  cat("#### Smoothed variance estimates summary: \n")
   print(summary(x$vars, digits = digits))
   cat("\n")
 
   if (x$method %in% c("ols", "gls")) {
-    cat("#### Divergences with raw variance estimates \n")
+    cat("#### Divergences with raw variance estimates: \n")
     print(summary(x$raw_vars - x$vars, digits = digits))
     cat("\n")
   }
 
-  cat("#### Smoothed phi estimates summary \n")
+  cat("#### Smoothed phi estimates summary: \n")
   print(summary(x$phi, digits = digits))
   cat("\n")
 
+}
+
+
+#' @export
+#'
+
+plot.smoothing_fitsae <- function(x,
+                                  size = 2.5,
+                                  alpha = 0.8,
+                                   ...
+){
+  if (!inherits(x, "smoothing_fitsae"))
+    stop("Indicated object does not have 'smoothing_fitsae' class.")
+
+  # Arranging dataset
+  xydata <- data.frame(x = x$raw_vars,
+                       y = x$vars)
+
+  # Plot original vs smoother variance estimates
+  lims_axis <- range(c(x$raw_vars, x$vars))
+  scatter_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
+    ggplot2::geom_abline(slope = 1, intercept = 0) +
+    ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
+    ggplot2::theme(aspect.ratio = 1) +
+    ggplot2::ylab("Smoothed est.") +
+    ggplot2::xlab("Raw est.") +
+    ggplot2::theme_bw() +
+    ggplot2::geom_point(
+      shape = 20,
+      size = size,
+      alpha = alpha
+    )
+
+  print(scatter_s)
 }

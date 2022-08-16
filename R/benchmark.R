@@ -75,12 +75,13 @@
 benchmark <- function(x,
                       bench,
                       share,
-                      method = "raking", #c("raking", "ratio", "double")
+                      method = c("raking", "ratio", "double"),
                       H = NULL,
                       time = NULL,
                       areas = NULL) {
 
   # check parameters
+  method <- match.arg(method)
   check_bench(x,
               bench,
               share,
@@ -159,7 +160,11 @@ benchmark <- function(x,
               method = method,
               post_risk = post_risk,
               time = time,
+              bench = bench,
+              H = H,
               areas = areas,
+              raw_est = estim,
+              share = share,
               data_obj = x$data_obj,
               model_settings = x$model_settings,
               model_estimates = x$model_estimates,
@@ -187,6 +192,7 @@ check_bench<-function(x,
 
   if (is.null(method) || is.null(share) || is.null(bench))
     stop(" 'method', 'share' and 'bench' has to be prespecified. ")
+
 
   if (method == "double" && is.null(H))
     stop("Variability benchmark has to be specified in 'double' method.")
@@ -217,4 +223,86 @@ check_share<-function(share,
 
 }
 
+#' @export
+#'
 
+print.benchmark_fitsae <- function(x, digits = 3L, ...) {
+  if (!inherits(x, "benchmark_fitsae"))
+    stop("Indicated object does not have 'benchmark_fitsae' class.")
+  cat("####### Benchmarking function \n")
+  cat("Method:",
+      x$method, "\n")
+
+  cat("Benchmark:",
+      round(x$bench, digits=digits), "\n")
+
+  cat("Weighted sum of original estimates:",
+      round(x$raw_est %*% x$share, digits=digits), "\n")
+
+  if(x$method == "double"){
+    cat("Ensemble Variance Benchmark:",
+        round(x$H, digits=digits), "\n")
+  }
+
+  areas <- ifelse(is.null(x$areas), "All", toString(x$areas))
+  cat("Considered areas:",
+      areas, "\n")
+
+  if(!is.null(x$time)){
+    cat("Time period:",
+        x$time, "\n")
+  }
+  cat("\n")
+
+
+  cat("#### Benchmarked estimates summary:\n")
+  print(summary(x$bench_est, digits = digits))
+  cat("\n")
+
+  post_risk <- ifelse(!is.null(x$post_risk), round(x$post_risk, digits=digits), "NULL")
+  cat("Posterior Risk:",
+      post_risk, "\n")
+  cat("\n")
+
+  cat("#### Divergences with original estimates:\n")
+  print(summary(x$raw_est-x$bench_est, digits = digits))
+  cat("\n")
+
+  cat("#### Shares summary:\n")
+  print(summary(x$share, digits = digits))
+  cat("\n")
+
+}
+
+#' @export
+#'
+
+plot.benchmark_fitsae <- function(x,
+                               size = 2.5,
+                               alpha = 0.8,
+                               ...
+){
+  if (!inherits(x, "benchmark_fitsae"))
+    stop("Indicated object does not have 'benchmark_fitsae' class.")
+
+  # Arranging dataset
+  xydata <- data.frame(x = x$raw_est,
+                       y = x$bench_est)
+
+  # Plot original vs benchmarked estimates
+  lims_axis <- range(c(x$raw_est, x$bench))
+  scatter_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
+    ggplot2::geom_abline(slope = 1, intercept = 0) +
+    ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
+    ggplot2::theme(aspect.ratio = 1) +
+    ggplot2::ylab("Benchmarked est.") +
+    ggplot2::xlab("Original est.") +
+    ggplot2::theme_bw() +
+    ggplot2::geom_point(
+      shape = 20,
+      size = size,
+      alpha = alpha
+    )
+
+  print(scatter_s)
+  }
