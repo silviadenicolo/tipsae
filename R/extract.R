@@ -45,10 +45,10 @@ extract <- function(x) {
     names(out$in_sample)[1] <- "Domains"
     rownames(out$in_sample) <- NULL
 
-    if(inherits(x, "benchmark_fitsae")){
-      if(is.null(x$areas)){
-        tm <-(x$data_obj$times==x$time)[!x$is_oos]
-        mt <- (!x$is_oos)[x$data_obj$times==x$time]
+    if (inherits(x, "benchmark_fitsae")) {
+      if (is.null(x$areas)) {
+        tm <- (x$data_obj$times == x$time)[!x$is_oos]
+        mt <- (!x$is_oos)[x$data_obj$times == x$time]
         out$in_sample$"Bench est." <- NA
         out$in_sample$"Bench est."[tm] <- x$bench_est[mt]
       } else{
@@ -83,8 +83,8 @@ extract <- function(x) {
     names(out$in_sample)[2] <- "Direct est."
     names(out$in_sample)[1] <- "Domains"
 
-    if(any(class(x) == "benchmark_fitsae")){
-      if(is.null(x$areas)){
+    if (inherits(x, "benchmark_fitsae")) {
+      if (is.null(x$areas)) {
         out$in_sample$"Bench est." <- x$bench_est[!x$is_oos]
       } else{
         mat <- match(x$areas, out$in_sample$"Domains")

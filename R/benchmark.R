@@ -178,7 +178,7 @@ benchmark <- function(x,
 }
 
 
-check_bench<-function(x,
+check_bench <- function(x,
                       bench,
                       share,
                       method,
@@ -197,29 +197,27 @@ check_bench<-function(x,
   if (method == "double" && is.null(H))
     stop("Variability benchmark has to be specified in 'double' method.")
 
-  if(!is.null(areas) && any(!(areas %in% x$data_obj$domains_names)))
+  if (!is.null(areas) && any(!(areas %in% x$data_obj$domains_names)))
     stop("'areas' does not corresponds to a subset of 'summary_fitsae' domain names, check saefit$data_obj$domains_names.")
 
   tp = unique(x$data_obj$times)
 
-  if(x$model_settings$temporal_error && !(time %in% tp))
+  if (x$model_settings$temporal_error && !(time %in% tp))
     stop("Time value inserted does not correspond with time values in object 'summary_fitsae'.")
 
-  if(x$model_settings$temporal_error && length(time) != 1)
+  if (x$model_settings$temporal_error && length(time) != 1)
     stop("Only one time value can to be inserted.")
 
   }
 
-check_share<-function(share,
+check_share <- function(share,
                       estim){
 
-  if (length(share)!=length(estim))
+  if (length(share) != length(estim))
     stop("Share length differs from the total number of selected areas. ")
 
-  if(sum(share)!=1){
+  if (sum(share) != 1)
     warning("'share' vector does not sum to 1, benchmark estimates may be unreliable.")
-
-  }
 
 }
 
@@ -229,47 +227,46 @@ check_share<-function(share,
 print.benchmark_fitsae <- function(x, digits = 3L, ...) {
   if (!inherits(x, "benchmark_fitsae"))
     stop("Indicated object does not have 'benchmark_fitsae' class.")
-  cat("####### Benchmarking function \n")
-  cat("Method:",
-      x$method, "\n")
 
-  cat("Benchmark:",
+  cat("Benchmarked estimates \n")
+  cat("\n")
+  cat("* Adopted method:", x$method,"\n")
+  cat("* Benchmark for indicator:",
       round(x$bench, digits=digits), "\n")
-
-  cat("Weighted sum of original estimates:",
+ if(x$method == "double"){
+   cat("* Ensemble Variance Benchmark:",
+       round(x$H, digits=digits), "\n")
+ }
+  cat("* Weighted sum of original estimates:",
       round(x$raw_est %*% x$share, digits=digits), "\n")
 
-  if(x$method == "double"){
-    cat("Ensemble Variance Benchmark:",
-        round(x$H, digits=digits), "\n")
-  }
 
   areas <- ifelse(is.null(x$areas), "All", toString(x$areas))
-  cat("Considered areas:",
+  cat("* Number of considered areas:",
       areas, "\n")
 
   if(!is.null(x$time)){
-    cat("Time period:",
+    cat("* Time period:",
         x$time, "\n")
   }
   cat("\n")
+  cat("---------------------------------------------------------------------\n")
+  cat("Summaries of involved quantities\n")
 
-
-  cat("#### Benchmarked estimates summary:\n")
+  cat("* Shares:\n")
+  print(summary(x$share, digits = digits))
+  cat("\n")
+  cat("* Benchmarked estimates:\n")
   print(summary(x$bench_est, digits = digits))
   cat("\n")
 
-  post_risk <- ifelse(!is.null(x$post_risk), round(x$post_risk, digits=digits), "NULL")
-  cat("Posterior Risk:",
+  post_risk <- ifelse(!is.null(x$post_risk), round(x$post_risk, digits = digits), "not available for this method")
+  cat("* Posterior Risk:",
       post_risk, "\n")
   cat("\n")
 
-  cat("#### Divergences with original estimates:\n")
-  print(summary(x$raw_est-x$bench_est, digits = digits))
-  cat("\n")
-
-  cat("#### Shares summary:\n")
-  print(summary(x$share, digits = digits))
+  cat("* Differences betwwen original and benchmarked estimates:\n")
+  print(summary(x$raw_est - x$bench_est, digits = digits))
   cat("\n")
 
 }

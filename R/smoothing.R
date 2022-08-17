@@ -119,7 +119,7 @@ smoothing <- function(data,  # ordered as area id factor!
 
   }
 
-  if (method %in% c("ols", "gls")){
+  if (method %in% c("ols", "gls")) {
 
    colnames(data)[which(colnames(data) == areas_sample_sizes)] <- "n"
    colnames(data)[which(colnames(data) == raw_variance)] <-
@@ -237,32 +237,37 @@ check_smoo <- function(data,
 print.smoothing_fitsae <- function(x, digits = 3L, ...) {
   if (!inherits(x, "smoothing_fitsae"))
     stop("Indicated object does not have 'smoothing_fitsae' class.")
-  cat("####### Smoothing function \n")
-  cat("Method:",
-      x$method)
+  cat("Smoothing procedure for the dispersion parameters \n")
   cat("\n")
-
-  cat("Variance function:\n")
-  print(x$var_function)
-  cat("\n")
+  cat("* Adopted method:", x$method,"\n")
+  cat("* Variance function:\n")
+  cat("function(mu) {\n")
+  print(body(x$var_function))
+  cat("}\n")
 
   if (x$method %in% c("ols", "gls")) {
-    cat("### Generalized Variance Function regression: \n")
-    print(summary(x$regression, digits = digits))
+    cat("---------------------------------------------------------------------\n")
+    cat("Generalized Variance Function regression: \n")
+    cat("\n")
+    print(summary(x$regression), digits = digits)
+    cat("---------------------------------------------------------------------\n")
+
     cat("\n")
   }
 
-  cat("#### Smoothed variance estimates summary: \n")
-  print(summary(x$vars, digits = digits))
+  cat("Summaries of involved quantities\n")
+  cat("\n")
+  cat("* Smoothed variance estimates: \n")
+  print(summary(x$vars), digits = digits)
   cat("\n")
 
   if (x$method %in% c("ols", "gls")) {
-    cat("#### Divergences with raw variance estimates: \n")
+    cat("* Differences betwwen smoothed and raw variances: \n")
     print(summary(x$raw_vars - x$vars, digits = digits))
     cat("\n")
   }
 
-  cat("#### Smoothed phi estimates summary: \n")
+  cat("* Smoothed Phi: \n")
   print(summary(x$phi, digits = digits))
   cat("\n")
 
@@ -293,23 +298,22 @@ plot.smoothing_fitsae <- function(x,
     ggplot2::geom_boxplot()+
     ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
   }else{
-
     xydata <- data.frame(y = c(x$raw_vars, x$vars),
                          n = c(x$n, x$n),
-                         i = c(rep("Original", length(x$raw_vars)),
+                         Type = c(rep("Raw", length(x$raw_vars)),
                                rep("Smoothed", length(x$vars))))
   # scatter with n size and smoothed/original estimates
 
-    plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ n, y = ~ y, color = ~ i)) +
+    plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ n, y = ~ y, color = ~ Type)) +
       ggplot2::theme(aspect.ratio = 1) +
-      ggplot2::ylab("estimates") +
+      ggplot2::ylab("Estimates") +
       ggplot2::xlab("n") +
       ggplot2::theme_bw() +
       ggplot2::geom_point(
         shape = 20,
         size = size,
-        alpha = alpha)+
-      ggplot2::scale_color_manual(values=c("#E69F00", "deepskyblue4"))
+        alpha = alpha) +
+      ggplot2::scale_color_manual(values = c("#E69F00", "deepskyblue4"))
   }
 
   print(plot_s)
