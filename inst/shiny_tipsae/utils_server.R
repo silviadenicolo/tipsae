@@ -5,7 +5,7 @@ create_data_shiny <-  function(formula_fixed,
                                domain_size,
                                domains,
                                disp_direct) {
-  if (any(class(data) == "tbl")) {
+  if (inherits(data, "tbl")) {
     data <- as.data.frame(data)
   }
   # scaled auxiliary variables
