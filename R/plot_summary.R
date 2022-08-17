@@ -72,7 +72,7 @@ plot.summary_fitsae <- function(x,
 
     # Boxplot for standard deviation reduction
     boxplot_sdr <- ggplot2::ggplot(xydata, ggplot2::aes_(y = ~ sdr, x = ~ ind)) +
-      ggplot2::theme_bw() + ggplot2::ylab("S.D. Reduction") +
+      ggplot2::theme_bw() + ggplot2::ylab("S.D. Reduction") + ggplot2::xlab("Distribution") +
       ggplot2::geom_boxplot() +
       ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
                      axis.text.x = ggplot2::element_blank())
