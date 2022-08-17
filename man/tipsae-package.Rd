@@ -30,7 +30,7 @@ It provides tools for mapping proportions and indicators defined on the unit int
 \insertRef{shiny}{tipsae}
 }
 \author{
-Silvia De Nicolò, \email{silvia.denicolo@phd.unipd.it}
+Silvia De Nicolò, \email{silvia.denicolo@unibo.it}
 
-Aldo Gardini, \email{aldo.gardini2@unibo.it}
+Aldo Gardini, \email{aldo.gardini@unibo.it}
 }

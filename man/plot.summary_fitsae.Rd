@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_summary.R
 \name{plot.summary_fitsae}
 \alias{plot.summary_fitsae}
-\title{Plot Function for a \code{summary_fitsae} Object}
+\title{Plot Method for a \code{summary_fitsae} Object}
 \usage{
 \method{plot}{summary_fitsae}(
   x,

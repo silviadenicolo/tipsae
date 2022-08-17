@@ -2,18 +2,20 @@
 % Please edit documentation in R/benchmark.R
 \name{plot.benchmark_fitsae}
 \alias{plot.benchmark_fitsae}
-\title{Plot Function for \code{benchmark_fitsae} Object}
+\title{Plot Method for \code{benchmark_fitsae} Object}
 \usage{
 \method{plot}{benchmark_fitsae}(x, ...)
 }
 \arguments{
 \item{x}{A \code{benchmark_fitsae} object.}
+
+\item{...}{Currently unused.}
 }
 \value{
 A \code{ggplot2} object.
 }
 \description{
-The \code{plot()} function provides the boxplots of original and benchmarked estimates in comparison with the benchmark value. Note that share weights are not considered.
+The method \code{plot()} provides the boxplots of original and benchmarked estimates in comparison with the benchmark value. Note that share weights are not considered.
 }
 \examples{
 library(tipsae)

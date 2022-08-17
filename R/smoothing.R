@@ -273,13 +273,14 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
 
 }
 
-#' Plot Function for `smoothing_fitsae` Object
+#' Plot Method for `smoothing_fitsae` Object
 #'
-#' The `plot()` function provides (a) the boxplot of variance estimates, when effective sample sizes are estimated through `kish` method; (b) a scatterplot of both original and smoothed estimates versus the area sample sizes, when variance smoothing is performed through methods `ols` and `gls`.
+#' The `plot()` method provides (a) the boxplot of variance estimates, when effective sample sizes are estimated through `kish` method; (b) a scatterplot of both original and smoothed estimates versus the area sample sizes, when variance smoothing is performed through methods `ols` and `gls`.
 #'
 #' @param x A `smoothing_fitsae` object.
 #' @param size Aesthetic option denoting the size of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
 #' @param alpha Aesthetic option denoting the opacity of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
+#' @param ... Currently unused.
 #'
 #' @return A `ggplot2` object.
 #'
@@ -310,7 +311,7 @@ plot.smoothing_fitsae <- function(x,
     stop("Indicated object does not have 'smoothing_fitsae' class.")
 
   # Plot original vs smoother variance estimates
-  if(x$method == "kish"){
+  if (x$method == "kish") {
 
   xydata <- data.frame(y = x$vars)
   #lims_axis <- range(x$vars)
@@ -318,7 +319,7 @@ plot.smoothing_fitsae <- function(x,
     ggplot2::theme(aspect.ratio = 1) +
     ggplot2::ylab("Kish variance est.") +
     ggplot2::theme_bw() +
-    ggplot2::geom_boxplot()+
+    ggplot2::geom_boxplot() +
     ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
   }else{
     xydata <- data.frame(y = c(x$raw_vars, x$vars),
@@ -339,5 +340,5 @@ plot.smoothing_fitsae <- function(x,
       ggplot2::scale_color_manual(values = c("#E69F00", "deepskyblue4"))
   }
 
-  print(plot_s)
+  plot_s
 }

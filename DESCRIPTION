@@ -1,6 +1,6 @@
 Package: tipsae
 Title: Tools for Handling Indices and Proportions in Small Area Estimation
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
@@ -28,30 +28,31 @@ Depends:
 Imports: 
     methods,
     Rcpp (>= 0.12.0),
-    RcppParallel (>= 5.0.1),
-    rstan (>= 2.18.1),
-    rstantools (>= 2.1.1),
-    loo (>= 2.3.1),
-    ggplot2 (>= 3.3.2), 
-    gridExtra (>= 2.3),
-    maptools (>= 1.0.2),
-    rgeos,
-    sp, 
-    spdep, 
     broom,
+    rstan (>= 2.18.1),
+    ggplot2 (>= 3.3.2), 
     nlme (>= 3.1.152), 
     stats,
-    spam,
     ggpubr,
+    Rdpack
+Suggests: 
+    rstantools (>= 2.1.1),
+    RcppParallel (>= 5.0.1),
     callr,
-    Rdpack,
+    spam,
+    spdep, 
+    maptools (>= 1.0.2),
+    gridExtra (>= 2.3),
+    R.rsp,
+    rgeos,
     shinythemes,
     shinyFeedback,
     shinybusy,
     shinyWidgets,
-    shinyjs
-Suggests: 
-    R.rsp
+    shinyjs,
+    bayesplot,
+    sp,
+    loo (>= 2.3.1)
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),

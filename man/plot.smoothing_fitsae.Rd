@@ -2,7 +2,7 @@
 % Please edit documentation in R/smoothing.R
 \name{plot.smoothing_fitsae}
 \alias{plot.smoothing_fitsae}
-\title{Plot Function for \code{smoothing_fitsae} Object}
+\title{Plot Method for \code{smoothing_fitsae} Object}
 \usage{
 \method{plot}{smoothing_fitsae}(x, size = 2.5, alpha = 0.8, ...)
 }
@@ -12,12 +12,14 @@
 \item{size}{Aesthetic option denoting the size of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.}
 
 \item{alpha}{Aesthetic option denoting the opacity of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.}
+
+\item{...}{Currently unused.}
 }
 \value{
 A \code{ggplot2} object.
 }
 \description{
-The \code{plot()} function provides (a) the boxplot of variance estimates, when effective sample sizes are estimated through \code{kish} method; (b) a scatterplot of both original and smoothed estimates versus the area sample sizes, when variance smoothing is performed through methods \code{ols} and \code{gls}.
+The \code{plot()} method provides (a) the boxplot of variance estimates, when effective sample sizes are estimated through \code{kish} method; (b) a scatterplot of both original and smoothed estimates versus the area sample sizes, when variance smoothing is performed through methods \code{ols} and \code{gls}.
 }
 \examples{
 

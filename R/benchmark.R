@@ -232,20 +232,20 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
   cat("\n")
   cat("* Adopted method:", x$method,"\n")
   cat("* Benchmark for indicator:",
-      round(x$bench, digits=digits), "\n")
- if(x$method == "double"){
+      round(x$bench, digits = digits), "\n")
+ if (x$method == "double") {
    cat("* Ensemble Variance Benchmark:",
-       round(x$H, digits=digits), "\n")
+       round(x$H, digits = digits), "\n")
  }
   cat("* Weighted sum of original estimates:",
-      round(x$raw_est %*% x$share, digits=digits), "\n")
+      round(x$raw_est %*% x$share, digits = digits), "\n")
 
 
   areas <- ifelse(is.null(x$areas), "All", toString(x$areas))
-  cat("* Number of considered areas:",
+  cat("* Considered areas:",
       areas, "\n")
 
-  if(!is.null(x$time)){
+  if (!is.null(x$time)) {
     cat("* Time period:",
         x$time, "\n")
   }
@@ -271,11 +271,12 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
 
 }
 
-#' Plot Function for `benchmark_fitsae` Object
+#' Plot Method for `benchmark_fitsae` Object
 #'
-#' The `plot()` function provides the boxplots of original and benchmarked estimates in comparison with the benchmark value. Note that share weights are not considered.
+#' The method `plot()` provides the boxplots of original and benchmarked estimates in comparison with the benchmark value. Note that share weights are not considered.
 #'
 #' @param x A `benchmark_fitsae` object.
+#' @param ... Currently unused.
 #'
 #' @return A `ggplot2` object.
 #'
@@ -315,7 +316,7 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
 #' @export
 #'
 
-plot.benchmark_fitsae <- function(x,...){
+plot.benchmark_fitsae <- function(x, ...){
   if (!inherits(x, "benchmark_fitsae"))
     stop("Indicated object does not have 'benchmark_fitsae' class.")
 
@@ -330,9 +331,9 @@ plot.benchmark_fitsae <- function(x,...){
     ggplot2::geom_abline(slope = 0, intercept = x$bench) +
     ggplot2::theme(aspect.ratio = 1) +
     ggplot2::ylab("") +
-    ggplot2::xlab("estimates") +
+    ggplot2::xlab("Estimates") +
     ggplot2::theme_bw() +
     ggplot2::geom_boxplot()
 
-  print(plot_s)
+  plot_s
   }

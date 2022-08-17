@@ -1,5 +1,5 @@
-#' Internal functions
-#' @export
+# Internal functions
+
 
 create_data <-  function(formula_fixed,
                          data,
@@ -10,11 +10,11 @@ create_data <-  function(formula_fixed,
     data <- as.data.frame(data)
   }
   # Model frame
-  mf <- model.frame(formula_fixed, data)
+  mf <- model.frame(formula_fixed, data, na.action = na.pass)
   type_var <- attr(attr(mf, "terms"), "dataClasses")[-1]
 
   # Design matrix
-  X <- model.matrix(formula_fixed, data)
+  X <- model.matrix(update(formula_fixed, NULL ~ .) , data)
   ass <- attr(X, "assign")
   type_var_X <- type_var[ass] # type of column
   # intercept removed: in case added later

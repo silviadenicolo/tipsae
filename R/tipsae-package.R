@@ -8,12 +8,12 @@
 #' @import shiny
 #' @importFrom rstan sampling
 #' @importFrom grDevices devAskNewPage
-#' @importFrom stats as.formula complete.cases model.matrix na.omit terms var density dnorm
+#' @importFrom stats as.formula complete.cases model.matrix na.omit terms var density dnorm model.extract model.frame
 #' @importFrom utils capture.output write.csv
 #' @importFrom Rdpack reprompt
 #'
-#'@author Silvia De Nicolò, \email{silvia.denicolo@@phd.unipd.it}
-#'@author Aldo Gardini, \email{aldo.gardini2@@unibo.it}
+#'@author Silvia De Nicolò, \email{silvia.denicolo@@unibo.it}
+#'@author Aldo Gardini, \email{aldo.gardini@@unibo.it}
 #'
 #' @references
 #'
