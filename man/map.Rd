@@ -10,7 +10,7 @@ map(
   spatial_id_domains,
   match_names = NULL,
   color_palette = c("snow2", "deepskyblue4"),
-  quantity = "HB_est",
+  quantity = c("HB_est", "Direct_est", "SD"),
   time = NULL
 )
 }

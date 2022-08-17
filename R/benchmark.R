@@ -271,6 +271,47 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
 
 }
 
+#' Plot Function for `benchmark_fitsae` Object
+#'
+#' The `plot()` function provides the boxplots of original and benchmarked estimates in comparison with the benchmark value. Note that share weights are not considered.
+#'
+#' @param x A `benchmark_fitsae` object.
+#'
+#' @return A `ggplot2` object.
+#'
+#' @seealso \code{\link{benchmark}} to produce the input object.
+#'
+#' @examples
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # fitting a model
+#' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
+#'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 300, seed = 0)
+#'
+#' # check model diagnostics
+#' summ_beta <- summary(fit_beta)
+#'
+#' # creating a subset of the areas whose estimates have to be benchmarked
+#' subset <- c("RIMINI", "RICCIONE", "RUBICONE", "CESENA - VALLE DEL SAVIO")
+#'
+#' # creating population shares of the subset areas
+#' pop <- emilia_cs$pop[emilia_cs$id %in% subset]
+#' shares_subset <- pop / sum(pop)
+#'
+#' # perform benchmarking procedure
+#' bmk_subset <- benchmark(x = summ_beta,
+#'                         bench = 0.13,
+#'                         share = shares_subset,
+#'                         method = "raking",
+#'                         areas = subset)
+#' plot(bmk_subset)
+#'
+#'
 #' @export
 #'
 

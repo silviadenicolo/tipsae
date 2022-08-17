@@ -273,7 +273,31 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
 
 }
 
-
+#' Plot Function for `smoothing_fitsae` Object
+#'
+#' The `plot()` function provides (a) the boxplot of variance estimates, when effective sample sizes are estimated through `kish` method; (b) a scatterplot of both original and smoothed estimates versus the area sample sizes, when variance smoothing is performed through methods `ols` and `gls`.
+#'
+#' @param x A `smoothing_fitsae` object.
+#' @param size Aesthetic option denoting the size of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
+#' @param alpha Aesthetic option denoting the opacity of scatterplots points, see \code{\link[ggplot2]{geom_point}} documentation.
+#'
+#' @return A `ggplot2` object.
+#'
+#' @seealso \code{\link{smoothing}} to produce the input object.
+#'
+#' @examples
+#'
+#' library(tipsae)
+#'
+#' # loading toy dataset
+#' data("emilia_cs")
+#'
+#' # perform smoothing procedure
+#' smoo <- smoothing(emilia_cs, direct_estimates = "hcr", area_id = "id",
+#'                   raw_variance = "vars", areas_sample_sizes = "n",
+#'                   var_function = NULL, method = "ols")
+#' plot(smoo)
+#'
 #' @export
 #'
 
@@ -284,7 +308,6 @@ plot.smoothing_fitsae <- function(x,
 ){
   if (!inherits(x, "smoothing_fitsae"))
     stop("Indicated object does not have 'smoothing_fitsae' class.")
-
 
   # Plot original vs smoother variance estimates
   if(x$method == "kish"){
