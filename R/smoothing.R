@@ -243,8 +243,7 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
   cat("\n")
 
   cat("Variance function:\n")
-  cat("function(mu) ")
-  print(body(x$var_function))
+  print(x$var_function)
   cat("\n")
 
   if (x$method %in% c("ols", "gls")) {
@@ -285,21 +284,14 @@ plot.smoothing_fitsae <- function(x,
   # Plot original vs smoother variance estimates
   if(x$method == "kish"){
 
-  xydata <- data.frame(x = x$raw_vars,
-                         y = x$vars)
-  lims_axis <- range(c(x$raw_vars, x$vars))
-  plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
-    ggplot2::geom_abline(slope = 1, intercept = 0) +
-    ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
+  xydata <- data.frame(y = x$vars)
+  #lims_axis <- range(x$vars)
+  plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(y = ~ y)) +
     ggplot2::theme(aspect.ratio = 1) +
-    ggplot2::ylab("Smoothed est.") +
-    ggplot2::xlab("Raw est.") +
+    ggplot2::ylab("Kish variance est.") +
     ggplot2::theme_bw() +
-    ggplot2::geom_point(
-      shape = 20,
-      size = size,
-      alpha = alpha
-    )
+    ggplot2::geom_boxplot()+
+    ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
   }else{
 
     xydata <- data.frame(y = c(x$raw_vars, x$vars),
