@@ -6,9 +6,9 @@
 #' @param formula_fixed An object of class `"formula"` specifying the linear regression fixed part at the linking level.
 #' @param data  An object of class `"data.frame"` containing all relevant quantities.
 #' @param domains Data column name displaying the domain names. If `NULL` (default), the domains are denoted with a progressive number.
-#' @param disp_direct Data column name displaying given values of sampling dispersion for each domain.
+#' @param disp_direct Data column name displaying given values of sampling dispersion for each domain. In out-of-sample areas, dispersion must be `NA`.
 #' @param type_disp Parametrization of the dispersion parameter. The choices are variance (`"var"`) or \eqn{\phi_d} + 1 (`"neff"`) parameter.
-#' @param domain_size Data column name indicating domain sizes (optional).
+#' @param domain_size Data column name indicating domain sizes (optional). In out-of-sample areas, sizes must be `NA`.
 #' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
 #' @param prior_reff Prior distribution of the unstructured random effect. The choices are: `"normal"`, `"t"`, `"VG"`.
 #' @param spatial_error Logical indicating whether to include a spatially structured random effect.

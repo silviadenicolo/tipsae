@@ -142,8 +142,7 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
     ) #'Infbeta0alt',
   }
 
-  if (sum(data_obj$is_oos) == 0 &&
-      !all(!is.na(data_obj$dispersion))) {
+  if (!all(!is.na(data_obj$dispersion[!data_obj$is_oos]))) {
     stop("The direct estimates of the dispersion parameters must not have NAs")
   }
   if (!all(!is.na(data_obj$dispersion[data_obj$y_is != 0 &
