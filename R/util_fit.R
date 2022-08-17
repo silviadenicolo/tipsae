@@ -18,8 +18,10 @@ create_data <-  function(formula_fixed,
   ass <- attr(X, "assign")
   type_var_X <- type_var[ass] # type of column
   # intercept removed: in case added later
+  intercept <- 0
   if (ass[1] == 0) {
     X <- X[, -1, drop = FALSE]
+    intercept <- 1
   }
   # if the column is numeric, it is standardised
   for (i in 1:ncol(X)) {
@@ -56,6 +58,7 @@ create_data <-  function(formula_fixed,
     list(
       y = y,
       X_scal = X,
+      intercept = intercept,
       y_is = y_is,
       is_oos = is_oos,
       dispersion = dispersion,
@@ -286,17 +289,11 @@ arrange_temporal_structure <-
 dummy_standata <-
   function(standata,
            data_obj,
-           terms_formula,
            type_disp,
            likelihood,
            prior_reff,
            prior_coeff,
            p0_HorseShoe) {
-    # Intercept
-    standata$intercept <-
-      ifelse(attr(terms_formula, which = 'intercept') == 0,
-             yes = 0,
-             no = 1)
     # Deff
     standata$deff <- ifelse(type_disp == "neff", yes = 1, no = 0)
 

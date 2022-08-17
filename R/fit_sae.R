@@ -84,10 +84,10 @@ fit_sae <- function(formula_fixed,
                     data,
                     domains = NULL,
                     disp_direct,
-                    type_disp = "neff", #c("neff", "var"),
+                    type_disp = c("neff", "var"),
                     domain_size = NULL,
-                    likelihood = "beta", # c("beta", "flexbeta", "Infbeta0","Infbeta1","Infbeta01","Infbeta0alt"),
-                    prior_reff = "normal",  #c("normal", "t", "VG")
+                    likelihood = c("beta", "flexbeta", "Infbeta0","Infbeta1","Infbeta01"),
+                    prior_reff = c("normal", "t", "VG"),
                     spatial_error = FALSE,
                     spatial_df = NULL,
                     temporal_error = FALSE,
@@ -97,15 +97,17 @@ fit_sae <- function(formula_fixed,
                     init="0",
                     ...) {
 
+  call <- match.call()
+
+  type_disp <- match.arg(type_disp)
+  likelihood <- match.arg(likelihood)
+  prior_reff <- match.arg(prior_reff)
+
   prior_coeff <- "normal"
   p0_HorseShoe <- NULL
 
-  call <- match.call()
-  terms_formula <- terms(formula_fixed)
-
   # check parameters
   check_par_fit(formula_fixed,
-                terms_formula,
                 domains,
                 disp_direct,
                 type_disp,
@@ -147,7 +149,8 @@ fit_sae <- function(formula_fixed,
     disp = data_obj$dispersion,
     prior_coeff = ifelse(prior_coeff == "normal", 0, 1),
     indices_is = data_obj$indices_is,
-    indices_oos = data_obj$indices_oos
+    indices_oos = data_obj$indices_oos,
+    intercept = data_obj$intercept
   )
   # adding intercepts of islands
   if (data_spatial$islands > 1) {
@@ -168,7 +171,7 @@ fit_sae <- function(formula_fixed,
   standata$X <- matrix(standata$X, ncol = ncol(data_obj$X_scal))
   }
   ### creation dummy variables
-  standata <- dummy_standata(standata, data_obj, terms_formula, type_disp,
+  standata <- dummy_standata(standata, data_obj, type_disp,
                              likelihood, prior_reff, prior_coeff, p0_HorseShoe)
 
 

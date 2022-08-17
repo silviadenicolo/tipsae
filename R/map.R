@@ -43,8 +43,10 @@ map <- function(x,
                 spatial_id_domains,
                 match_names = NULL,
                 color_palette = c("snow2","deepskyblue4"),
-                quantity = "HB_est",
+                quantity = c("HB_est", "Direct_est", "SD"),
                 time = NULL) {
+
+  quantity <- match.arg(quantity)
 
   check_map_sae(x,
                 spatial_df,
@@ -98,7 +100,7 @@ map <- function(x,
 
     if (quantity %in% c("HB_est", "Direct_est", "SD")) {
       quantity <- "Bench_est"
-      message("With 'benchmark_fitsae' object, default quantity is 'Bench_est'.")
+      message("With 'benchmark_fitsae' object, argument 'quantity' is ignored and 'Bench_est' is plotted.")
     }
     map_data$Bench_est <- x$bench_est
     map_data$Domains[!is_oos] <- dat_is$Domains
@@ -191,9 +193,6 @@ check_map_sae <- function(x,
   }
   if (length(quantity) != 1) {
     stop("'quantity' must be a vector of length 1.")
-  }
-  if (!quantity %in% c("HB_est", "Direct_est", "SD")) {
-    stop("Argument 'quantity' must be fixed equal to 'HB_est', 'Direct_est', or 'SD'")
   }
   if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
     stop("'spatial_df' is not of class SpatialPolygonsDataFrame from the 'sp' package")

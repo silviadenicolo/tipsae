@@ -72,10 +72,10 @@ plot.summary_fitsae <- function(x,
 
     # Boxplot for standard deviation reduction
     boxplot_sdr <- ggplot2::ggplot(xydata, ggplot2::aes_(y = ~ sdr, x = ~ ind)) +
-      ggplot2::theme_bw() + ggplot2::xlab("") + ggplot2::ylab("S.D. Reduction") +
+      ggplot2::theme_bw() + ggplot2::ylab("S.D. Reduction") +
       ggplot2::geom_boxplot() +
-      ggplot2::theme(axis.text.x =  ggplot2::element_blank())
-
+      ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank())
     if (0 >= min(xydata$sdr) & 0 <= max(xydata$sdr))
       boxplot_sdr <- boxplot_sdr + ggplot2::geom_hline(yintercept = 0)
 
@@ -97,7 +97,7 @@ plot.summary_fitsae <- function(x,
     # Histogram Bayesian p-values
     hist_bp <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ bp)) +
       ggplot2::xlim(0, 1) + ggplot2::theme_bw() +
-      ggplot2::xlab("Bayesian p-values") + ggplot2::ylab("") +
+      ggplot2::xlab("Bayesian p-values") + ggplot2::ylab("Counts") +
       ggplot2::geom_histogram(bins = n_bins,
                               color = "black",
                               fill = "white")

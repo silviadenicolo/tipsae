@@ -50,7 +50,7 @@ smoothing <- function(data,  # ordered as area id factor!
                       survey_data = NULL,
                       survey_area_id = NULL,
                       weights = NULL,
-                      sizes= NULL) {
+                      sizes = NULL) {
 
   method <- match.arg(method)
   check_smoo(data,
@@ -75,8 +75,7 @@ smoothing <- function(data,  # ordered as area id factor!
     message("Proportions variance function specified.")
   }
 
-  if(method == "kish"){
-
+  if (method == "kish") {
     if (!is.null(additional_covariates) ||
         !is.null(raw_variance) ||
         !is.null(areas_sample_sizes)
@@ -186,8 +185,7 @@ check_smoo <- function(data,
       "'direct_estimates' names if specified must be valid columns names of 'data'."
     )
 
-  if (!is.null(var_function) &&
-      !inherits(var_function, "function"))
+  if (!is.null(var_function) && !inherits(var_function, "function"))
     stop("'var_function' defined is not a function.")
 
   if (method == "kish") {
@@ -215,10 +213,8 @@ check_smoo <- function(data,
 
     }
 
-  if(method %in% c("ols", "gls")){
-
-
-   if( (!is.null(raw_variance) &&
+  if (method %in% c("ols", "gls")) {
+   if ((!is.null(raw_variance) &&
          !(raw_variance %in% colnames(data))) ||
       (!is.null(areas_sample_sizes) &&
          !(areas_sample_sizes %in% colnames(data))) ||
@@ -280,7 +276,7 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
 plot.smoothing_fitsae <- function(x,
                                   size = 2.5,
                                   alpha = 0.8,
-                                   ...
+                                  ...
 ){
   if (!inherits(x, "smoothing_fitsae"))
     stop("Indicated object does not have 'smoothing_fitsae' class.")
