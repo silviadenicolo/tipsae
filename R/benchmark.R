@@ -277,32 +277,24 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
 #' @export
 #'
 
-plot.benchmark_fitsae <- function(x,
-                               size = 2.5,
-                               alpha = 0.8,
-                               ...
-){
+plot.benchmark_fitsae <- function(x,...){
   if (!inherits(x, "benchmark_fitsae"))
     stop("Indicated object does not have 'benchmark_fitsae' class.")
 
   # Arranging dataset
-  xydata <- data.frame(x = x$raw_est,
-                       y = x$bench_est)
+  xydata <- data.frame(y = c(x$raw_est, x$bench_est),
+                       i = c(rep("Original", length(x$raw_est)),
+                             rep("Benchmarked", length(x$bench_est))))
 
   # Plot original vs benchmarked estimates
-  lims_axis <- range(c(x$raw_est, x$bench))
-  scatter_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
-    ggplot2::geom_abline(slope = 1, intercept = 0) +
-    ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
+  #lims_axis <- range(c(x$raw_est, x$bench))
+  plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ i, y = ~ y)) +
+    ggplot2::geom_abline(slope = 0, intercept = x$bench) +
     ggplot2::theme(aspect.ratio = 1) +
-    ggplot2::ylab("Benchmarked est.") +
-    ggplot2::xlab("Original est.") +
+    ggplot2::ylab("") +
+    ggplot2::xlab("estimates") +
     ggplot2::theme_bw() +
-    ggplot2::geom_point(
-      shape = 20,
-      size = size,
-      alpha = alpha
-    )
+    ggplot2::geom_boxplot()
 
-  print(scatter_s)
+  print(plot_s)
   }

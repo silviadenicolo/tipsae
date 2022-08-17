@@ -154,7 +154,8 @@ smoothing <- function(data,  # ordered as area id factor!
         regression = reg,
         phi = data$n * inv_deff - 1,
         vars = var_function(data$direct_estimates) / (data$n * inv_deff),
-        raw_vars = data$raw_variance
+        raw_vars = data$raw_variance,
+        n = data$n
       )
     }
 
@@ -284,13 +285,14 @@ plot.smoothing_fitsae <- function(x,
   if (!inherits(x, "smoothing_fitsae"))
     stop("Indicated object does not have 'smoothing_fitsae' class.")
 
-  # Arranging dataset
-  xydata <- data.frame(x = x$raw_vars,
-                       y = x$vars)
 
   # Plot original vs smoother variance estimates
+  if(x$method == "kish"){
+
+  xydata <- data.frame(x = x$raw_vars,
+                         y = x$vars)
   lims_axis <- range(c(x$raw_vars, x$vars))
-  scatter_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
+  plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ x, y = ~ y)) +
     ggplot2::geom_abline(slope = 1, intercept = 0) +
     ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
     ggplot2::theme(aspect.ratio = 1) +
@@ -302,6 +304,26 @@ plot.smoothing_fitsae <- function(x,
       size = size,
       alpha = alpha
     )
+  }else{
 
-  print(scatter_s)
+    xydata <- data.frame(y = c(x$raw_vars, x$vars),
+                         n = c(x$n, x$n),
+                         i = c(rep("Original", length(x$raw_vars)),
+                               rep("Smoothed", length(x$vars))))
+  # scatter with n size and smoothed/original estimates
+
+    plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ n, y = ~ y, color = ~ i)) +
+      ggplot2::geom_abline(slope = 1, intercept = 0) +
+      ggplot2::theme(aspect.ratio = 1) +
+      ggplot2::ylab("estimates") +
+      ggplot2::xlab("n") +
+      ggplot2::theme_bw() +
+      ggplot2::geom_point(
+        shape = 20,
+        size = size,
+        alpha = alpha
+      )
+  }
+
+  print(plot_s)
 }

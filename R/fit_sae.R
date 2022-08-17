@@ -213,7 +213,25 @@ fit_sae <- function(formula_fixed,
   return(output)
 }
 
+#' @export
+#'
 
+print.fitsae <- function(x, digits = 3L, ...){
+  if (!inherits(x, "fitsae"))
+  stop("Indicated object does not have 'fitsae' class.")
+  cat("####### Fitting function for SAE model \n")
+  print(x$call)
+  cat("\n")
+  cat("### Model likelihood:", x$model_settings$likelihood, "\n")
+
+  type_disp = ifelse(x$model_settings$type_disp == "var", "variance", "effective sample size")
+  cat("### Dispersion parameter type:", type_disp , "\n")
+
+  cat("### Prior on random effects:", x$model_settings$prior_reff , "\n")
+  cat("### Spatial error:", x$model_settings$spatial_error , "\n")
+  cat("### Temporal error:", x$model_settings$temporal_error , "\n")
+
+}
 
 
 
