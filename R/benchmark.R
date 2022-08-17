@@ -265,7 +265,7 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
       post_risk, "\n")
   cat("\n")
 
-  cat("* Differences betwwen original and benchmarked estimates:\n")
+  cat("* Differences between original and benchmarked estimates:\n")
   print(summary(x$raw_est - x$bench_est, digits = digits))
   cat("\n")
 

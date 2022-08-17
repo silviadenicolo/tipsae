@@ -262,7 +262,7 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
   cat("\n")
 
   if (x$method %in% c("ols", "gls")) {
-    cat("* Differences betwwen smoothed and raw variances: \n")
+    cat("* Differences between smoothed and raw variances: \n")
     print(summary(x$raw_vars - x$vars, digits = digits))
     cat("\n")
   }
