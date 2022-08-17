@@ -309,7 +309,6 @@ plot.smoothing_fitsae <- function(x,
   # scatter with n size and smoothed/original estimates
 
     plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ n, y = ~ y, color = ~ i)) +
-      ggplot2::geom_abline(slope = 1, intercept = 0) +
       ggplot2::theme(aspect.ratio = 1) +
       ggplot2::ylab("estimates") +
       ggplot2::xlab("n") +
@@ -317,8 +316,8 @@ plot.smoothing_fitsae <- function(x,
       ggplot2::geom_point(
         shape = 20,
         size = size,
-        alpha = alpha
-      )
+        alpha = alpha)+
+      ggplot2::scale_color_manual(values=c("#E69F00", "deepskyblue4"))
   }
 
   print(plot_s)
