@@ -228,13 +228,13 @@ print.benchmark_fitsae <- function(x, digits = 3L, ...) {
   if (!inherits(x, "benchmark_fitsae"))
     stop("Indicated object does not have 'benchmark_fitsae' class.")
 
-  cat("Benchmarked estimates \n")
+  cat("Benchmarking procedure \n")
   cat("\n")
   cat("* Adopted method:", x$method,"\n")
-  cat("* Benchmark for indicator:",
+  cat("* Indicator benchmark:",
       round(x$bench, digits = digits), "\n")
  if (x$method == "double") {
-   cat("* Ensemble Variance Benchmark:",
+   cat("* Ensemble variance benchmark:",
        round(x$H, digits = digits), "\n")
  }
   cat("* Weighted sum of original estimates:",
