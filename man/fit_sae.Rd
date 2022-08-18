@@ -30,11 +30,11 @@ fit_sae(
 
 \item{domains}{Data column name displaying the domain names. If \code{NULL} (default), the domains are denoted with a progressive number.}
 
-\item{disp_direct}{Data column name displaying given values of sampling dispersion for each domain.}
+\item{disp_direct}{Data column name displaying given values of sampling dispersion for each domain. In out-of-sample areas, dispersion must be \code{NA}.}
 
 \item{type_disp}{Parametrization of the dispersion parameter. The choices are variance (\code{"var"}) or \eqn{\phi_d} + 1 (\code{"neff"}) parameter.}
 
-\item{domain_size}{Data column name indicating domain sizes (optional).}
+\item{domain_size}{Data column name indicating domain sizes (optional). In out-of-sample areas, sizes must be \code{NA}.}
 
 \item{likelihood}{Sampling likelihood to be used. The choices are \code{"beta"} (default), \code{"flexbeta"}, \code{"Infbeta0"}, \code{"Infbeta1"} and \code{"Infbeta01"}.}
 

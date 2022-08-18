@@ -5,7 +5,7 @@ shiny::tagList(
             shiny::tags$a(href = "https://cran.r-project.org/", "R"), ", ",
             shiny::tags$a(href = "https://mc-stan.org/", "Stan"), " and ",
             shiny::tags$a(href = "https://shiny.rstudio.com/", "Shiny"), "."),
-  shiny::h4("I will allow you to perform a complete SAE analysis via area-level models fitted in the Bayesian farmework. I implement:"),
+  shiny::h4("I will allow you to perform a complete SAE analysis via area-level models fitted in the Bayesian framework I implement:"),
   shiny::h4(shiny::tags$ul(style = "line-height:150%",
               shiny::tags$li("the Beta regression model (see ",
                              shiny::tags$a(href = "https://www.tandfonline.com/doi/abs/10.1080/03610926.2019.1570266", "Janicki 2020"),
@@ -41,7 +41,7 @@ shiny::tagList(
                    shiny::strong(style = "color: #bbd9ec;", "Results"), "tab.")
   )
   ),
-  shiny::h4("If you want to start analysizing your data move to the", shiny::strong(style = "color: #bbd9ec;", "Data"), "tab. Otherwise press the following button to load the example data (see the documentation of the emilia_cs data) and the related shapefile:"),
+  shiny::h4("If you want to start analysizing your data move to the", shiny::strong(style = "color: #bbd9ec;", "Data"), "tab. Otherwise press the following button to load the example data (see the documentation of the emilia_cs data):"),
   shiny::fluidRow(style = 'padding-left:15px', shiny::actionButton("load_emilia_cs", label = "Load dataset"))
 
 
