@@ -63,8 +63,11 @@
 #' }
 #'
 #' @seealso \code{\link{emilia}} and \code{\link{emilia_cs}} for the provided datasets.
-#' @examples \donttest{library(tipsae)
-#' data("emilia_shp")}
+#' @examples \donttest{
+#' library(tipsae)
+#' library(sp)
+#' data("emilia_shp")
+#' }
 #'
 #' @keywords datasets
 #'
