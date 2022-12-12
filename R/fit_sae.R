@@ -15,6 +15,7 @@
 #' @param spatial_df Object of class `SpatialPolygonsDataFrame` with the shapefile of the studied region. Required if `spatial_error = TRUE`.`
 #' @param temporal_error Logical indicating whether to include a temporally structured random effect.
 #' @param temporal_variable Data column name indicating temporal variable. Required if `temporal_error = TRUE`.
+#' @param scale_prior List with the values of the prior scales. 4 named elements must be provided: "Unstructured", "Spatial", "Temporal", "Coeff.". Default: all equal to 2.5.
 #' @param adapt_delta HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.
 #' @param max_treedepth HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.
 #' @inheritParams rstan::sampling
@@ -92,6 +93,10 @@ fit_sae <- function(formula_fixed,
                     spatial_df = NULL,
                     temporal_error = FALSE,
                     temporal_variable = NULL,
+                    scale_prior = list("Unstructured" = 2.5,
+                                       "Spatial" = 2.5,
+                                       "Temporal" = 2.5,
+                                       "Coeff." = 2.5),
                     adapt_delta = 0.95,
                     max_treedepth=10,
                     init="0",
@@ -125,6 +130,8 @@ fit_sae <- function(formula_fixed,
                 max_treedepth,
                 init)
 
+  # check scale_prior
+  check_scale_prior(scale_prior)
 
   # creation data objects
   data_obj <- create_data(formula_fixed, data, domain_size, domains, disp_direct)
@@ -150,7 +157,11 @@ fit_sae <- function(formula_fixed,
     prior_coeff = ifelse(prior_coeff == "normal", 0, 1),
     indices_is = data_obj$indices_is,
     indices_oos = data_obj$indices_oos,
-    intercept = data_obj$intercept
+    intercept = data_obj$intercept,
+    sigma_unstr = scale_prior[["Unstructured"]],
+    sigma_spatial = scale_prior[["Spatial"]],
+    sigma_temporal = scale_prior[["Temporal"]],
+    sigma_coeff = scale_prior[["Coeff."]]
   )
   # adding intercepts of islands
   if (data_spatial$islands > 1) {

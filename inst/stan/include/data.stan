@@ -49,3 +49,9 @@ real<lower=0> sigma_HS; // estimate sigma HS prior
 real<lower=0> p0_HS;  // Expected number of large slopes
 real<lower=0> slab_scale; // Scale for large slopes
 real<lower=0> slab_df;// Effective degrees of freedom for large slopes
+
+// Prior hyperparameters
+real<lower=0> sigma_unstr;
+real<lower=0> sigma_spatial;
+real<lower=0> sigma_temporal;
+real<lower=0> sigma_coeff;

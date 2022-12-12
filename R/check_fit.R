@@ -160,3 +160,24 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
 }
 
 
+check_scale_prior <- function(scale_prior){
+  if (!inherits(scale_prior, "list"))
+    stop("The argument 'scale_prior' must be a list with 4 named components: 'Unstructured', 'Spatial', 'Temporal' and 'Coeff.'.")
+
+  if (length(scale_prior) != 4)
+    stop("The argument 'scale_prior' must be a list with 4 named components: 'Unstructured', 'Spatial', 'Temporal' and 'Coeff.'.")
+
+  if (!all(names(scale_prior) %in% c("Unstructured", "Spatial", "Temporal", "Coeff.")))
+    stop("The argument 'scale_prior' must be a list with 4 named components: 'Unstructured', 'Spatial', 'Temporal' and 'Coeff.'.")
+
+  if (!all(c("Unstructured", "Spatial", "Temporal", "Coeff.") %in% names(scale_prior)))
+    stop("The argument 'scale_prior' must be a list with 4 named components: 'Unstructured', 'Spatial', 'Temporal' and 'Coeff.'.")
+
+  if (!all(sapply(scale_prior, FUN = function(x){length(x) == 1})))
+    stop("A positive scalar must be provided as list element for 'scale_prior'.")
+
+  if (!all(sapply(scale_prior, FUN = function(x){x > 0})))
+    stop("A positive scalar must be provided as list element for 'scale_prior'.")
+
+}
+

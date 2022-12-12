@@ -47,7 +47,7 @@ transformed parameters {
     }else if(prior_reff==1){
       v = sigma_v[1] * v_raw;
     }else if(prior_reff==2){
-      v = sqrt(psi_d*lambda[1]) .* v_raw;
+      v = (sqrt(psi_d)*lambda[1]) .* v_raw;
     }
   }
 
@@ -74,10 +74,10 @@ model{
 
   // Prior fixed effects
   if(intercept==1) {
-    beta0[1] ~ normal(0,2.5);
+    beta0[1] ~ normal(0, sigma_coeff);
   }
   if(prior_coeff == 0){
-    z_beta ~ normal(0, 2.5);
+    z_beta ~ normal(0, sigma_coeff);
   }else if (prior_coeff == 1) {
     z_beta ~ normal(0,1);
     lambda_HS ~ cauchy(0, 1);
@@ -89,15 +89,15 @@ model{
   if(spatio_temporal == 0){
     if(prior_reff == 0) {// std normal
       v_raw ~ std_normal();
-      sigma_v[1] ~ normal(0, 2.5)T[0, ];
+      sigma_v[1] ~ normal(0, sigma_unstr)T[0, ];
     }else if(prior_reff == 1) {// half t (3 dof)
       v_raw ~ student_t(nu[1], 0, 1);
-      sigma_v[1] ~ normal(0, 2.5)T[0, ];
+      sigma_v[1] ~ normal(0, sigma_unstr)T[0, ];
       nu[1] ~ exponential(0.1);
     }else if(prior_reff == 2) {//VG
       v_raw ~ std_normal();
       psi_d ~ gamma(0.5, 1);
-      lambda[1] ~ gamma(2, 1);
+      lambda[1] ~ normal(0, sigma_unstr);
     }
   }
   // Prior Spatial random effect
