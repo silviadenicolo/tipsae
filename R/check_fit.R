@@ -13,6 +13,7 @@ check_par_fit <- function(formula_fixed,
                           p0_HorseShoe,
                           spatial_error,
                           spatial_df,
+                          domains_spatial_df,
                           temporal_error,
                           temporal_variable,
                           adapt_delta,
@@ -69,6 +70,15 @@ check_par_fit <- function(formula_fixed,
       be passed to the argument 'spatial_df'"
     )
   }
+  if (spatial_error && is.null(domains_spatial_df)) {
+    stop(
+      "When a spatial error is included in the model, a valid name in 'domains_spatial_df' must
+      be provided."
+    )
+  }
+  if (spatial_error && is.null(domains)) {
+    stop("When a spatial random effect is considered, the argument 'domains' must be specified.")
+  }
   if (spatial_error) {
     if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
       stop(
@@ -76,24 +86,42 @@ check_par_fit <- function(formula_fixed,
         'SpatialPolygonsDataFrame' (see 'sp' package)"
       )
     }
+    if ((length(domains_spatial_df) != 1 ||
+         !(domains_spatial_df %in% colnames(spatial_df@data)))) {
+      stop(
+        "The argument 'domains_spatial_df' must contain a unique character that determines
+         a column in the 'spatial_df@data' object with the domains denominations"
+      )
+    }
+    if (!all(unique(data[,domains]) %in% spatial_df@data[,domains_spatial_df])) {
+      stop("Not all the domains denominations in 'data' are included in those
+         provided in 'spatial_df@data'. Check the spelling.")
+    }
+    if (!all(spatial_df@data[,domains_spatial_df] %in% unique(data[,domains]))) {
+      stop("Not all the domains denominations in 'spatial_df@data' are included in those
+         provided in 'data'. Check the spelling.")
+    }
     if (!temporal_error) {
       if (nrow(spatial_df) != nrow(data)) {
         stop("The input of the argument 'spatial_df' must be have the same number of rows of 'data'")
       }
     }
   }
-  if (temporal_error && is.null(temporal_variable)) {
-    stop(
-      "When a temporal error is included in the model, a temporal variable has to
+  if(temporal_error){
+    if (is.null(temporal_variable)) {
+      stop(
+        "When a temporal error is included in the model, a temporal variable has to
       be included in data and its name has to be passed through argument 'temporal_variable'."
-    )
+      )
+    }
     if (length(temporal_variable) != 1 || !(temporal_variable %in% colnames(data))) {
       stop("The argument 'temporal_variable' must be a string indicating a valid name in the data.")
     }
+    if (is.null(domains)) {
+      stop("When a temporal random effect is considered, the argument 'domains' must be specified.")
+    }
   }
-  if (temporal_error && is.null(domains)) {
-    stop("When a temporal random effect is considered, the argument 'domains' must be specified.")
-  }
+
   if (temporal_error && spatial_error) {
     if (nrow(spatial_df) != length(unique(data[,domains]))) {
       stop("The input of the argument 'spatial_df' must be have the same number of rows of the number of domains in 'data'")

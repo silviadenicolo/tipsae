@@ -12,7 +12,8 @@
 #' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
 #' @param prior_reff Prior distribution of the unstructured random effect. The choices are: `"normal"`, `"t"`, `"VG"`.
 #' @param spatial_error Logical indicating whether to include a spatially structured random effect.
-#' @param spatial_df Object of class `SpatialPolygonsDataFrame` with the shapefile of the studied region. Required if `spatial_error = TRUE`.`
+#' @param spatial_df Object of class `SpatialPolygonsDataFrame` with the shapefile of the studied region. Required if `spatial_error = TRUE`.
+#' @param domains_spatial_df Column name of the `spatial_df@data` object displaying the domain names. Required if `spatial_error = TRUE`.
 #' @param temporal_error Logical indicating whether to include a temporally structured random effect.
 #' @param temporal_variable Data column name indicating temporal variable. Required if `temporal_error = TRUE`.
 #' @param scale_prior List with the values of the prior scales. 4 named elements must be provided: "Unstructured", "Spatial", "Temporal", "Coeff.". Default: all equal to 2.5.
@@ -91,6 +92,7 @@ fit_sae <- function(formula_fixed,
                     prior_reff = c("normal", "t", "VG"),
                     spatial_error = FALSE,
                     spatial_df = NULL,
+                    domains_spatial_df = NULL,
                     temporal_error = FALSE,
                     temporal_variable = NULL,
                     scale_prior = list("Unstructured" = 2.5,
@@ -124,6 +126,7 @@ fit_sae <- function(formula_fixed,
                 p0_HorseShoe,
                 spatial_error,
                 spatial_df,
+                domains_spatial_df,
                 temporal_error,
                 temporal_variable,
                 adapt_delta,
@@ -132,6 +135,18 @@ fit_sae <- function(formula_fixed,
 
   # check scale_prior
   check_scale_prior(scale_prior)
+
+  # order dataset w.r.t. domain
+  if (!is.null(domains)) {
+    if (!temporal_error) {
+      data <- data[order(data[,domains]), ]
+    }else{# with temporal error: domain nested within times
+      data <- data[order(data[,temporal_variable], data[,domains]), ]
+    }
+  }
+  if (!is.null(spatial_df)) {
+    spatial_df@data <- spatial_df@data[order(spatial_df@data[,domains_spatial_df]), ]
+  }
 
   # creation data objects
   data_obj <- create_data(formula_fixed, data, domain_size, domains, disp_direct)

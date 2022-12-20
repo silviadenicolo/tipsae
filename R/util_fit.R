@@ -202,6 +202,9 @@ arrange_temporal_structure <-
            data) {
     if (temporal_error) {
       # time identifier variable
+      if (!is.numeric(data[, temporal_variable])) {
+        stop("The temporal variable must be numeric.")
+      }
       time <- as.factor(data[, temporal_variable])
       TP <- length(levels(time)) # time periods
       D <- nrow(data) / TP # areas
@@ -236,12 +239,6 @@ arrange_temporal_structure <-
       for (i in 1:nrow(data)) {
         cat_ios[i] <- cat[indices_temp[i, 1], indices_temp[i, 2]]
       }
-
-      ## aggiungere: vettore di categorica che dica che oos è:
-      #0- non mancante
-      #1- tutti mancanti: no effetto temporale
-      #2- mancante il primo TP
-      #3- mancante in mezzo: effetto di area (what about temporale?)
 
       # compute scaling factor
       eig_K_RW1 <-
