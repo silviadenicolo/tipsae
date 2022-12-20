@@ -15,8 +15,10 @@ fit_sae(
   prior_reff = c("normal", "t", "VG"),
   spatial_error = FALSE,
   spatial_df = NULL,
+  domains_spatial_df = NULL,
   temporal_error = FALSE,
   temporal_variable = NULL,
+  scale_prior = list(Unstructured = 2.5, Spatial = 2.5, Temporal = 2.5, Coeff. = 2.5),
   adapt_delta = 0.95,
   max_treedepth = 10,
   init = "0",
@@ -42,11 +44,15 @@ fit_sae(
 
 \item{spatial_error}{Logical indicating whether to include a spatially structured random effect.}
 
-\item{spatial_df}{Object of class \code{SpatialPolygonsDataFrame} with the shapefile of the studied region. Required if \code{spatial_error = TRUE}.`}
+\item{spatial_df}{Object of class \code{SpatialPolygonsDataFrame} with the shapefile of the studied region. Required if \code{spatial_error = TRUE}.}
+
+\item{domains_spatial_df}{Column name of the \code{spatial_df@data} object displaying the domain names. Required if \code{spatial_error = TRUE}.}
 
 \item{temporal_error}{Logical indicating whether to include a temporally structured random effect.}
 
 \item{temporal_variable}{Data column name indicating temporal variable. Required if \code{temporal_error = TRUE}.}
+
+\item{scale_prior}{List with the values of the prior scales. 4 named elements must be provided: "Unstructured", "Spatial", "Temporal", "Coeff.". Default: all equal to 2.5.}
 
 \item{adapt_delta}{HMC option: target average proposal acceptance probability. See \code{\link[rstan]{stan}} documentation.}
 

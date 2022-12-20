@@ -19,8 +19,11 @@ emilia_shp
 The \code{emilia_shp} shapefile consists of a \code{SpatialPolygonsDataFrame} object of 38 health districts within the Emilia-Romagna region, located in the North-East of Italy.
 }
 \examples{
-\donttest{library(tipsae)
-data("emilia_shp")}
+\donttest{
+library(tipsae)
+library(sp)
+data("emilia_shp")
+}
 
 }
 \seealso{
