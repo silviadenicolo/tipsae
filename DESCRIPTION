@@ -17,7 +17,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: R.rsp
 RdMacros: Rdpack
 Biarch: true
@@ -40,6 +40,7 @@ Suggests:
     rstantools (>= 2.1.1),
     RcppParallel (>= 5.0.1),
     callr,
+    sf,
     spam,
     spdep, 
     maptools (>= 1.0.2),

@@ -25,7 +25,7 @@ map_shp <- shiny::reactive({
       # NULL if the path input does not refer to a shapefile
       return(NULL)
     } else {
-      shpFile <- rgdal::readOGR(shpPath)
+      shpFile <- sf:::as_Spatial(sf::st_read(shpPath))
       return(shpFile)
     }
   } else {
