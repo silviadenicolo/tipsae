@@ -9,13 +9,13 @@
 #' @param raw_variance Character string indicating the variable name for raw variance estimates included in `data` object, to be specified if methods `"ols"` or `"gls"` are selected.
 #' @param areas_sample_sizes Character string indicating the variable name for domain sample sizes included in `data` object, to be specified if methods `"ols"` or `"gls"` are selected.
 #' @param additional_covariates A vector of character strings indicating the variable names of possible additional covariates, included in `data`, to be added to the smoothing procedure if methods `"ols"` or `"gls"` are selected.
-#' @param var_function  An object of class `function` denoting the variance function of the response variable. The default option (`NULL`) matches the proportion case being equal to `function(x) x * (1 - x)`.
+#' @param var_function  An object of class `function` denoting the variance function of the response variable. The default option (`NULL`) matches the proportion case being equal to `function(x) x * (1 - x)`. If an alternative function is specified, only variance estimates are provided.
 #' @param survey_data An additional dataset to be specified when method `"kish"` is selected, defined at sampling unit level (e.g., households) and comprising sampling weights, unit sizes and domain names.
 #' @param survey_area_id Character string indicating the variable denoting the domain names included in the `survey_data` object.
 #' @param weights Character string indicating the variable including sampling weights in `survey_data` object.
 #' @param sizes Character string indicating the variable including unit sizes in `survey_data` object.
 #'
-#' @return An object of class `smoothing_fitsae`, being a list of vectors including dispersion parameters estimates: both the variances and the effective sample sizes. When `"ols"` or `"gls"` method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from `nlme` package.
+#' @return An object of class `smoothing_fitsae`, being a list of vectors including dispersion estimates: the variances and, when no alternative variance functions are specified, the effective sample sizes. When `"ols"` or `"gls"` method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from `nlme` package.
 #'
 #' @seealso \code{\link[nlme]{gls}} for details on estimation procedure for `"ols"` and `"gls"` methods.
 #'
@@ -39,7 +39,8 @@
 #' @export
 #'
 
-smoothing <- function(data,  # ordered as area id factor!
+smoothing <- function(data,
+                      # ordered as area id factor!
                       direct_estimates,
                       area_id = NULL,
                       raw_variance = NULL,
@@ -51,35 +52,38 @@ smoothing <- function(data,  # ordered as area id factor!
                       survey_area_id = NULL,
                       weights = NULL,
                       sizes = NULL) {
-
   method <- match.arg(method)
-  check_smoo(data,
-             direct_estimates,
-             area_id,
-             raw_variance,
-             areas_sample_sizes,
-             additional_covariates,
-             method,
-             var_function,
-             survey_data,
-             survey_area_id,
-             weights,
-             sizes)
+  check_smoo(
+    data,
+    direct_estimates,
+    area_id,
+    raw_variance,
+    areas_sample_sizes,
+    additional_covariates,
+    method,
+    var_function,
+    survey_data,
+    survey_area_id,
+    weights,
+    sizes
+  )
 
-  colnames(data)[which(colnames(data) == direct_estimates)] <- "direct_estimates"
+  colnames(data)[which(colnames(data) == direct_estimates)] <-
+    "direct_estimates"
 
+  default_variance_function = "no"
 
   if (is.null(var_function)) {
     var_function = function(mu)
       mu * (1 - mu)
     message("Proportions variance function specified.")
+    default_variance_function = "yes"
   }
 
   if (method == "kish") {
     if (!is.null(additional_covariates) ||
         !is.null(raw_variance) ||
-        !is.null(areas_sample_sizes)
-    )
+        !is.null(areas_sample_sizes))
       warning(
         "'additional_covariates', 'raw_variance', 'areas_sample_sizes' will not be considered when choosing 'kish' method."
       )
@@ -93,62 +97,80 @@ smoothing <- function(data,  # ordered as area id factor!
       "sizes"
 
     agg_area <-
-      stats::aggregate(
-        survey_data$weight,
-        by = list(survey_data$area_id),
-        FUN = sum
-      )
+      stats::aggregate(survey_data$weight,
+                       by = list(survey_data$area_id),
+                       FUN = sum)
     names(agg_area) = c("area_id", "N_i")
 
     agg <- merge(survey_data, agg_area, by = "area_id")
     agg$tot = (agg$weights / agg$N_i) ^ 2 / agg$sizes
 
-    s <- stats::aggregate(agg$tot, by = list(agg$area_id), FUN = sum)
+    s <-
+      stats::aggregate(agg$tot, by = list(agg$area_id), FUN = sum)
     colnames(s) <- c("area_id", "deff")
 
-   data <- merge(data, s, by = "area_id")
+    data <- merge(data, s, by = "area_id")
 
-   data$inv_deff = 1 / data$deff
+    data$inv_deff = 1 / data$deff
 
-   out = list(
-         method = method,
-         var_function = var_function,
-         phi = data$inv_deff - 1,
-         vars = var_function(data$direct_estimates) / data$inv_deff
-     )
+    if (default_variance_function == "yes") {
+      out = list(
+        method = method,
+        var_function = var_function,
+        phi = data$inv_deff - 1,
+        vars = var_function(data$direct_estimates) / data$inv_deff
+      )
+    } else{
+      out = list(
+        method = method,
+        var_function = var_function,
+        vars = var_function(data$direct_estimates) / data$inv_deff
+      )
+    }
+
+
 
   }
 
   if (method %in% c("ols", "gls")) {
+    colnames(data)[which(colnames(data) == areas_sample_sizes)] <- "n"
+    colnames(data)[which(colnames(data) == raw_variance)] <-
+      "raw_variance"
 
-   colnames(data)[which(colnames(data) == areas_sample_sizes)] <- "n"
-   colnames(data)[which(colnames(data) == raw_variance)] <-
-        "raw_variance"
 
+    regdata <-
+      data.frame(y = var_function(data$direct_estimates) / data$raw_variance,
+                 n = data$n)
 
-   regdata <- data.frame(y = var_function(data$direct_estimates) / data$raw_variance,
-                   n = data$n)
-
-   if (!is.null(additional_covariates))
-        regdata <- cbind(regdata, data[, additional_covariates])
+    if (!is.null(additional_covariates))
+      regdata <- cbind(regdata, data[, additional_covariates])
 
     nam <- names(regdata)[-1]
     str <-
-        paste(sapply(1:length(nam), function(x)
-          paste0("+", nam[x])), collapse = '')
+      paste(sapply(1:length(nam), function(x)
+        paste0("+", nam[x])), collapse = '')
 
     if (method == "gls") {
-        reg <- nlme::gls(as.formula(paste0("y ~ -1", str)),
-                         data = regdata,
-                         weights = nlme::varPower(), na.action = na.omit)
-      } else{
-        reg <- nlme::gls(as.formula(paste0("y ~ -1", str)),
-                         data = regdata, na.action = na.omit)}
+      reg <- nlme::gls(
+        as.formula(paste0("y ~ -1", str)),
+        data = regdata,
+        weights = nlme::varPower(),
+        na.action = na.omit
+      )
+    } else{
+      reg <- nlme::gls(as.formula(paste0("y ~ -1", str)),
+                       data = regdata,
+                       na.action = na.omit)
+    }
 
-      inv_deff <- reg$coefficients[which(names(reg$coefficients) == "n")]
+    inv_deff <-
+      reg$coefficients[which(names(reg$coefficients) == "n")]
 
+
+    if (default_variance_function == "yes") {
       out <- list(
         method = method,
+        default_variance_function = default_variance_function,
         var_function = var_function,
         regression = reg,
         phi = data$n * inv_deff - 1,
@@ -156,7 +178,18 @@ smoothing <- function(data,  # ordered as area id factor!
         raw_vars = data$raw_variance,
         n = data$n
       )
+    } else{
+      out <- list(
+        method = method,
+        default_variance_function = default_variance_function,
+        var_function = var_function,
+        regression = reg,
+        vars = var_function(data$direct_estimates) / (data$n * inv_deff),
+        raw_vars = data$raw_variance,
+        n = data$n
+      )
     }
+  }
 
   class(out) <- "smoothing_fitsae"
   return(out)
@@ -176,55 +209,52 @@ check_smoo <- function(data,
                        survey_area_id,
                        weights,
                        sizes) {
-
   if (!inherits(data, "data.frame"))
     stop("'data' is not a dataframe object.")
 
   if (!(direct_estimates %in% colnames(data)))
-    stop(
-      "'direct_estimates' names if specified must be valid columns names of 'data'."
-    )
+    stop("'direct_estimates' names if specified must be valid columns names of 'data'.")
 
   if (!is.null(var_function) && !inherits(var_function, "function"))
     stop("'var_function' defined is not a function.")
 
   if (method == "kish") {
     if (!(area_id %in% colnames(data)))
-      stop(
-        "'area_id' must be valid columns names of 'data'."
-      )
+      stop("'area_id' must be valid columns names of 'data'.")
 
     if (is.null(survey_data))
-      stop(
-        "'survey_data' object has to be indicated when choosing 'kish' method."
-      )
+      stop("'survey_data' object has to be indicated when choosing 'kish' method.")
 
     if (!inherits(survey_data, "data.frame"))
       stop("survey_data is not a dataframe object.")
 
-    if (any(!(c(survey_area_id, weights, sizes) %in% colnames(survey_data))))
-      stop("'survey_area_id', 'sizes' and 'weights' names must be valid columns names of 'survey_data'.")
+    if (any(!(
+      c(survey_area_id, weights, sizes) %in% colnames(survey_data)
+    )))
+      stop(
+        "'survey_area_id', 'sizes' and 'weights' names must be valid columns names of 'survey_data'."
+      )
 
-    if (length(unique(survey_data[,survey_area_id])) != dim(data)[1])
+    if (length(unique(survey_data[, survey_area_id])) != dim(data)[1])
       stop("Number of areas in 'data' different from areas in 'survey_data'.")
 
-    if ( any(!(unique(survey_data[,survey_area_id]) %in% unique(data[,area_id]))))
+    if (any(!(unique(survey_data[, survey_area_id]) %in% unique(data[, area_id]))))
       stop("Number of areas in 'data' different from areas in 'survey_data'.")
 
-    }
+  }
 
   if (method %in% c("ols", "gls")) {
-   if ((!is.null(raw_variance) &&
+    if ((!is.null(raw_variance) &&
          !(raw_variance %in% colnames(data))) ||
-      (!is.null(areas_sample_sizes) &&
+        (!is.null(areas_sample_sizes) &&
          !(areas_sample_sizes %in% colnames(data))) ||
-      (!is.null(additional_covariates) &&
+        (!is.null(additional_covariates) &&
          any(!(
            additional_covariates %in% colnames(data)
          ))))
-     stop(
-  "'raw_variance', 'areas_sample_sizes', 'additional_covariates' names, if specified, must be valid columns names of 'data'."
-)
+      stop(
+        "'raw_variance', 'areas_sample_sizes', 'additional_covariates' names, if specified, must be valid columns names of 'data'."
+      )
 
   }
 
@@ -239,7 +269,7 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
     stop("Indicated object does not have 'smoothing_fitsae' class.")
   cat("Smoothing procedure for the dispersion parameters \n")
   cat("\n")
-  cat("* Adopted method:", x$method,"\n")
+  cat("* Adopted method:", x$method, "\n")
   cat("* Variance function:\n")
   cat("function(mu) {\n")
   print(body(x$var_function))
@@ -267,8 +297,11 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
     cat("\n")
   }
 
-  cat("* Smoothed Phi: \n")
-  print(summary(x$phi, digits = digits))
+  if (x$default_variance_function == "yes") {
+    cat("* Smoothed Phi: \n")
+    print(summary(x$phi, digits = digits))
+  }
+
   cat("\n")
 
 }
@@ -305,38 +338,45 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
 plot.smoothing_fitsae <- function(x,
                                   size = 2.5,
                                   alpha = 0.8,
-                                  ...
-){
+                                  ...) {
   if (!inherits(x, "smoothing_fitsae"))
     stop("Indicated object does not have 'smoothing_fitsae' class.")
 
   # Plot original vs smoother variance estimates
   if (x$method == "kish") {
+    xydata <- data.frame(y = x$vars)
+    #lims_axis <- range(x$vars)
+    plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(y = ~ y)) +
+      ggplot2::theme(aspect.ratio = 1) +
+      ggplot2::ylab("Kish variance est.") +
+      ggplot2::theme_bw() +
+      ggplot2::geom_boxplot() +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_blank(),
+        axis.ticks = ggplot2::element_blank()
+      )
+  } else{
+    xydata <- data.frame(
+      y = c(x$raw_vars, x$vars),
+      n = c(x$n, x$n),
+      Type = c(rep("Raw", length(x$raw_vars)),
+               rep("Smoothed", length(x$vars)))
+    )
+    # scatter with n size and smoothed/original estimates
 
-  xydata <- data.frame(y = x$vars)
-  #lims_axis <- range(x$vars)
-  plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(y = ~ y)) +
-    ggplot2::theme(aspect.ratio = 1) +
-    ggplot2::ylab("Kish variance est.") +
-    ggplot2::theme_bw() +
-    ggplot2::geom_boxplot() +
-    ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank())
-  }else{
-    xydata <- data.frame(y = c(x$raw_vars, x$vars),
-                         n = c(x$n, x$n),
-                         Type = c(rep("Raw", length(x$raw_vars)),
-                               rep("Smoothed", length(x$vars))))
-  # scatter with n size and smoothed/original estimates
-
-    plot_s <- ggplot2::ggplot(data = xydata, ggplot2::aes_(x = ~ n, y = ~ y, color = ~ Type)) +
+    plot_s <-
+      ggplot2::ggplot(data = xydata, ggplot2::aes_(
+        x = ~ n,
+        y = ~ y,
+        color = ~ Type
+      )) +
       ggplot2::theme(aspect.ratio = 1) +
       ggplot2::ylab("Estimates") +
       ggplot2::xlab("n") +
       ggplot2::theme_bw() +
-      ggplot2::geom_point(
-        shape = 20,
-        size = size,
-        alpha = alpha) +
+      ggplot2::geom_point(shape = 20,
+                          size = size,
+                          alpha = alpha) +
       ggplot2::scale_color_manual(values = c("#E69F00", "deepskyblue4"))
   }
 

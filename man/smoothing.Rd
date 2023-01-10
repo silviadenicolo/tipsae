@@ -34,7 +34,7 @@ smoothing(
 
 \item{method}{The method to be used. The choices are \code{"kish"},\code{"ols"} and \code{"gls"}.}
 
-\item{var_function}{An object of class \code{function} denoting the variance function of the response variable. The default option (\code{NULL}) matches the proportion case being equal to \code{function(x) x * (1 - x)}.}
+\item{var_function}{An object of class \code{function} denoting the variance function of the response variable. The default option (\code{NULL}) matches the proportion case being equal to \code{function(x) x * (1 - x)}. If an alternative function is specified, only variance estimates are provided.}
 
 \item{survey_data}{An additional dataset to be specified when method \code{"kish"} is selected, defined at sampling unit level (e.g., households) and comprising sampling weights, unit sizes and domain names.}
 
@@ -45,7 +45,7 @@ smoothing(
 \item{sizes}{Character string indicating the variable including unit sizes in \code{survey_data} object.}
 }
 \value{
-An object of class \code{smoothing_fitsae}, being a list of vectors including dispersion parameters estimates: both the variances and the effective sample sizes. When \code{"ols"} or \code{"gls"} method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from \code{nlme} package.
+An object of class \code{smoothing_fitsae}, being a list of vectors including dispersion estimates: the variances and, when no alternative variance functions are specified, the effective sample sizes. When \code{"ols"} or \code{"gls"} method has been selected, the list incorporates also an object of class \code{\link[nlme]{gls}} from \code{nlme} package.
 }
 \description{
 The \code{smoothing()} function implements three methods, all yielding refined estimates of either variance or effective sample size, to account for indicators with different variance functions. The output estimates are ready to be used as known parameters in an area-level model, and they need to be added to the analysed \code{data.frame} object. All the implemented methods enable the estimation of the effective sample sizes, whereas \code{"ols"} and \code{"gls"} also perform a variance smoothing procedure.
