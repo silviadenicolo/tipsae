@@ -96,9 +96,6 @@ data("emilia")
 # loading the shapefile of the concerned areas
 data("emilia_shp")
 
-# ordering the shapefile consistently with the dataset order
-emilia_shp@data <- emilia_shp@data[match(unique(emilia$id), emilia_shp@data$NAME_DISTRICT),]
-
 # fitting a spatio-temporal model
 fit_ST <- fit_sae(formula_fixed = hcr ~ x,
                   domains = "id",
@@ -108,12 +105,12 @@ fit_ST <- fit_sae(formula_fixed = hcr ~ x,
                   data = emilia,
                   spatial_error = TRUE,
                   spatial_df = emilia_shp,
+                  domains_spatial_df = "NAME_DISTRICT",
                   temporal_error = TRUE,
                   temporal_variable = "year",
                   max_treedepth = 15,
                   seed = 0)
 }
-
 
 }
 \references{
