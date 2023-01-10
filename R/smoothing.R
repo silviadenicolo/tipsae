@@ -52,6 +52,7 @@ smoothing <- function(data,
                       survey_area_id = NULL,
                       weights = NULL,
                       sizes = NULL) {
+
   method <- match.arg(method)
   check_smoo(
     data,
@@ -68,10 +69,10 @@ smoothing <- function(data,
     sizes
   )
 
+  default_variance_function = "no"
+
   colnames(data)[which(colnames(data) == direct_estimates)] <-
     "direct_estimates"
-
-  default_variance_function = "no"
 
   if (is.null(var_function)) {
     var_function = function(mu)
@@ -116,6 +117,7 @@ smoothing <- function(data,
     if (default_variance_function == "yes") {
       out = list(
         method = method,
+        default_variance_function = default_variance_function,
         var_function = var_function,
         phi = data$inv_deff - 1,
         vars = var_function(data$direct_estimates) / data$inv_deff
@@ -123,6 +125,7 @@ smoothing <- function(data,
     } else{
       out = list(
         method = method,
+        default_variance_function = default_variance_function,
         var_function = var_function,
         vars = var_function(data$direct_estimates) / data$inv_deff
       )
@@ -300,9 +303,8 @@ print.smoothing_fitsae <- function(x, digits = 3L, ...) {
   if (x$default_variance_function == "yes") {
     cat("* Smoothed Phi: \n")
     print(summary(x$phi, digits = digits))
+    cat("\n")
   }
-
-  cat("\n")
 
 }
 
