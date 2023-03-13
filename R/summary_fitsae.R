@@ -235,7 +235,7 @@ summary.fitsae <- function(object,
         p_0 <- as.matrix(object$stanfit)[, p0]
         p_tot <- p_1 + p_0
         g <- p_1/p_tot
-        vars <- m * sweep((1 - m), MARGIN = 2, STATS = (object$dispersion + 1), FUN = '/') *
+        vars <- m * sweep((1 - m), MARGIN = 2, STATS = (object$data_obj$dispersion + 1), FUN = '/') *
            (1 - p_tot) + p_tot * g * (1 - g) + p_tot * (1 - p_tot) * (g - m) ^ 2
       }
       sd_d <- sqrt(apply(vars, 2, mean))

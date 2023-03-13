@@ -13,7 +13,7 @@ vector[length_v] v_raw; //raw area-specific random effect
     // prior_reff=1
     vector<lower=0>[(prior_reff == 1 && spatio_temporal == 0) ? 1:0] nu;
     // prior_reff=2 (VG)
-    vector<lower=0>[(prior_reff == 2 && spatio_temporal == 0) ? M_is:0] psi_d;
+    vector<lower=0>[(prior_reff == 2 && spatio_temporal == 0) ? length_v:0] psi_d;
     vector<lower=0>[(prior_reff == 2 && spatio_temporal == 0) ? 1:0] lambda;
 
 // Spatial reff
