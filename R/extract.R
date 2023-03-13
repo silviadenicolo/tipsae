@@ -55,7 +55,7 @@ extract <- function(x) {
         stop("benchmark time x area to fix")
       }}
 
-    if (sum(x$is_oos) > 0) {
+    if (sum(x$is_oos) > 0 & x$model_settings$likelihood != "flexbeta") {
       out$out_of_sample <- cbind(x$model_estimates_oos[,1:2], NA, x$model_estimates_oos[,-c(1:2)])
       out$out_of_sample <- as.data.frame(out$out_of_sample)
       names(out$out_of_sample)[which(names(out$out_of_sample) == "mean")] <- "HB est."
@@ -94,7 +94,7 @@ extract <- function(x) {
     rownames(out$in_sample) <- NULL
 
 
-    if (sum(x$is_oos) > 0) {
+    if (sum(x$is_oos) > 0 & x$model_settings$likelihood != "flexbeta") {
       out$out_of_sample <- cbind(x$model_estimates_oos[,1], NA, x$model_estimates_oos[,-1])
 
       out$out_of_sample <- as.data.frame(out$out_of_sample)

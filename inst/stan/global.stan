@@ -190,7 +190,7 @@ generated quantities{
   real v_oos[1];
   int label_mixt;
   vector[inflation == 2 ? 3:0] probs;
-  vector<lower=0,upper=1>[M_oos]  theta_oos;
+  vector<lower=0,upper=1>[likelihood != 1 ? M_oos:0]  theta_oos;
 
 
   // different likelihoods

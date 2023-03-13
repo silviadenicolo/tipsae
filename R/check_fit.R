@@ -165,12 +165,12 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
   if (!all(data_obj$y_is != 0) &&
       !(likelihood %in% c("Infbeta0",  "Infbeta01"))) { #"Infbeta0alt",
     stop(
-      "To deal with direct estimates equal to 1, models 'Infbeta0',
+      "To deal with direct estimates equal to 0, models 'Infbeta0',
           or 'Infbeta01' must be chosen"
     ) #'Infbeta0alt',
   }
 
-  if (!all(!is.na(data_obj$dispersion[!data_obj$is_oos]))) {
+  if (!all(!is.na(data_obj$dispersion))) {
     stop("The direct estimates of the dispersion parameters must not have NAs")
   }
   if (!all(!is.na(data_obj$dispersion[data_obj$y_is != 0 &

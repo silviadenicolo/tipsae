@@ -167,7 +167,9 @@ summary.fitsae <- function(object,
     # out of samples
     if (sum(object$data_obj$is_oos) == 0) {
       post_summ_theta_oos <- NULL
-    }else{
+    }else if(object$model_settings$likelihood == "flexbeta"){
+      post_summ_theta_oos <- NULL
+    } else {
       theta_est_oos <- par[grepl("^theta_oos", par)]
       post_summ_theta_oos = smry[theta_est_oos, col_take]
       if (length(theta_est_oos) == 1) {
