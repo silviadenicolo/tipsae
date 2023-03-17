@@ -130,6 +130,8 @@ fit_sae <- function(formula_fixed,
                 max_treedepth,
                 init)
 
+  data <- as.data.frame(data)
+
   # check scale_prior
   check_scale_prior(scale_prior)
 

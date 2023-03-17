@@ -158,12 +158,14 @@ smoothing <- function(data,
         as.formula(paste0("y ~ -1", str)),
         data = regdata,
         weights = nlme::varPower(),
-        na.action = na.omit
+        na.action = na.omit,
+        control = list(singular.ok = TRUE)
       )
     } else{
       reg <- nlme::gls(as.formula(paste0("y ~ -1", str)),
                        data = regdata,
-                       na.action = na.omit)
+                       na.action = na.omit,
+                       control = list(singular.ok = TRUE))
     }
 
     inv_deff <-
@@ -221,6 +223,9 @@ check_smoo <- function(data,
   if (!is.null(var_function) && !inherits(var_function, "function"))
     stop("'var_function' defined is not a function.")
 
+  if (sum(data[,raw_variance] <= 0, na.rm = T) != 0)
+    stop("Raw variances uncorrectly specified with negative or null values.")
+
   if (method == "kish") {
     if (!(area_id %in% colnames(data)))
       stop("'area_id' must be valid columns names of 'data'.")
@@ -243,6 +248,8 @@ check_smoo <- function(data,
 
     if (any(!(unique(survey_data[, survey_area_id]) %in% unique(data[, area_id]))))
       stop("Number of areas in 'data' different from areas in 'survey_data'.")
+
+
 
   }
 

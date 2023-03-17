@@ -181,10 +181,10 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
     stop("The direct estimates of the dispersion parameters must not have NAs")
   }
   if (sum(data_obj$dispersion <= 0, na.rm = T) != 0)
-    stop("Dispersion parameter uncorrectly specified with negative values.")
+    stop("Dispersion parameter uncorrectly specified with negative or null values.")
   if (!is.null(domain_size)) {
     if (sum(data_obj$domain_size_n <= 0, na.rm = T) != 0)
-      stop("Sizes of the domains uncorrectly specified with negative values.")
+      stop("Sizes of the domains uncorrectly specified with negative or null values.")
   }
 
 
