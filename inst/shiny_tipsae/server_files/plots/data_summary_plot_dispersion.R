@@ -33,24 +33,24 @@ plot_dispersion <- shiny::reactive({
       data_plot$Time <- factor(data_plot$Time)
       if(input$plot_var_kind == "y"){
         plot3 <- ggplot2::ggplot(data_plot,
-                                 ggplot2::aes_(x = ~ Response, y = ~ Dispersion)) +
+                                 ggplot2::aes(x = Response, y = Dispersion)) +
           ggplot2::ylab(Disp_string) + ggplot2::xlab(paste0(input$choice_resp)) +
-          ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes_(colour = ~ Time))+
+          ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes(colour = Time))+
           ggplot2::guides(colour=ggplot2::guide_legend(title=paste0(input$time_col))) + ggplot2::theme(aspect.ratio = 2/3)
       } else{
         plot3 <- ggplot2::ggplot(data_plot,
-                                 ggplot2::aes_(x = ~ size, y = ~ Dispersion)) +
+                                 ggplot2::aes(x = size, y = Dispersion)) +
           ggplot2::ylab(Disp_string) + ggplot2::xlab("Area Sample Size") +
-          ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes_(colour = ~ Time))+
+          ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes(colour = Time))+
           ggplot2::guides(colour=ggplot2::guide_legend(title=paste0(input$time_col))) + ggplot2::theme(aspect.ratio = 2/3)
       }
     } else {
       data_plot <- data_plot[data_plot$Time %in% selected_times,]
       data_plot$Time <- factor(data_plot$Time)
       plot3 <- ggplot2::ggplot(data_plot,
-                               ggplot2::aes_(x = ~ Response, y = ~ Dispersion)) +
+                               ggplot2::aes(x = Response, y = Dispersion)) +
         ggplot2::ylab(Disp_string) + ggplot2::xlab(paste0(input$choice_resp)) +
-        ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes_(colour = ~ Time))+
+        ggplot2::theme_bw(base_size = 15)+ ggplot2::geom_point(ggplot2::aes(colour = Time))+
         ggplot2::guides(colour=ggplot2::guide_legend(title=paste0(input$time_col))) + ggplot2::theme(aspect.ratio = 2/3)
     }
   }else{
@@ -58,20 +58,20 @@ plot_dispersion <- shiny::reactive({
       data_plot$size <- organized_data()$all$domain_size_n
       if(input$plot_var_kind == "y"){
         plot3 <- ggplot2::ggplot(data_plot,
-                                 ggplot2::aes_(x = ~ Response, y = ~ Dispersion)) +
+                                 ggplot2::aes(x = Response, y = Dispersion)) +
           ggplot2::ylab(Disp_string) + ggplot2::xlab(paste0(input$choice_resp)) +
           ggplot2::geom_point() +
           ggplot2::theme_bw(base_size = 15) + ggplot2::theme(aspect.ratio = 2/3)
       } else{
         plot3 <- ggplot2::ggplot(data_plot,
-                                 ggplot2::aes_(x = ~ size, y = ~ Dispersion)) +
+                                 ggplot2::aes(x = size, y = Dispersion)) +
           ggplot2::ylab(Disp_string) + ggplot2::xlab("Area Sample Size") +
           ggplot2::geom_point() +
           ggplot2::theme_bw(base_size = 15) + ggplot2::theme(aspect.ratio = 2/3)
       }
     } else {
       plot3 <- ggplot2::ggplot(data_plot,
-                               ggplot2::aes_(x = ~ Response, y = ~ Dispersion)) +
+                               ggplot2::aes(x = Response, y = Dispersion)) +
         ggplot2::ylab(Disp_string) + ggplot2::xlab(paste0(input$choice_resp)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw(base_size = 15) + ggplot2::theme(aspect.ratio = 2/3)

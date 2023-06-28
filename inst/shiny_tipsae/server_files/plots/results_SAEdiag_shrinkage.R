@@ -6,7 +6,7 @@
 
 plot_shrinkage <- shiny::reactive({
   lims_axis <- range(c(res_model()$summary$direct_est, res_model()$summary$post_means))
-  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes_(x = ~ Direct, y = ~ Mod_Est_Mean)) +
+  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes(x = Direct, y = Mod_Est_Mean)) +
     ggplot2::geom_abline(slope = 1, intercept = 0) +
     ggplot2::xlim(lims_axis) + ggplot2::ylim(lims_axis) +
     ggplot2::theme(aspect.ratio = 1) +

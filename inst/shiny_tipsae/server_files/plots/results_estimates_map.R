@@ -16,8 +16,6 @@ shiny::observe({
   }
 })
 
-
-
 ### Creating plot ------
 
 plot_map_estimates <- shiny::reactive({
@@ -53,28 +51,14 @@ plot_map_estimates <- shiny::reactive({
       data_sub <- rbind(data_sub, data_oos)
     }
 
-    spatial_df_plot <- merge(map_shp_matching()$spatial_df_tidy,
-                             data_sub,
-                             by.x = "id",
-                             by.y = "Domains")
 
-    map <- ggplot2::ggplot(spatial_df_plot,
-                           ggplot2::aes_(x = ~ long, y = ~ lat, group = ~ group,
-                                         fill  = spatial_df_plot[name_var][, 1])) +
-      ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-      ggplot2::labs(x = "", y = "") +
-      ggplot2::theme_bw() +
-      ggplot2::scale_fill_gradient(
-        low = color_palette[1],
-        high = color_palette[2],
-        limits = range(spatial_df_plot[name_var][, 1]),
-        guide = "colourbar"
-      ) +
-      ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                     axis.text = ggplot2::element_blank()) +
-      ggplot2::coord_sf()
+    spatial_df_plot <- dplyr::left_join(map_shp_matching()$spatial_df_tidy,
+                                      data_sub, by = setNames("Domains", input$choice_match))
 
 
+    map <-  tmap::tm_shape(spatial_df_plot) +
+      tmap::tm_polygons(name_var,
+                        palette = color_palette)
 
 
   map
@@ -82,10 +66,10 @@ plot_map_estimates <- shiny::reactive({
 
 ### Output: plot and save -----
 
-output$plot_map_estimates <- shiny::renderPlot({
-  plot_map_estimates()
-}, bg = "transparent")
-
+output$plot_map_estimates <- leaflet::renderLeaflet({
+  tmap::tmap_leaflet(plot_map_estimates()+
+                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+})
 
 output$download_map_estimates <- shiny::downloadHandler(
   filename = 'tipsae_map_estimates.RData',
@@ -99,10 +83,8 @@ output$save_pdf_map_estimates <- shiny::downloadHandler(
   filename = "tipsae_map_estimates.pdf",
     content = function(file) {
     tipsae_map_estimates <- plot_map_estimates()
-    ggplot2::ggsave(file, plot = tipsae_map_estimates, device = "pdf")
+    tmap::tmap_save(tm = tipsae_map_estimates,
+                    filename = file)
   }
 )
-
-
-
 

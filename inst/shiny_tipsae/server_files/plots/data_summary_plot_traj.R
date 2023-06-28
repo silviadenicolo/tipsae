@@ -37,12 +37,12 @@ plot_time_traj <- shiny::reactive({
 
   data_plot <- data_plot[data_plot$Domain %in% selected_domains,]
   plot2 <- ggplot2::ggplot(data_plot,
-                           ggplot2::aes_string(x = input$time_col, y = name_var),
-                           ggplot2::aes_(group = ~ Domain)) +
+                           ggplot2::aes(x = .data[[input$time_col]], y = .data[[name_var]]),
+                           ggplot2::aes(group = Domain)) +
     ggplot2::ylab(paste0(name_var)) + ggplot2::xlab(paste0(input$time_col)) +
     ggplot2::scale_x_continuous(breaks = unique(data_plot[,input$time_col])) +
-    ggplot2::geom_line(ggplot2::aes_(colour = ~ Domain)) +
-    ggplot2::geom_point(ggplot2::aes_(colour = ~ Domain)) +
+    ggplot2::geom_line(ggplot2::aes(colour = Domain)) +
+    ggplot2::geom_point(ggplot2::aes(colour = Domain)) +
     ggplot2::theme_bw(base_size = 15) + ggplot2::theme(aspect.ratio = 2/3) +
     ggplot2::guides(colour=ggplot2::guide_legend(title = paste0("Domain")))
 

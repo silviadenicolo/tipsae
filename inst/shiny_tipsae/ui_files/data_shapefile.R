@@ -43,7 +43,7 @@ shiny::tagList(
               shiny::fileInput(buttonLabel = "Browse",
                 "shpFileRDS",
                 accept = c('.rds'),
-                label = "Input RDS: an object containing a 'SpatialPolygonsDataFrame' must be loaded"
+                label = "Input RDS: an object containing a 'SpatialPolygonsDataFrame' or 'sf' must be loaded"
               )
             })
         )

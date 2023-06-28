@@ -6,9 +6,9 @@
 
 plot_density <- shiny::reactive({
   ggplot2::ggplot(res_model()$data_ris) +
-    ggplot2::stat_density(ggplot2::aes_(x = ~ Direct, color = "Direct est."),
+    ggplot2::stat_density(ggplot2::aes(x = Direct, color = "Direct est."),
                           geom = "line", position = "identity") +
-    ggplot2::stat_density(ggplot2::aes_(x = ~ Mod_Est_Mean, color = "Model est."),
+    ggplot2::stat_density(ggplot2::aes(x = Mod_Est_Mean, color = "Model est."),
                           geom = "line", position = "identity") +
     ggplot2::theme_bw(base_size = 15) + ggplot2::xlab("Estimates") +
     ggplot2::ylab("Density") + ggplot2::labs(color = "") +

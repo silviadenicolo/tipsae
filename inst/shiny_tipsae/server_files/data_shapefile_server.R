@@ -4,6 +4,7 @@
 map_shp <- shiny::reactive({
   if(input$load_emilia_cs > 0) {
     shpFile <- readRDS(system.file("extdata","emilia_shp.rds", package = "tipsae"))
+    shpFile <- sf::st_as_sf(shpFile)
   }else{
   # Active if the user need a .shp file
   if (!is.null(input$shpFile)) {
@@ -25,7 +26,7 @@ map_shp <- shiny::reactive({
       # NULL if the path input does not refer to a shapefile
       return(NULL)
     } else {
-      shpFile <- sf:::as_Spatial(sf::st_read(shpPath))
+      shpFile <- sf::st_read(shpPath)
       return(shpFile)
     }
   } else {
@@ -33,14 +34,17 @@ map_shp <- shiny::reactive({
     if (!is.null(input$shpFileRDS)) {
       shpFile <- readRDS(input$shpFileRDS$datapath)
       # check shpFile
-      check_shp_file <- class(shpFile) != "SpatialPolygonsDataFrame"
+      check_shp_file <- ! (inherits(shpFile, "SpatialPolygonsDataFrame") || inherits(shpFile, "sf"))
       shinyFeedback::feedbackDanger("shpFileRDS", check_shp_file,
                                     "The object contained in the '.rds' input must be of class
-                                      'SpatialPolygonsDataFrame' (see 'sp' package)")
+                                      'SpatialPolygonsDataFrame' (see 'sp' package) or 'sf' (see 'sf' package)")
       if (check_shp_file) {
         # NULL if the loaded RDS do not contain a SpatialPolygonsDataFrame
         return(NULL)
       } else {
+        if (inherits(shpFile, "SpatialPolygonsDataFrame")) {#create sf object
+          shpFile <- sf::st_as_sf(shpFile)
+        }
         return(shpFile)
       }
     } else {# NULL until the a path is specified
@@ -67,18 +71,7 @@ map_shp_matching <- shiny::reactive({
       spatial_df <- map_shp()
       indices_match <- match(spatial_df[[input$choice_match]], organized_data()$id_domains)
       map_data <- organized_data()$data[indices_match,c(input$choice_resp, input$choice_cov)]
-      if (!is.data.frame(map_data)) {
-        map_data <- as.data.frame(map_data)
-        colnames(map_data) <- input$choice_resp
-      }
-      # fortify
-      spatial_df@data[colnames(map_data)] <- map_data
-
-      spatial_df_tidy <- broom::tidy(spatial_df, region = input$choice_match)
-      spatial_df_tidy <- merge(spatial_df_tidy,
-                               spatial_df@data,
-                               by.x = "id",
-                               by.y = input$choice_match)
+      spatial_df_tidy <- dplyr::bind_cols(spatial_df, map_data)#,
 
       if (check1) {
         return(NULL)
@@ -91,7 +84,8 @@ map_shp_matching <- shiny::reactive({
     }else{ # With time
       spatial_df <- map_shp()
       # fortify
-      spatial_df_tidy <- broom::tidy(spatial_df, region = input$choice_match)
+      spatial_df_tidy <- spatial_df
+      print(spatial_df_tidy)
       if (check1) {
         return(NULL)
       } else {
@@ -158,7 +152,7 @@ shiny::outputOptions(output, 'cond_map_shp_matched', suspendWhenHidden = FALSE)
 ## Output: map with the loaded grid
 output$map <- shiny::renderPlot({
   if (is.null(map_shp())) return()
-  sp::plot(map_shp(), main = "Loaded map")
+  sp::plot(map_shp()$geometry, main = "Loaded map")
 })
 
 ## Output: names of the domains

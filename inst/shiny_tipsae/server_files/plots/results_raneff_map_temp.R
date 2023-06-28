@@ -17,38 +17,30 @@ plot_map_temp <- shiny::reactive({
     time_selected <- input$select_time_map2
   }
 
-  data_reff_t <- data.frame(Domain =res_model()$summary$raneff$temporal[, "Domains"],
+  data_reff_t <- data.frame(Domains =res_model()$summary$raneff$temporal[, "Domains"],
                             means = res_model()$summary$raneff$temporal[, "mean"])
   data_reff_t <- data_reff_t[res_model()$summary$raneff$temporal$Times==time_selected, ]
 
   color_palette = c("snow2","#A4112E")
-  spatial_df_plot <- merge(map_shp_matching()$spatial_df_tidy,
-                           data_reff_t,
-                           by.x = "id",
-                           by.y = "Domain")
-  ggplot2::ggplot(spatial_df_plot,
-                  ggplot2::aes_(x = ~ long, y = ~ lat, group = ~ group,
-                                fill  = ~ means)) +
-    ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::theme_bw() +
-    ggplot2::scale_fill_gradient(
-      low = color_palette[1],
-      high = color_palette[2],
-      limits = range(spatial_df_plot["means"][, 1]),
-      name = "Ran. Effects",
-      guide = "colourbar"
-    ) +
-    ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                   axis.text = ggplot2::element_blank()) +
-    ggplot2::coord_sf()
+
+
+  spatial_df_plot <- dplyr::left_join(map_shp_matching()$spatial_df_tidy,
+                                      data_reff_t, by = setNames("Domains", input$choice_match))
+
+
+  map <-  tmap::tm_shape(spatial_df_plot) +
+    tmap::tm_polygons("means",
+                      palette = color_palette)
+
+
   })
 
 ### Output: plot and save -----
 
-output$map_temp <- shiny::renderPlot({
-  plot_map_temp()
-}, bg = "transparent")
+output$map_temp <- leaflet::renderLeaflet({
+  tmap::tmap_leaflet(plot_map_temp()+
+                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+})
 
 
 output$download_map_temp <- shiny::downloadHandler(
@@ -62,7 +54,8 @@ output$download_map_temp <- shiny::downloadHandler(
 output$save_pdf_map_temp = shiny::downloadHandler(
   filename = "tipsae_map_temp.pdf",
   content = function(file) {
-    ggplot2::ggsave(file, plot = plot_map_temp(), device = "pdf")
+    tmap::tmap_save(tm = plot_map_temp(),
+                    filename = file)
   }
 )
 

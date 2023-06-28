@@ -12,8 +12,8 @@
 #' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
 #' @param prior_reff Prior distribution of the unstructured random effect. The choices are: `"normal"`, `"t"`, `"VG"`.
 #' @param spatial_error Logical indicating whether to include a spatially structured random effect.
-#' @param spatial_df Object of class `SpatialPolygonsDataFrame` with the shapefile of the studied region. Required if `spatial_error = TRUE`.
-#' @param domains_spatial_df Column name of the `spatial_df@data` object displaying the domain names. Required if `spatial_error = TRUE`.
+#' @param spatial_df Object of class `SpatialPolygonsDataFrame` or `sf` with the shapefile of the studied region. Required if `spatial_error = TRUE`.
+#' @param domains_spatial_df Column name of the `spatial_df` object displaying the domain names. Required if `spatial_error = TRUE`.
 #' @param temporal_error Logical indicating whether to include a temporally structured random effect.
 #' @param temporal_variable Data column name indicating temporal variable. Required if `temporal_error = TRUE`.
 #' @param scale_prior List with the values of the prior scales. 4 named elements must be provided: "Unstructured", "Spatial", "Temporal", "Coeff.". Default: all equal to 2.5.
@@ -144,7 +144,12 @@ fit_sae <- function(formula_fixed,
     }
   }
   if (!is.null(spatial_df)) {
-    spatial_df@data <- spatial_df@data[order(spatial_df@data[,domains_spatial_df]), ]
+    if (inherits(spatial_df, "SpatialPolygonsDataFrame")){
+      dom_spat <- spatial_df@data[,domains_spatial_df]
+    } else {
+      dom_spat <- sf::st_drop_geometry(spatial_df[,domains_spatial_df])[[1]]
+    }
+    spatial_df <- spatial_df[order(dom_spat), ]
   }
 
   # creation data objects

@@ -5,7 +5,7 @@
 ### Creating plot ------
 
 plot_hist_pval <- shiny::reactive({
-  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes_(x = ~ bayes_pvalues)) +
+  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes(x = bayes_pvalues)) +
     ggplot2::xlim(0, 1) + ggplot2::theme_bw(base_size = 15) +
     ggplot2::xlab("Bayesian p-values") + ggplot2::ylab("Counts") +
     ggplot2::geom_histogram(bins = 30,

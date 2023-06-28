@@ -9,7 +9,10 @@ shiny::tagList(
   ### Distribution response ------
   shiny::wellPanel(
     shiny::div(
-      style = "display: inline-block;vertical-align:top; width: 75px;",
+      style = "display: inline-block; vertical-align:top; width: 79%;",
+      shiny::h4(shiny::strong("Distribution of the response"))),
+    shiny::div(
+      style = "display: inline-block;vertical-align:top;float:right; width: 20%;",
       shinyWidgets::dropdown(
         shiny::tags$h4(shiny::strong("Plot options")),
         shiny::radioButtons(
@@ -23,12 +26,9 @@ shiny::tagList(
             shiny::uiOutput("choose_time_dist")
           }),
         status = "primary",
-        icon = shiny::icon("gears"), width = "400px",
+        icon = shiny::icon("gears"), width = "100%", block = T,
         tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
       )),
-    shiny::div(
-      style = "display: inline-block; vertical-align:top; width: 500px;",
-      shiny::h4(shiny::strong("Distribution of the response"))),
     shiny::br(),shiny::br(),
     shiny::plotOutput("plot_expl_dist"),
     shiny::br(),
@@ -39,7 +39,10 @@ shiny::tagList(
   ### Logit vs covariate ------
   shiny::wellPanel(
     shiny::div(
-      style = "display: inline-block;vertical-align:top; width: 75px;",
+      style = "display: inline-block;vertical-align:top; width: 79%;",
+      shiny::h4(shiny::strong("Logit of the response vs covariates"))),
+    shiny::div(
+      style = "display: inline-block;vertical-align:top; width: 20%;",
       shinyWidgets::dropdown(
         shiny::tags$h4(shiny::strong("Plot options")),
         shiny::uiOutput("cov_plot"),
@@ -53,12 +56,9 @@ shiny::tagList(
           inline = F
         ),
         status = "primary",
-        icon = shiny::icon("gears"), width = "300px",
+        icon = shiny::icon("gears"), width = "100%", block = T,
         tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
       )),
-    shiny::div(
-      style = "display: inline-block;vertical-align:top; width: 500px;",
-      shiny::h4(shiny::strong("Logit of the response vs covariates"))),
     shiny::br(),shiny::br(),
     shiny::plotOutput("plot_expl_xy"),
     shiny::br(),
@@ -66,12 +66,16 @@ shiny::tagList(
     shiny::downloadButton("save_pdf_logit", label = "Save as .pdf")
   ),
 
+
   ### Plot variances ------
   shiny::conditionalPanel(
     condition = "output.cond_smoothing_ok==true",
     shiny::wellPanel(
       shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 75px;",
+        style = "display: inline-block;vertical-align:top; width: 79%;",
+        shiny::h4(shiny::strong("Dispersion parameter"))),
+      shiny::div(
+        style = "display: inline-block;vertical-align:top; width: 20%;",
         shinyWidgets::dropdown(
           shiny::tags$h4(shiny::strong("Plot options")),
           shiny::conditionalPanel(
@@ -95,12 +99,9 @@ shiny::tagList(
             inline = F
           ),
           status = "primary",
-          icon = shiny::icon("gears"), width = "300px",
+          icon = shiny::icon("gears"), width = "100%", block = T,
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
-      shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 500px;",
-        shiny::h4(shiny::strong("Dispersion parameter"))),
       shiny::br(),shiny::br(),
       shiny::plotOutput("plot_var_xy"),
       shiny::br(),
@@ -114,7 +115,10 @@ shiny::tagList(
     condition = "output.cond_map_shp_matched==true",
     shiny::wellPanel(
       shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 75px;",
+        style = "display: inline-block;vertical-align:top; width: 79%;",
+        shiny::h4(shiny::strong("Map"))),
+      shiny::div(
+        style = "display: inline-block;vertical-align:top;float:right; width: 20%;",
         shinyWidgets::dropdown(
           shiny::tags$h4(shiny::strong("Plot options")),
           shiny::uiOutput("choice_map_quantity_expl"),
@@ -122,16 +126,13 @@ shiny::tagList(
             shiny::uiOutput("choose_time_map")
           }),
           status = "primary",
-          icon = shiny::icon("gears"), width = "300px",
+          icon = shiny::icon("gears"), width = "100%", block = T,
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
-      shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 500px;",
-        shiny::h4(shiny::strong("Map"))),
       shiny::br(),shiny::br(),
-      shiny::plotOutput("plot_map_expl"),
+      leaflet::leafletOutput("plot_map_expl"),
       shiny::br(),
-      shiny::downloadButton("download_map_summary", label = "Save ggplot as .RData"),
+      shiny::downloadButton("download_map_summary", label = "Save tmap as .RData"),
       shiny::downloadButton("save_pdf_map_summary", label = "Save as .pdf")
     )
   ),
@@ -141,18 +142,18 @@ shiny::tagList(
     condition = "output.time_present==true",
     shiny::wellPanel(
       shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 75px;",
+        style = "display: inline-block;vertical-align:top; width: 79%;",
+        shiny::h4(shiny::strong("Time trajectories"))),
+      shiny::div(
+        style = "display: inline-block;vertical-align:top; width: 20%;",
         shinyWidgets::dropdown(
           shiny::tags$h4("Plot options"),
           shiny::uiOutput("choice_traj_quantity_expl"),
           shiny::uiOutput("choose_domain_traj"),
           status = "primary",
-          icon = shiny::icon("gears"), width = "300px",
+          icon = shiny::icon("gears"), width = "100%", block = T,
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
-      shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 500px;",
-        shiny::h4(shiny::strong("Time trajectories"))),
       shiny::br(),shiny::br(),
       shiny::plotOutput("plot_traj_expl"),
       shiny::br(),

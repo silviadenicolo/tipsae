@@ -44,9 +44,9 @@ fit_sae(
 
 \item{spatial_error}{Logical indicating whether to include a spatially structured random effect.}
 
-\item{spatial_df}{Object of class \code{SpatialPolygonsDataFrame} with the shapefile of the studied region. Required if \code{spatial_error = TRUE}.}
+\item{spatial_df}{Object of class \code{SpatialPolygonsDataFrame} or \code{sf} with the shapefile of the studied region. Required if \code{spatial_error = TRUE}.}
 
-\item{domains_spatial_df}{Column name of the \code{spatial_df@data} object displaying the domain names. Required if \code{spatial_error = TRUE}.}
+\item{domains_spatial_df}{Column name of the \code{spatial_df} object displaying the domain names. Required if \code{spatial_error = TRUE}.}
 
 \item{temporal_error}{Logical indicating whether to include a temporally structured random effect.}
 

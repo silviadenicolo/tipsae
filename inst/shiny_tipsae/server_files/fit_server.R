@@ -127,6 +127,7 @@ observeEvent(input$fit_model, {
     domains = domain_name,
     disp_direct = input$choice_var,
     type_disp = allowed_lik()$disp_type,
+    domains_spatial_df = input$choice_match,
     domain_size = domain_size,
     data = data_fit,
     likelihood = lik_model,
@@ -149,6 +150,7 @@ observeEvent(input$fit_model, {
         disp_direct = input_stan$disp_direct,
         type_disp = input_stan$type_disp,
         domain_size = input_stan$domain_size,
+        domains_spatial_df = input_stan$domains_spatial_df,
         data = input_stan$data,
         likelihood = input_stan$likelihood,
         prior_reff = input_stan$prior_reff,  #c("normal", "t", "VG")

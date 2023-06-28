@@ -19,7 +19,10 @@ shiny::tagList(
       shiny::h4(shiny::strong("Map")),
       shiny::wellPanel(
         shiny::div(
-          style = "display: inline-block;vertical-align:top; width: 75px;",
+          style = "display: inline-block;vertical-align:top; width: 79%;",
+          shiny::h4(shiny::strong("  "))),
+        shiny::div(
+          style = "display: inline-block;vertical-align:top; width: 20%;",
           shinyWidgets::dropdown(
             shiny::tags$h4(shiny::strong("Plot options")),
             shiny::radioButtons("select_map_quantity_estimates",
@@ -34,14 +37,14 @@ shiny::tagList(
               shiny::uiOutput("time_map_estimates")
             }),
             status = "primary",
-            icon = shiny::icon("gears"), width = "300px",
+            icon = shiny::icon("gears"), width = "100%", block = T,
             tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
           )),
         shiny::div(
           shiny::br(),
-          shiny::plotOutput("plot_map_estimates"),
+          leaflet::leafletOutput("plot_map_estimates"),
           shiny::br(),
-          shiny::downloadButton("download_map_estimates", label = "Save ggplot as .RData"),
+          shiny::downloadButton("download_map_estimates", label = "Save tmap as .RData"),
           shiny::downloadButton("save_pdf_map_estimates", label = "Save as .pdf")
         )
       )
@@ -50,7 +53,10 @@ shiny::tagList(
     shiny::h4(shiny::strong("Caterpillar plot")),
     shiny::wellPanel(
       shiny::div(
-        style = "display: inline-block;vertical-align:top; width: 75px;",
+        style = "display: inline-block;vertical-align:top; width: 79%;",
+        shiny::h4(shiny::strong("  "))),
+      shiny::div(
+        style = "display: inline-block;vertical-align:top; width: 20%;",
         shinyWidgets::dropdown(
           shiny::tags$h4(shiny::strong("Plot options")),
           shiny::radioButtons("oos_in_cat",
@@ -61,7 +67,7 @@ shiny::tagList(
             shiny::uiOutput("time_cat_estimates")
           }),
           status = "primary",
-          icon = shiny::icon("gears"), width = "300px",
+          icon = shiny::icon("gears"), width = "100%", block = T,
           tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
         )),
       shiny::div(

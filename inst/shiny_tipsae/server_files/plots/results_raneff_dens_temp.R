@@ -9,7 +9,7 @@ plot_dens_temp <- shiny::reactive({
   xlim_reff <- range(c(data_reff_t$reff, 2, -2))
 
 
-  ggplot2::ggplot(data_reff_t, ggplot2::aes_(x = ~ reff)) +
+  ggplot2::ggplot(data_reff_t, ggplot2::aes(x = reff)) +
     ggplot2::geom_function(fun = dnorm,  ggplot2::aes(color = "Standard normal")) +
     ggplot2::stat_density(ggplot2::aes(color = "Scaled random effects"),
                           geom = "line", position = "identity") +

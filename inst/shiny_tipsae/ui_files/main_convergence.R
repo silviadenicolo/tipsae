@@ -28,7 +28,11 @@ shiny::tagList(
         shiny::br(),
         shiny::wellPanel(
           shiny::div(
-            style = "display: inline-block;vertical-align:top; width: 75px;",
+            style = "display: inline-block;vertical-align:top; width: 79%;",
+            shiny::h4(shiny::strong("Single parameter's focus"))
+          ),
+          shiny::div(
+            style = "display: inline-block;vertical-align:top; width: 20%;",
             shinyWidgets::dropdown(
               shiny::tags$h4(shiny::strong("Plot options")),
               shiny::uiOutput("choose_var_diag"),
@@ -39,13 +43,9 @@ shiny::tagList(
                 inline = F
               ),
               status = "primary",
-              icon = shiny::icon("gears"), width = "300px",
+              icon = shiny::icon("gears"), width = "100%", block = T,
               tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
             )
-          ),
-          shiny::div(
-            style = "display: inline-block;vertical-align:top; width: 500px;",
-            shiny::h4(shiny::strong("Single parameter's focus"))
           ),
           shiny::plotOutput("plot_single")
         )

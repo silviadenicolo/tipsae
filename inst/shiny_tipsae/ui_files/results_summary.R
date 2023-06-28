@@ -24,19 +24,24 @@ shiny::tagList(
     shiny::conditionalPanel(
       "output.cond_map_shp_matched==true",{
         shiny::wellPanel(
-          shinyWidgets::dropdown(
-            inputId = "button_time_resid",
-            shiny::tags$h4(shiny::strong("Plot options")
-            ),
-            shiny::uiOutput("choose_time_map_resid"),
-            status = "primary",
-            icon = shiny::icon("gears"),
-            width = "300px",
-            tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
-          ), shiny::br(),shiny::br(),
-          shiny::plotOutput("map_resid"),
+          shiny::div(
+            style = "display: inline-block;vertical-align:top; width: 79%;",
+            shiny::h4("  ")),
+          shiny::div(
+            style = "display: inline-block;vertical-align:top; width: 20%;",
+            shinyWidgets::dropdown(
+              inputId = "button_time_resid",
+              shiny::tags$h4(shiny::strong("Plot options")
+              ),
+              shiny::uiOutput("choose_time_map_resid"),
+              status = "primary",
+              icon = shiny::icon("gears"),
+              width = "100%", block = T,
+              tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
+            )), shiny::br(),shiny::br(),
+          leaflet::leafletOutput("map_resid"),
           shiny::br(),
-          shiny::downloadButton("download_map_resid", label = "Save ggplot as .RData"),
+          shiny::downloadButton("download_map_resid", label = "Save tmap as .RData"),
           shiny::downloadButton("save_pdf_map_resid", label = "Save as .pdf")
         )
       }),

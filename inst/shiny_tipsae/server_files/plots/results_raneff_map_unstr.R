@@ -5,39 +5,30 @@
 ### Creating plot ------
 
 plot_map_unstr <- shiny::reactive({
-  data_reff_u <- data.frame(Domain = res_model()$summary$raneff$unstructured[, "Domains"],
+  data_reff_u <- data.frame(Domains = res_model()$summary$raneff$unstructured[, "Domains"],
                             means = res_model()$summary$raneff$unstructured[, "mean"])
 
   color_palette = c("snow2","#A4112E")
-  spatial_df_plot <- merge(map_shp_matching()$spatial_df_tidy,
-                           data_reff_u,
-                           by.x = "id",
-                           by.y = "Domain")
-  ggplot2::ggplot(spatial_df_plot,
-                  ggplot2::aes_(x = ~ long, y = ~ lat, group = ~ group,
-                                fill  = ~ means)) +
-    ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::theme_bw() +
-    ggplot2::scale_fill_gradient(
-      low = color_palette[1],
-      high = color_palette[2],
-      limits = range(spatial_df_plot["means"][, 1]),
-      name = "Ran. Effects",
-      guide = "colourbar"
-    ) +
-    ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                   axis.text = ggplot2::element_blank()) +
-    ggplot2::coord_sf()
+
+
+  spatial_df_plot <- dplyr::left_join(map_shp_matching()$spatial_df_tidy,
+                                      data_reff_u, by = setNames("Domains", input$choice_match))
+
+
+  map <-  tmap::tm_shape(spatial_df_plot) +
+    tmap::tm_polygons("means",
+                      palette = color_palette)
+
 
 
   })
 
 ### Output: plot and save -----
 
-output$map_unstr <- shiny::renderPlot({
-  plot_map_unstr()
-}, bg = "transparent")
+output$map_unstr <- leaflet::renderLeaflet({
+  tmap::tmap_leaflet(plot_map_unstr()+
+                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+})
 
 
 output$download_map_unstr <- shiny::downloadHandler(
@@ -51,7 +42,8 @@ output$download_map_unstr <- shiny::downloadHandler(
 output$save_pdf_map_unstr = shiny::downloadHandler(
   filename = "tipsae_map_unstr.pdf",
   content = function(file) {
-    ggplot2::ggsave(file, plot = plot_map_unstr(), device = "pdf")
+    tmap::tmap_save(tm = plot_map_unstr(),
+                    filename = file)
   }
 )
 

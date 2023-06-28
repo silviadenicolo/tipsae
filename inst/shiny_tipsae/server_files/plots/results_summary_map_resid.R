@@ -24,50 +24,30 @@ plot_map_resid <- shiny::reactive({
       # prendo i dati solo dell'anno
       data_sub <- res_model()$data_ris[res_model()$data_ris$Time == selected_times,
                                        c("Domain", "Residuals")]
-      map_shp_matching()$spatial_df_tidy
-      spatial_df_plot <- merge(map_shp_matching()$spatial_df_tidy,
-                               data_sub,
-                               by.x = "id",
-                               by.y = "Domain")
-      map <- ggplot2::ggplot(spatial_df_plot,
-                             ggplot2::aes_(x = ~ long, y = ~ lat, group = ~ group,
-                                           fill  = ~ Residuals)) +
-        ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-        ggplot2::labs(x = "", y = "") +
-        ggplot2::theme_bw() +
-        ggplot2::scale_fill_gradient(
-          low = color_palette[1],
-          high = color_palette[2],
-          limits = range(spatial_df_plot["Residuals"][, 1]),
-          name = "Residuals",
-          guide = "colourbar"
-        ) +
-        ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_blank()) +
-        ggplot2::coord_sf()
+
+      spatial_df_plot <- dplyr::left_join(map_shp_matching()$spatial_df_tidy,
+                                          data_sub, by = setNames("Domain", input$choice_match))
+
+
+      map <-  tmap::tm_shape(spatial_df_plot) +
+        tmap::tm_polygons("Residuals",
+                          palette = color_palette)
+
+
     }else{
       data_sub <- res_model()$data_ris[,
                                        c("Domain", "Residuals")]
-      spatial_df_plot <- merge(map_shp_matching()$spatial_df_tidy,
-                               data_sub,
-                               by.x = "id",
-                               by.y = "Domain")
-      map <- ggplot2::ggplot(spatial_df_plot,
-                             ggplot2::aes_(x = ~ long, y = ~ lat, group = ~ group,
-                                           fill  = ~ Residuals)) +
-        ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-        ggplot2::labs(x = "", y = "") +
-        ggplot2::theme_bw(base_size = 15) +
-        ggplot2::scale_fill_gradient(
-          low = color_palette[1],
-          high = color_palette[2],
-          limits = range(spatial_df_plot["Residuals"][, 1]),
-          name = "Residuals",
-          guide = "colourbar"
-        ) +
-        ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                       axis.text = ggplot2::element_blank()) +
-        ggplot2::coord_sf()
+
+
+      spatial_df_plot <- dplyr::left_join(map_shp_matching()$spatial_df_tidy,
+                                          data_sub, by = setNames("Domain", input$choice_match))
+
+
+      map <-  tmap::tm_shape(spatial_df_plot) +
+        tmap::tm_polygons("Residuals",
+                          palette = color_palette)
+
+
     }
     map
 
@@ -77,10 +57,10 @@ plot_map_resid <- shiny::reactive({
 
 ### Output: plot and save -----
 
-output$map_resid <- shiny::renderPlot({
-  plot_map_resid()
-}, bg = "transparent")
-
+output$map_resid <- leaflet::renderLeaflet({
+  tmap::tmap_leaflet(plot_map_resid()+
+                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+})
 
 output$download_map_resid <- shiny::downloadHandler(
   filename = 'tipsae_map_resid.RData',
@@ -93,7 +73,8 @@ output$download_map_resid <- shiny::downloadHandler(
 output$save_pdf_map_resid = shiny::downloadHandler(
   filename = "tipsae_map_resid.pdf",
   content = function(file) {
-    ggplot2::ggsave(file, plot = plot_map_resid(), device = "pdf")
+    tmap::tmap_save(tm = plot_map_resid(),
+                    filename = file)
   }
 )
 

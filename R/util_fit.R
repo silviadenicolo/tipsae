@@ -85,8 +85,7 @@ arrange_spatial_structure <- function(spatial_error,
   if (spatial_error) {
     NB <- spdep::poly2nb(spatial_df) # list of neighbours
     comp <- spdep::n.comp.nb(NB)
-    message("Building the spatial structure: it is assumed that the 'spatial_df' provided as
-            input is ordered as the 'data' object.")
+    message("Building the spatial structure.")
     # disconnected graphs
     nc <- comp$nc
     # groups size

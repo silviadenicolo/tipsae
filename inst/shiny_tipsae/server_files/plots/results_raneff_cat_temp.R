@@ -23,9 +23,9 @@ plot_cat_temp <- shiny::reactive({
                                 q_U = res_model()$summary$raneff$temporal[, 7])
   data_reff_t_cat <- data_reff_t_cat[data_reff_t_cat$time == time_selected, ]
 
-  ggplot2::ggplot(data_reff_t_cat, ggplot2::aes_(x = ~ reorder(Domain, means))) +
-    ggplot2::geom_point(ggplot2::aes_(y = ~ means)) +
-    ggplot2::geom_linerange(ggplot2::aes_(ymin = ~ q_L, ymax = ~ q_U)) +
+  ggplot2::ggplot(data_reff_t_cat, ggplot2::aes(x = reorder(Domain, means))) +
+    ggplot2::geom_point(ggplot2::aes(y = means)) +
+    ggplot2::geom_linerange(ggplot2::aes(ymin = q_L, ymax = q_U)) +
     ggplot2::geom_hline(yintercept = 0, lty = 2) +
     ggplot2::ylab("Temporal random effect") + ggplot2::xlab("") + ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))

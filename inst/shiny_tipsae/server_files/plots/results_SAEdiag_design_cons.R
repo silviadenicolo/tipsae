@@ -6,7 +6,7 @@
 
 plot_design_cons <- shiny::reactive({
   if(!is.null(res_model()$data_ris$size)){
-    ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes_(x = ~ size, y = ~ Residuals)) +
+    ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes(x = size, y = Residuals)) +
       ggplot2::geom_hline(yintercept = 0) +
       ggplot2::theme_bw(base_size = 15) +
       ggplot2::geom_point(

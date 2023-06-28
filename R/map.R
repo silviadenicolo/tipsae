@@ -1,15 +1,16 @@
 #' Map Relevant Quantities from a Small Area Model
 #'
-#' The `map()` function enables to plot maps containing relevant model outputs by accounting for their geographical dimension. The shapefile of the area must be provided via a `SpatialPolygonsDataFrame` object.
+#' The `map()` function enables to plot maps containing relevant model outputs by accounting for their geographical dimension. The shapefile of the area must be provided via a `SpatialPolygonsDataFrame` or `sf` object.
 #'
 #' @param x An object of class `summary_fitsae` or `benchmark_fitsae`.
-#' @param spatial_df A object of class `SpatialPolygonsDataFrame` (spatial polygons object) from `sp` package, accounting for the geographical dimension of the domains.
+#' @param spatial_df A object of class `SpatialPolygonsDataFrame` (spatial polygons object) from `sp` package or `sf` from the `sf` package, accounting for the geographical dimension of the domains.
 #' @param spatial_id_domains A character string indicating the name of `spatial_df` variable containing area denominations, in order to correctly match the areas.
 #' @param match_names An encoding two-columns `data.frame`: the first with the original data coding (domains) and the second one with corresponding `spatial_df` object labels. This argument has to be specified only if `spatial_df` object labels do not match the ones provided through the original dataset.
 #' @param color_palette A vector with two color strings denoting the extreme bounds of colors range to be used.
 #' @param quantity A string indicating the quantity to be mapped. When a `summary_fitsae` is given as input, it can be selected among `"HB_est"` (model-based estimates), `"SD"`(posterior standard deviations) and `"Direct_est"`(direct estimates). While when a `benchmark_fitsae` class object is given as input, this argument turns automatically to `"Bench_est"`, displaying the benchmarked estimates.
 #' @param time A string indicating the year of interest for the quantities to be treated, in case of temporal or spatio-temporal objects.
-#' @return A map `ggplot2` object with colors scaled legend.
+#' @param ... Arguments passed to \code{\link[tmap]{tm_fill}} (e.g. n, breaks).
+#' @return A`tmap` object.
 #'
 #' @seealso \code{\link{summary.fitsae}} to produce the input object and \code{\link[sp]{SpatialPolygonsDataFrame}} to manage the shapefile.
 #'
@@ -44,7 +45,8 @@ map <- function(x,
                 match_names = NULL,
                 color_palette = c("snow2","deepskyblue4"),
                 quantity = c("HB_est", "Direct_est", "SD"),
-                time = NULL) {
+                time = NULL,
+                ...) {
 
   quantity <- match.arg(quantity)
 
@@ -111,8 +113,13 @@ map <- function(x,
   }
 
   # match model estimates and shapefile
+  if(inherits(spatial_df, "SpatialPolygonsDataFrame")){
+    spatial_df <- sf::st_as_sf(spatial_df)
+  }
+
+
   if (is.null(match_names)) {
-    indices_match <- match(spatial_df@data[spatial_id_domains][,1], map_data$Domains)
+    indices_match <- match(sf::st_drop_geometry(spatial_df[,spatial_id_domains])[[1]], map_data$Domains)
     if (any(is.na(indices_match))) {
       if (all(is.na(indices_match))) {
         stop("Domains names provided in 'fit_sae' and those in the 'spatial_df' do not match.")
@@ -125,7 +132,7 @@ map <- function(x,
   } else {
     map_data <- merge(x = map_data, y = match_names,
                       by.x = "Domains", by.y = names(match_names)[1])
-    indices_match <- match(spatial_df@data[spatial_id_domains][,1],
+    indices_match <- match(sf::st_drop_geometry(spatial_df[,spatial_id_domains])[[1]],
                            map_data[, names(match_names)[2]])
     if (any(is.na(indices_match))) {
       if (all(is.na(indices_match))) {
@@ -135,44 +142,29 @@ map <- function(x,
                  Consider specifying 'match_names' as input.")
       }
     }
-    map_data <- map_data[,!colnames(map_data) %in% c("Domain",
+    map_data <- map_data[,!colnames(map_data) %in% c("Domains",
                                                      spatial_id_domains,
                                                      names(match_names)), drop = F]
   }
   map_data <- map_data[indices_match,]
 
   # fortify
-  spatial_df@data[colnames(map_data)] <- map_data
-  spatial_df_tidy <- broom::tidy(spatial_df, region = spatial_id_domains)
-  spatial_df_tidy <- merge(spatial_df_tidy,
-                           spatial_df@data,
-                           by.x = "id",
-                           by.y = spatial_id_domains)
+  spatial_df_tidy <- dplyr::left_join(spatial_df, y = map_data, by = setNames("Domains", paste0(spatial_id_domains)))
+
   colnames(spatial_df_tidy)[colnames(spatial_df_tidy) %in% c("mean_HB","sd_HB","Direct")] <- c("HB_est", "SD", "Direct_est")
 
 
-  spatial_df_tidy[quantity][, 1][!is.finite(spatial_df_tidy[quantity][, 1])] <- NA
+  # spatial_df_tidy[quantity][, 1][!is.finite(spatial_df_tidy[quantity][, 1])] <- NA
 
   # ggplot
-  map <- ggplot2::ggplot(spatial_df_tidy,
-                         ggplot2::aes_(x = ~long, y = ~lat, group = ~ group,
-                                       fill = spatial_df_tidy[quantity][, 1])) +
-    ggplot2::geom_polygon(color = "gray47", size = 0.1)  +
-    ggplot2::labs(x = "", y = "") +
-    ggplot2::theme_bw() +
-    ggplot2::scale_fill_gradient(
-      name = quantity,
-      low = color_palette[1],
-      high = color_palette[2],
-      limits = range(spatial_df_tidy[quantity][, 1]),
-      guide = "colourbar"
-    ) +
-    ggplot2::theme(axis.ticks = ggplot2::element_blank(),
-                   axis.text = ggplot2::element_blank()) +
-    ggplot2::coord_sf()
+  map <- tmap::tm_shape(spatial_df_tidy) +
+    tmap::tm_polygons(quantity,
+                      palette = color_palette,
+                      ...)
 
   if (x$model_settings$temporal_error) {
-    map <- map + ggplot2::ggtitle(paste0("Time t = ", time))
+    map <- map +
+      tmap::tm_layout(title = paste0("Time t = ", time))
   }
 
   map
@@ -194,8 +186,11 @@ check_map_sae <- function(x,
   if (length(quantity) != 1) {
     stop("'quantity' must be a vector of length 1.")
   }
-  if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
-    stop("'spatial_df' is not of class SpatialPolygonsDataFrame from the 'sp' package")
+  if (!(inherits(spatial_df, "SpatialPolygonsDataFrame") || inherits(spatial_df, "sf"))) {
+    stop(
+      "The input of the argument 'spatial_df' must be of class
+        'SpatialPolygonsDataFrame' (see 'sp' package) or 'sf' (see 'sf' package)."
+    )
   }
   if (!x$model_settings$temporal_error) {
     if (nrow(spatial_df) != length(x$data_obj$y)) {

@@ -66,8 +66,8 @@ check_par_fit <- function(formula_fixed,
   }
   if (spatial_error && is.null(spatial_df)) {
     stop(
-      "When a spatial error is included in the model, a 'SpatialPolygonsDataFrame' must
-      be passed to the argument 'spatial_df'"
+      "When a spatial error is included in the model, a 'SpatialPolygonsDataFrame' or 'sf' object must
+      be passed to the argument 'spatial_df'."
     )
   }
   if (spatial_error && is.null(domains_spatial_df)) {
@@ -80,26 +80,44 @@ check_par_fit <- function(formula_fixed,
     stop("When a spatial random effect is considered, the argument 'domains' must be specified.")
   }
   if (spatial_error) {
-    if (!inherits(spatial_df, "SpatialPolygonsDataFrame")) {
+    if (!(inherits(spatial_df, "SpatialPolygonsDataFrame") || inherits(spatial_df, "sf"))) {
       stop(
         "The input of the argument 'spatial_df' must be of class
-        'SpatialPolygonsDataFrame' (see 'sp' package)"
+        'SpatialPolygonsDataFrame' (see 'sp' package) or 'sf' (see 'sf' package)."
       )
     }
-    if ((length(domains_spatial_df) != 1 ||
-         !(domains_spatial_df %in% colnames(spatial_df@data)))) {
-      stop(
-        "The argument 'domains_spatial_df' must contain a unique character that determines
+    if (inherits(spatial_df, "SpatialPolygonsDataFrame")){
+      if ((length(domains_spatial_df) != 1 ||
+           !(domains_spatial_df %in% colnames(spatial_df@data)))) {
+        stop(
+          "The argument 'domains_spatial_df' must contain a unique character that determines
          a column in the 'spatial_df@data' object with the domains denominations"
-      )
-    }
-    if (!all(unique(data[,domains]) %in% spatial_df@data[,domains_spatial_df])) {
-      stop("Not all the domains denominations in 'data' are included in those
+        )
+      }
+      if (!all(unique(data[,domains]) %in% spatial_df@data[,domains_spatial_df])) {
+        stop("Not all the domains denominations in 'data' are included in those
          provided in 'spatial_df@data'. Check the spelling.")
-    }
-    if (!all(spatial_df@data[,domains_spatial_df] %in% unique(data[,domains]))) {
-      stop("Not all the domains denominations in 'spatial_df@data' are included in those
+      }
+      if (!all(spatial_df@data[,domains_spatial_df] %in% unique(data[,domains]))) {
+        stop("Not all the domains denominations in 'spatial_df@data' are included in those
          provided in 'data'. Check the spelling.")
+      }
+    } else {# check sf object
+      if ((length(domains_spatial_df) != 1 ||
+           !(domains_spatial_df %in% colnames(spatial_df)))) {
+        stop(
+          "The argument 'domains_spatial_df' must contain a unique character that determines
+         a column in the 'spatial_df' object with the domains denominations"
+        )
+      }
+      if (!all(unique(data[,domains]) %in% sf::st_drop_geometry(spatial_df[,domains_spatial_df])[[1]])) {
+        stop("Not all the domains denominations in 'data' are included in those
+         provided in 'spatial_df'. Check the spelling.")
+      }
+      if (!all(sf::st_drop_geometry(spatial_df[,domains_spatial_df])[[1]] %in% unique(data[,domains]))) {
+        stop("Not all the domains denominations in 'spatial_df' are included in those
+         provided in 'data'. Check the spelling.")
+      }
     }
     if (!temporal_error) {
       if (nrow(spatial_df) != nrow(data)) {

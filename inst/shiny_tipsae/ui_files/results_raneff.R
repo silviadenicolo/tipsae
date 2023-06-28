@@ -20,9 +20,9 @@ shiny::tagList(
         "output.cond_map_shp_matched==true",{
           shiny::wellPanel(
             shiny::h4("Random effects map"),
-            shiny::plotOutput("map_unstr"),
+            leaflet::leafletOutput("map_unstr"),
             shiny::br(),
-            shiny::downloadButton("download_map_unstr", label = "Save ggplot as .RData"),
+            shiny::downloadButton("download_map_unstr", label = "Save tmap as .RData"),
             shiny::downloadButton("save_pdf_map_unstr", label = "Save as .pdf")
           )
         })
@@ -46,9 +46,9 @@ shiny::tagList(
         "output.cond_map_shp_matched==true",{
           shiny::wellPanel(
             shiny::h4("Random effects map"),
-            shiny::plotOutput("map_spat"),
+            leaflet::leafletOutput("map_spat"),
             shiny::br(),
-            shiny::downloadButton("download_map_spat", label = "Save ggplot as .RData"),
+            shiny::downloadButton("download_map_spat", label = "Save tmap as .RData"),
             shiny::downloadButton("save_pdf_map_spat", label = "Save as .pdf")
           )
         })
@@ -64,15 +64,19 @@ shiny::tagList(
         shiny::downloadButton("save_pdf_dens_temp", label = "Save as .pdf")
       ),
       shiny::wellPanel(
-        shiny::h4("Caterpillar plot"),
-        shinyWidgets::dropdown(
-          inputId = "button_time_cat",
-          shiny::tags$h4(shiny::strong("Plot options")),
-          shiny::uiOutput("choose_time_cat"),
-          status = "primary",
-          icon = shiny::icon("gears"), width = "300px",
-          tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
-        ),shiny::br(),shiny::br(),
+        shiny::div(
+          style = "display: inline-block;vertical-align:top; width: 79%;",
+          shiny::h4("Caterpillar plot")),
+        shiny::div(
+          style = "display: inline-block;vertical-align:top; width: 20%;",
+          shinyWidgets::dropdown(
+            inputId = "button_time_cat",
+            shiny::tags$h4(shiny::strong("Plot options")),
+            shiny::uiOutput("choose_time_cat"),
+            status = "primary",
+            icon = shiny::icon("gears"), width = "100%", block = T,
+            tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
+          )),shiny::br(),shiny::br(),
         shiny::plotOutput("cat_temp"),
         shiny::br(),
         shiny::downloadButton("download_cat_temp", label = "Save ggplot as .RData"),
@@ -81,34 +85,38 @@ shiny::tagList(
       shiny::conditionalPanel(
         "output.cond_map_shp_matched==true",{
           shiny::wellPanel(
-            shiny::h4("Random effects map"),
-            shinyWidgets::dropdown(
-              inputId = "button_time_map2",
-              shiny::tags$h4(shiny::strong("Plot options")),
-              shiny::uiOutput("choose_time_map2"),
-              status = "primary",
-              icon = shiny::icon("gears"), width = "300px",
-              tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
-            ),shiny::br(),shiny::br(),
-            shiny::plotOutput("map_temp"),
+            shiny::div(
+              style = "display: inline-block;vertical-align:top; width: 79%;",
+              shiny::h4("Random effects map")),
+            shiny::div(
+              style = "display: inline-block;vertical-align:top; width: 20%;",
+              shinyWidgets::dropdown(
+                inputId = "button_time_map2",
+                shiny::tags$h4(shiny::strong("Plot options")),
+                shiny::uiOutput("choose_time_map2"),
+                status = "primary",
+                icon = shiny::icon("gears"), width = "100%", block = T,
+                tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
+              )),shiny::br(),shiny::br(),
+            leaflet::leafletOutput("map_temp"),
             shiny::br(),
-            shiny::downloadButton("download_map_temp", label = "Save ggplot as .RData"),
+            shiny::downloadButton("download_map_temp", label = "Save tmap as .RData"),
             shiny::downloadButton("save_pdf_map_temp", label = "Save as .pdf")
           )
         }),
         shiny::wellPanel(
           shiny::div(
-            style = "display: inline-block;vertical-align:top; width: 75px;",
+            style = "display: inline-block;vertical-align:top; width: 79%;",
+            shiny::h4("Time trajectories")),
+          shiny::div(
+            style = "display: inline-block;vertical-align:top; width: 20%;",
             shinyWidgets::dropdown(
               shiny::tags$h4("Plot options"),
               shiny::uiOutput("choose_domain_traj_raneff"),
               status = "primary",
-              icon = shiny::icon("gears"), width = "300px",
+              icon = shiny::icon("gears"), width = "100%", block = T,
               tooltip = shinyWidgets::tooltipOptions(title = "Click to see plot options")
             )),
-          shiny::div(
-            style = "display: inline-block;vertical-align:top; width: 500px;",
-            shiny::h4(shiny::strong("Time trajectories"))),
           shiny::br(),shiny::br(),
           shiny::plotOutput("plot_traj_raneff"),
           shiny::br(),

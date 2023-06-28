@@ -40,9 +40,9 @@ plot_logit_cov <- shiny::reactive({
     data_plot <- data_plot[data_plot$Time %in% selected_times,]
     data_plot$Time <- factor(data_plot$Time)
     plot2 <- ggplot2::ggplot(data_plot,
-                             ggplot2::aes_(x = ~ x, y = ~ Logit)) +
+                             ggplot2::aes(x = x, y = Logit)) +
       ggplot2::xlab(paste0(cov_name)) + ggplot2::ylab(paste0("Logit of ", input$choice_resp)) +
-      ggplot2::geom_point(ggplot2::aes_(colour = ~ Time)) +
+      ggplot2::geom_point(ggplot2::aes(colour = Time)) +
       ggplot2::theme_bw(base_size = 15) + ggplot2::guides(colour=ggplot2::guide_legend(title=paste0(input$time_col)))+ ggplot2::theme(aspect.ratio = 2/3)
     if (input$plot_expl_yx_loess == "Yes") {
       plot2 + ggplot2::geom_smooth()
@@ -51,7 +51,7 @@ plot_logit_cov <- shiny::reactive({
     }
   } else{
     plot2 <- ggplot2::ggplot(data_plot,
-                             ggplot2::aes_(x = ~ x, y = ~ Logit)) +
+                             ggplot2::aes(x = x, y = Logit)) +
       ggplot2::xlab(paste0(cov_name)) + ggplot2::ylab(paste0("Logit of ", input$choice_resp)) +
       ggplot2::geom_point() +
       ggplot2::theme_bw(base_size = 15) + ggplot2::theme(aspect.ratio = 2/3)

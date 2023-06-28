@@ -5,7 +5,7 @@
 ### Creating plot ------
 
 plot_hist_sdr <- shiny::reactive({
-  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes_(y = ~ Sd_reduction)) +
+  ggplot2::ggplot(data = res_model()$data_ris, ggplot2::aes(y = Sd_reduction)) +
     ggplot2::theme_bw(base_size = 15) + ggplot2::geom_hline(yintercept = 0) +
     ggplot2::ylab("S.D. Reduction") + ggplot2::xlab("") +
     ggplot2::geom_boxplot(color = "black",

@@ -52,9 +52,9 @@ plot_cat_estimates <- shiny::reactive({
                                 q_U = data_sub[, pos_quant[2]])
 
 
-  ggplot2::ggplot(data_reff_t_cat, ggplot2::aes_(x = ~ reorder(Domain, means))) +
-    ggplot2::geom_point(ggplot2::aes_(y = ~ means)) +
-    ggplot2::geom_linerange(ggplot2::aes_(ymin = ~ q_L, ymax = ~ q_U)) +
+  ggplot2::ggplot(data_reff_t_cat, ggplot2::aes(x = reorder(Domain, means))) +
+    ggplot2::geom_point(ggplot2::aes(y = means)) +
+    ggplot2::geom_linerange(ggplot2::aes(ymin = q_L, ymax = q_U)) +
     ggplot2::ylab("H.B. Estimates") + ggplot2::xlab("") + ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))
 
