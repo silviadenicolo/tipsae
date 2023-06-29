@@ -9,6 +9,7 @@
 #' @param color_palette A vector with two color strings denoting the extreme bounds of colors range to be used.
 #' @param quantity A string indicating the quantity to be mapped. When a `summary_fitsae` is given as input, it can be selected among `"HB_est"` (model-based estimates), `"SD"`(posterior standard deviations) and `"Direct_est"`(direct estimates). While when a `benchmark_fitsae` class object is given as input, this argument turns automatically to `"Bench_est"`, displaying the benchmarked estimates.
 #' @param time A string indicating the year of interest for the quantities to be treated, in case of temporal or spatio-temporal objects.
+#' @param style Method to process the color scale, see \code{\link[tmap]{tmap}} documentation.
 #' @param ... Arguments passed to \code{\link[tmap]{tm_fill}} (e.g. n, breaks).
 #' @return A`tmap` object.
 #'
@@ -46,6 +47,7 @@ map <- function(x,
                 color_palette = c("snow2","deepskyblue4"),
                 quantity = c("HB_est", "Direct_est", "SD"),
                 time = NULL,
+                style = "quantile",
                 ...) {
 
   quantity <- match.arg(quantity)
@@ -160,6 +162,7 @@ map <- function(x,
   map <- tmap::tm_shape(spatial_df_tidy) +
     tmap::tm_polygons(quantity,
                       palette = color_palette,
+                      style = "quantile",
                       ...)
 
   if (x$model_settings$temporal_error) {

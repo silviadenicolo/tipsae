@@ -207,6 +207,10 @@ arrange_temporal_structure <-
       time <- as.factor(data[, temporal_variable])
       TP <- length(levels(time)) # time periods
       D <- nrow(data) / TP # areas
+
+      if (TP==1){
+        stop("The dataset contains only one time period: a temporal effect cannot be specified.")
+      }
       if (D %% 1 != 0) {
         stop("Each area should have the same observed time periods.")
       }
