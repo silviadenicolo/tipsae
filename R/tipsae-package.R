@@ -8,7 +8,7 @@
 #' @import shiny
 #' @importFrom rstan sampling
 #' @importFrom grDevices devAskNewPage
-#' @importFrom stats as.formula complete.cases model.matrix na.omit terms var density dnorm model.extract model.frame na.pass update
+#' @importFrom stats setNames as.formula complete.cases model.matrix na.omit terms var density dnorm model.extract model.frame na.pass update
 #' @importFrom utils capture.output write.csv
 #' @importFrom Rdpack reprompt
 #'
