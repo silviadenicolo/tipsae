@@ -19,7 +19,8 @@
 #' # fitting a model
 #' fit_beta <- fit_sae(formula_fixed = hcr ~ x, data = emilia_cs, domains = "id",
 #'                     type_disp = "var", disp_direct = "vars", domain_size = "n",
-#'                     seed = 0)
+#'                     # MCMC setting to obtain a fast example. Remove next line for reliable results.
+#'                     chains = 1, iter = 150, seed = 0)
 #'
 #' # check model diagnostics
 #' summ_beta <- summary(fit_beta)
