@@ -28,7 +28,7 @@ Depends:
 Imports: 
     methods,
     Rcpp (>= 0.12.0),
-    rstan (>= 2.18.1),
+    rstan (>= 2.26.0),
     ggplot2 (>= 3.3.2), 
     nlme (>= 3.1.152), 
     stats,
@@ -59,6 +59,6 @@ LinkingTo:
     Rcpp (>= 0.12.0),
     RcppEigen (>= 0.3.3.3.0),
     RcppParallel (>= 5.0.1),
-    rstan (>= 2.18.1),
-    StanHeaders (>= 2.18.0)
+    rstan (>= 2.26.0),
+    StanHeaders (>= 2.26.0)
 SystemRequirements: GNU make

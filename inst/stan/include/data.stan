@@ -25,24 +25,24 @@ vector<lower=0>[M_is] disp; // dispersion parameter
 vector<lower=0>[M_is] m_d; // area observations
 
 // Position indices
-int<lower=0> indices_is[M_is]; //indices units in sample
-int<lower=0> indices_oos[M_oos]; //indices units out of sample
-int<lower=0> indices_spat[D]; //indices ordering the spatial structure
-int<lower=0> indices_temp[M_is+M_oos,2]; //indexing time matrix with original obs vector
+array[M_is] int<lower=0> indices_is; //indices units in sample
+array[M_oos] int<lower=0> indices_oos; //indices units out of sample
+array[D] int<lower=0> indices_spat; //indices ordering the spatial structure
+array[M_is+M_oos,2] int<lower=0> indices_temp; //indexing time matrix with original obs vector
 
 // Spatial structure
 int<lower=0> N_edges; // number edges
 int<lower=0> N_comp; // number disconnected components
-int<lower=0> dim_c[N_comp]; // components sizes
+array[N_comp] int<lower=0> dim_c; // components sizes
 vector<lower=0>[D] scales_ICAR; // scaling factor graph
-int<lower=1, upper=D> node1[N_edges];  // node1[i] adjacent to node2[i]
-int<lower=1, upper=D> node2[N_edges];  // and node1[i] < node2[i]
+array[N_edges] int<lower=1, upper=D> node1;  // node1[i] adjacent to node2[i]
+array[N_edges] int<lower=1, upper=D> node2;  // and node1[i] < node2[i]
 
 // Temporal structure
-int<lower=1, upper=TP> node1_t[TP-1]; //temporal connections
-int<lower=1, upper=TP> node2_t[TP-1]; //temporal connections
+array[TP-1] int<lower=1, upper=TP> node1_t; //temporal connections
+array[TP-1] int<lower=1, upper=TP> node2_t; //temporal connections
 real<lower=0> scale_factor_RW1; // scaling factor temporal graph
-int<lower=0> cat_ios[M_oos]; //Missingness kind for the temporal case
+array[M_oos] int<lower=0> cat_ios; //Missingness kind for the temporal case
 
 ///// data for HS prior
 real<lower=0> sigma_HS; // estimate sigma HS prior

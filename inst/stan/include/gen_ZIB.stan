@@ -1,5 +1,5 @@
 for(i in 1:M_oos) { // OOS units
-#include /inst/stan/include/gen_reff_OOS.stan
+#include /include/gen_reff_OOS.stan
    if(inflation == 0) {
     if(intercept == 0) {
       theta_oos[i] = (1 - inv_logit(X_oos[i, ] * gamma_p0)) *
