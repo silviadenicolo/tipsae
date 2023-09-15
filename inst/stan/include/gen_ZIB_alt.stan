@@ -1,5 +1,5 @@
 for(i in 1:M_oos) {
-#include /inst/stan/include/gen_reff_OOS.stan
+#include /include/gen_reff_OOS.stan
   if(intercept == 0) {
     theta_oos[i] = inv_logit(X_oos[i, ] * beta + reffs_oos[i] + v_oos[1]);
   }else{

@@ -15,5 +15,5 @@ for(i in 1:M_is) {
     mu[i] = inv_logit(beta0[1] + X[i, ] * beta + reffs[i]);
   }
   theta[i] = mu[i] * (1 - pow(1 - mu[i], m_d[i]));
-#include /inst/stan/include/transf_par_ab.stan
+#include /include/transf_par_ab.stan
 }

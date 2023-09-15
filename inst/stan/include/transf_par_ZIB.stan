@@ -60,5 +60,5 @@ for(i in 1:M_is) { //IS units
   }else if(inflation == 2) {
     theta[i] = (1 - p0[i] - p1[i]) * mu[i] + p1[i];
   }
-#include /inst/stan/include/transf_par_ab.stan
+#include /include/transf_par_ab.stan
 }

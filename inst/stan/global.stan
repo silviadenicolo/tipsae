@@ -1,5 +1,5 @@
 data {
-#include /inst/stan/include/data.stan
+#include /include/data.stan
  }
 transformed data{
   int<lower=0> M_overall = M_is + M_oos; // number of observations (is+oos)
@@ -24,11 +24,11 @@ transformed data{
   }
 }
 parameters {
-#include /inst/stan/include/parameters.stan
+#include /include/parameters.stan
 }
 
 transformed parameters {
-#include /inst/stan/include/transf_par_declaration.stan
+#include /include/transf_par_declaration.stan
 
 // Regression coefficients - Fixed effect
   if(prior_coeff==0) { // normal prior
@@ -52,19 +52,19 @@ transformed parameters {
   }
 
 // Overall random effect part
-#include /inst/stan/include/transf_par_reff.stan
+#include /include/transf_par_reff.stan
 
   // diversi theta a seconda delle verosimiglianze
   if(likelihood==0){ // beta
-#include /inst/stan/include/transf_par_beta.stan
+#include /include/transf_par_beta.stan
   }else if(likelihood==1){ // FB
   // da capire OOS//
   /////////////////
-#include /inst/stan/include/transf_par_FB.stan
+#include /include/transf_par_FB.stan
   }else if(likelihood==2){ // ZIB
-#include /inst/stan/include/transf_par_ZIB.stan
+#include /include/transf_par_ZIB.stan
   }else if(likelihood==3){// beta FFT
-#include /inst/stan/include/transf_par_ZIBalt.stan
+#include /include/transf_par_ZIBalt.stan
   }
 }
 model{
@@ -186,8 +186,8 @@ model{
 generated quantities{
   vector[M_is] log_lik;
   vector[M_is] y_rep;
-  real psi_OOS[1];
-  real v_oos[1];
+  array[1] real psi_OOS;
+  array[1] real v_oos;
   int label_mixt;
   vector[inflation == 2 ? 3:0] probs;
   vector<lower=0,upper=1>[likelihood != 1 ? M_oos:0]  theta_oos;
@@ -201,7 +201,7 @@ generated quantities{
     }
   // add
     for(i in 1:M_oos) { // OOS units
-#include /inst/stan/include/gen_reff_OOS.stan
+#include /include/gen_reff_OOS.stan
       if(intercept == 0) {
         theta_oos[i] = inv_logit(X_oos[i,] * beta + reffs_oos[i] + v_oos[1]);
       }else{
@@ -209,14 +209,10 @@ generated quantities{
       }
     }
   }else if(likelihood == 1){ //FB
-#include /inst/stan/include/gen_FB.stan
+#include /include/gen_FB.stan
   }else if(likelihood == 2) { //ZIB
-#include /inst/stan/include/gen_ZIB.stan
+#include /include/gen_ZIB.stan
   }else if(likelihood==3) {//FFT beta
-#include /inst/stan/include/gen_ZIB_alt.stan
+#include /include/gen_ZIB_alt.stan
   }
 }
-
-
-
-

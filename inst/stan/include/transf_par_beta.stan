@@ -16,5 +16,5 @@ for(i in 1:M_is) { // IS units
   }
   theta[i] = mu[i];
   // definition of parameters a and b
-#include /inst/stan/include/transf_par_ab.stan
+#include /include/transf_par_ab.stan
 }
