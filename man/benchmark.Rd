@@ -92,6 +92,8 @@ bmk_subset$post_risk
 }
 \references{
 \insertRef{datta2011bayesian}{tipsae}
+
+\insertRef{JSS}{tipsae}
 }
 \seealso{
 \code{\link{summary.fitsae}} to produce the input object.

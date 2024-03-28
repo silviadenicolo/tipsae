@@ -1,6 +1,6 @@
 Package: tipsae
 Title: Tools for Handling Indices and Proportions in Small Area Estimation
-Version: 0.0.18
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
@@ -12,12 +12,12 @@ Authors@R:
            role = c("aut"),
            email = "aldo.gardini@unibo.it",
            comment = c(ORCID = "0000-0002-2164-5815")))
-Description: It allows for mapping proportions and indicators defined on the unit interval. It implements Beta-based small area methods comprising the classical Beta regression models, the Flexible Beta model and Zero and/or One Inflated extensions (Janicki 2020 <doi:10.1080/03610926.2019.1570266>). Such methods, developed within a Bayesian framework through Stan <https://mc-stan.org/>, come equipped with a set of diagnostics and complementary tools, visualizing and exporting functions. A Shiny application with a user-friendly interface can be launched to further simplify the process.
+Description: It allows for mapping proportions and indicators defined on the unit interval. It implements Beta-based small area methods comprising the classical Beta regression models, the Flexible Beta model and Zero and/or One Inflated extensions (Janicki 2020 <doi:10.1080/03610926.2019.1570266>). Such methods, developed within a Bayesian framework through Stan <https://mc-stan.org/>, come equipped with a set of diagnostics and complementary tools, visualizing and exporting functions. A Shiny application with a user-friendly interface can be launched to further simplify the process. For further details, refer to De Nicolò and Gardini (2024 <doi:10.18637/jss.v108.i01>).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 VignetteBuilder: R.rsp
 RdMacros: Rdpack
 Biarch: true

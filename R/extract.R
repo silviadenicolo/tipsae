@@ -120,9 +120,18 @@ extract <- function(x) {
 
 }
 
+
+#' Print Method for a `estimates_fitsae` Object
+#'
+#' The generic method `print()` allow to explore relevant outputs of the input object
+#'
+#' @param x Object of class `estimates_fitsae`.
+#' @param digits Number of digits to display.
+#' @param ... Currently unused.
+#'
+#' @return Printed information on a `estimates_fitsae` object.
+#'
 #' @export
-#'
-#'
 #'
 
 

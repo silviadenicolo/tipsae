@@ -121,6 +121,8 @@ fit_ST <- fit_sae(formula_fixed = hcr ~ x,
 \insertRef{morris2019bayesian}{tipsae}
 
 \insertRef{DeNicolo2021}{tipsae}
+
+\insertRef{JSS}{tipsae}
 }
 \seealso{
 \code{\link[rstan]{sampling}} for sampler options and \code{\link{summary.fitsae}} for handling the output.

@@ -67,6 +67,8 @@ smoo <- smoothing(emilia_cs, direct_estimates = "hcr", area_id = "id",
 \insertRef{kish1992weighting}{tipsae}
 
 \insertRef{fabrizi2011hierarchical}{tipsae}
+
+\insertRef{JSS}{tipsae}
 }
 \seealso{
 \code{\link[nlme]{gls}} for details on estimation procedure for \code{"ols"} and \code{"gls"} methods.

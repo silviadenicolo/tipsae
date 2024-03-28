@@ -1,0 +1,17 @@
+bibentry(bibtype = "Article",
+  title        = "The {R} Package {tipsae}: Tools for Mapping Proportions and Indicators on the Unit Interval",
+  author       = c(person(given = "Silvia",
+                          family = "De Nicol{\\`o}",
+                          email = "silvia.denicolo@unibo.it"),
+                   person(given = "Aldo",
+                          family = "Gardini",
+                          email = "aldo.gardini@unibo.it")),
+  journal      = "Journal of Statistical Software",
+  year         = "2024",
+  volume       = "108",
+  number       = "1",
+  pages        = "1--36",
+  doi          = "10.18637/jss.v108.i01",
+  header       = "To cite tipsae in publications use:"
+)
+

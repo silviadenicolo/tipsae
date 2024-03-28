@@ -2,7 +2,7 @@
 #'
 #' `fit_sae()` is used to fit Beta-based small area models, such as the classical Beta, zero and/or one inflated Beta and Flexible Beta models. The random effect part can incorporate either a temporal and/or a spatial dependency structure devoted to the prior specification settings. In addition, different prior assumptions can be specified for the unstructured random effects, allowing for robust and shrinking priors and different parametrizations can be set up.
 #'
-#' @export
+#'
 #' @param formula_fixed An object of class `"formula"` specifying the linear regression fixed part at the linking level.
 #' @param data  An object of class `"data.frame"` containing all relevant quantities.
 #' @param domains Data column name displaying the domain names. If `NULL` (default), the domains are denoted with a progressive number.
@@ -77,7 +77,10 @@
 #'
 #' \insertRef{DeNicolo2021}{tipsae}
 #'
+#' \insertRef{JSS}{tipsae}
 #'
+#'
+#'@export
 
 fit_sae <- function(formula_fixed,
                     data,
@@ -246,6 +249,15 @@ fit_sae <- function(formula_fixed,
   return(output)
 }
 
+#' Print Method for a `fitsae` Object
+#'
+#' The generic method `print()` allow to explore relevant outputs of the input object
+#'
+#' @param x Object of class `fitsae`.
+#' @param ... Currently unused.
+#'
+#' @return Printed information on a `fitsae` object.
+#'
 #' @export
 #'
 

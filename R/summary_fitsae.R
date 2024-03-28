@@ -40,6 +40,8 @@
 #'
 #' \insertRef{vehtari2017practical}{tipsae}
 #'
+#'  \insertRef{JSS}{tipsae}
+#'
 #' @examples
 #' library(tipsae)
 #'
@@ -296,6 +298,17 @@ summary.fitsae <- function(object,
     return(out)
 }
 
+
+#' Print Method for a `summary_fitsae` Object
+#'
+#' The generic method `print()` allow to explore relevant outputs of the input object
+#'
+#' @param x Object of class `summary_fitsae`.
+#' @param digits Number of digits to display.
+#' @param ... Currently unused.
+#'
+#' @return Printed information on a `summary_fitsae` object.
+#'
 #' @export
 #'
 

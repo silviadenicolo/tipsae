@@ -17,6 +17,8 @@
 #'
 #' @references
 #'
+#' \insertRef{JSS}{tipsae}
+#'
 #' \insertRef{rstan}{tipsae}
 #'
 #' \insertRef{carpenter2017stan}{tipsae}
@@ -38,8 +40,5 @@
 #' \insertRef{shiny}{tipsae}
 #'
 #'
-#' @docType package
-#' @name tipsae-package
-#' @aliases tipsae
 
-NULL
+"_PACKAGE"

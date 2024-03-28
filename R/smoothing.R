@@ -24,6 +24,8 @@
 #'
 #' \insertRef{fabrizi2011hierarchical}{tipsae}
 #'
+#'  \insertRef{JSS}{tipsae}
+#'
 #' @examples
 #'
 #' library(tipsae)
@@ -271,6 +273,16 @@ check_smoo <- function(data,
 
 }
 
+#' Print Method for a `smoothing_fitsae` Object
+#'
+#' The generic method `print()` allow to explore relevant outputs of the input object
+#'
+#' @param x Object of class `smoothing_fitsae`.
+#' @param digits Number of digits to display.
+#' @param ... Currently unused.
+#'
+#' @return Printed information on a `smoothing_fitsae` object.
+#'
 #' @export
 #'
 

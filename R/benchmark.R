@@ -1,5 +1,3 @@
-
-
 #' Benchmarking Procedure for Model-Based Estimates
 #'
 #' The `benchmark()` function gives the chance to perform a benchmarking procedure on model-based estimates. Benchmarking could target solely the point estimates (single benchmarking) or, alternatively, also the ensemble variability (double benchmarking). Furthermore, an estimate of the overall posterior risk is provided, aggregated for all areas. This value is only yielded when in-sample areas are treated and a single benchmarking is performed.
@@ -32,6 +30,8 @@
 #'
 #' @references
 #' \insertRef{datta2011bayesian}{tipsae}
+#'
+#' \insertRef{JSS}{tipsae}
 #'
 #' @examples
 #' library(tipsae)
@@ -222,6 +222,18 @@ check_share <- function(share,
 
 }
 
+
+
+#' Print Method for a `benchmark_fitsae` Object
+#'
+#' The generic method `print()` allow to explore relevant outputs of the input object
+#'
+#' @param x Object of class `benchmark_fitsae`.
+#' @param digits Number of digits to display.
+#' @param ... Currently unused.
+#'
+#' @return Printed information on a `benchmark_fitsae` object.
+#'
 #' @export
 #'
 

@@ -71,6 +71,8 @@ summ_beta
 \insertRef{janicki2020properties}{tipsae}
 
 \insertRef{vehtari2017practical}{tipsae}
+
+\insertRef{JSS}{tipsae}
 }
 \seealso{
 \code{\link{fit_sae}} to estimate the model and the generic methods \code{\link{plot.summary_fitsae}} and \code{\link{density.summary_fitsae}}, and functions \code{\link{map}}, \code{\link{benchmark}} and \code{\link{extract}}.
