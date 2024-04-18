@@ -98,13 +98,17 @@ arrange_spatial_structure <- function(spatial_error,
       sizes_islands <- colSums(intercept_islands)
       # biggest island as general intercept
       intercept_islands <- intercept_islands[, -which.max(sizes_islands)]
+      if (!is.matrix(intercept_islands)) {
+        intercept_islands <- matrix(intercept_islands, ncol = 1)
+      }
       sizes_islands <- colSums(intercept_islands)
       # remove singletons
       intercept_islands <- intercept_islands[,sizes_islands != 1]
       if (!is.matrix(intercept_islands)) {
-        intercept_islands <- matrix(intercept_islands, ncol = (islands - 1))
+        intercept_islands <- matrix(intercept_islands, ncol = 1)
       }
       colnames(intercept_islands) <- paste0("intercept_island", 2:islands)
+
     }
 
     # ordering with respect to graphs
