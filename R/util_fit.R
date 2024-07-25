@@ -4,6 +4,7 @@
 create_data <-  function(formula_fixed,
                          data,
                          domain_size,
+                         household_size,
                          domains,
                          disp_direct) {
   if (inherits(data, "tbl")) {
@@ -47,6 +48,12 @@ create_data <-  function(formula_fixed,
     domain_size_n <- data[!is_oos, domain_size]
   }
 
+  if (is.null(household_size)) {
+    household_size_n <- NULL
+  } else{
+    household_size_n <- data[!is_oos, household_size]
+  }
+
   if (is.null(domains)) {
     domains_names <- 1:(nrow(data))
   } else{
@@ -63,6 +70,7 @@ create_data <-  function(formula_fixed,
       is_oos = is_oos,
       dispersion = dispersion,
       domain_size_n = domain_size_n,
+      household_size_n = household_size_n,
       domains_names = domains_names,
       indices_is = indices_is,
       indices_oos = indices_oos,
@@ -324,11 +332,11 @@ dummy_standata <-
       standata$likelihood = 2
       standata$inflation <- 2
     }
-    if (likelihood == "Infbeta0alt") {
+    if (likelihood == "ExtBeta") {
       standata$likelihood = 3
-      standata$m_d <- data_obj$domain_size_n
+      standata$m_d <- data_obj$household_size_n
     }
-    if (likelihood != "Infbeta0alt") {
+    if (likelihood != "ExtBeta") {
       standata$m_d <- rep(0, length(data_obj$y_is))
     }
     # Prior reff
@@ -350,8 +358,8 @@ dummy_standata <-
       standata$slab_df <- 0.5
     } else{
       z_HS <-
-        log((data_obj$y_is[data_obj$y_is > 0 || data_obj$y_is < 1]) /
-              (1 - data_obj$y_is[data_obj$y_is > 0 || data_obj$y_is < 1]))
+        log((data_obj$y_is[data_obj$y_is > 0 | data_obj$y_is < 1]) /
+              (1 - data_obj$y_is[data_obj$y_is > 0 | data_obj$y_is < 1]))
       mu_bar_HS <- exp(mean(z_HS)) / (1 + exp(mean(z_HS)))
       standata$sigma_HS <-  sqrt(var(data_obj$y_is - mean(data_obj$y_is)) /
                                    (mu_bar_HS * (1 - mu_bar_HS)) ^ 2)
@@ -410,8 +418,8 @@ target_parameters <- function(standata,
         c(pars_interest, "gamma_p0", "gamma_p1", "p0", "p1", "mu")
     }
 
-    if (likelihood == "Infbeta0alt") {
-      pars_interest <- c(pars_interest, "mu")
+    if (likelihood == "ExtBeta") {
+      pars_interest <- c(pars_interest, "mu", "p0", "p1", "lambda_EB")
     }
 
 

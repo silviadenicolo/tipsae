@@ -67,6 +67,7 @@ transformed parameters {
 #include /include/transf_par_ZIBalt.stan
   }
 }
+
 model{
   // Auxiliary quantity
   int pos;
@@ -143,6 +144,9 @@ model{
       }
     }
   }
+  if(likelihood == 3) {
+    lambda_star_EB ~ lognormal(0, 1);
+  }
 
   // Likelihoods
   if(likelihood == 0) { // beta
@@ -173,12 +177,13 @@ model{
     }
   }else if(likelihood == 3) {// ZIBalt
     for (i in 1:M_is) {
-      if(y[i] == 0) {
-        target += m_d[i] * log(1 - mu[i]);
-      }else{
-        target += log(1 - pow(1 - mu[i], m_d[i])) +
-          beta_lpdf(y[i] | a1[i], b1[i]);
-      }
+      if(y[i] == 0){
+       target += log(p0[i]);
+     } else if(y[i] == 1){
+       target += log(p1[i]);
+     }else{
+        target += log(1 - p0[i] - p1[i]) + beta_lpdf(y[i] | a1[i], b1[i]);
+     }
     }
   }
 }
@@ -189,7 +194,7 @@ generated quantities{
   array[1] real psi_OOS;
   array[1] real v_oos;
   int label_mixt;
-  vector[inflation == 2 ? 3:0] probs;
+  vector[(inflation == 2 || likelihood ==3) ? 3:0] probs;
   vector<lower=0,upper=1>[likelihood != 1 ? M_oos:0]  theta_oos;
 
 

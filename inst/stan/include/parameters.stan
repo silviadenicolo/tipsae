@@ -32,3 +32,7 @@ vector[(likelihood==2 && inflation != 1) ? P:0] gamma_p0;// 0-infl coeff
 vector[(likelihood==2 && inflation != 0) ? P:0] gamma_p1;// 1-infl coeff
 vector[(likelihood==2 && inflation != 1 && intercept==1) ? 1:0] gamma0_p0;// 0-infl intercept
 vector[(likelihood==2 && inflation != 0 && intercept==1) ? 1:0] gamma0_p1;// 1-infl intercept
+//likelihood=3
+vector<lower=0, upper=1>[(likelihood==3) ? 1:0] lambda_star_EB;
+
+

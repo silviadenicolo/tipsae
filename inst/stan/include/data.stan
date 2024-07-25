@@ -22,7 +22,7 @@ vector<lower=0, upper=1>[M_is] y; // outcomes
 matrix[M_is, P] X; // covariates for is data
 matrix[M_oos,P] X_oos; // covariates for oos data
 vector<lower=0>[M_is] disp; // dispersion parameter
-vector<lower=0>[M_is] m_d; // area observations
+vector<lower=0>[M_is] m_d; // area households
 
 // Position indices
 array[M_is] int<lower=0> indices_is; //indices units in sample

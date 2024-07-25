@@ -6,6 +6,7 @@ check_par_fit <- function(formula_fixed,
                           disp_direct,
                           type_disp,
                           domain_size,
+                          household_size,
                           data,
                           likelihood,
                           prior_reff,
@@ -48,14 +49,21 @@ check_par_fit <- function(formula_fixed,
       "The argument 'prior_coeff' must contain a string among the following: 'normal', 'HorseShoe'"
     )
   }
-  # if (is.null(domain_size) && likelihood == "Infbeta0alt") {
-  #   stop("To use the alternative 0 inflated model the sizes of the areas must be specified")
-  # }
+  if (is.null(household_size) && likelihood == "ExtBeta") {
+    stop("To use the 'ExtBeta' model, the number of households sampled in each areas must be specified")
+  }
   if (!is.null(domain_size) && (length(domain_size) != 1 ||
                                 !(domain_size %in% colnames(data)))) {
     stop(
       "The argument 'domain_size' must contain a unique character that determines
          a column in the 'data' object with the size of the domains"
+    )
+  }
+  if (!is.null(household_size) && (length(household_size) != 1 ||
+                                !(household_size %in% colnames(data)))) {
+    stop(
+      "The argument 'household_size' must contain a unique character that determines
+         a column in the 'data' object with the number of sampled household of each domain"
     )
   }
   if (prior_coeff == "HorseShoe" && is.null(p0_HorseShoe)) {
@@ -145,14 +153,17 @@ check_par_fit <- function(formula_fixed,
       stop("The input of the argument 'spatial_df' must be have the same number of rows of the number of domains in 'data'")
     }
   }
-  if (likelihood %in% c("Infbeta0", "Infbeta01",  "Infbeta1") & type_disp == "var") { #"Infbeta0alt",
+  if (likelihood %in% c("Infbeta0", "Infbeta01",  "Infbeta1", "ExtBeta") & type_disp == "var") { #"Infbeta0alt",
     stop("With zero and one inflated models 'type_disp' can be only 'neff'.")
   }
   if (likelihood %in% c("flexbeta") & type_disp == "neff") {
     stop("With the flexible beta model 'type_disp' can be only 'var'.")
   }
   if (likelihood %in% c("Infbeta01") & init == "0") {
-    warning("Initial values of probabilities related to 0 and 1 are unconstained, we suggest to use init='random' to avoid initialization errors.")
+    warning("Initial values of probabilities related to 0 and 1 are unconstrained, we suggest to use init='random' to avoid initialization errors.")
+  }
+  if (likelihood %in% c("ExtBeta") & is.null(household_size)) {
+    stop("When model 'ExtBeta' is required, argument 'household_size' must be provided.")
   }
 
 }
@@ -162,12 +173,18 @@ check_par_fit <- function(formula_fixed,
 
 
 
-check_data_fit <- function(data_obj, likelihood, domain_size) {
+check_data_fit <- function(data_obj, likelihood, prior_coeff, domain_size, household_size) {
   if (!all(complete.cases(data_obj$X_scal))) {
     stop("The covariates must not have NAs.")
   }
   if (ncol(data_obj$X_scal) == 0) {
     stop("At least one covariate must be included in the model.")
+  }
+  if (prior_coeff == "HorseShoe" && ncol(data_obj$X_scal) <= 1) {
+    stop(
+      "The 'HorseShoe' prior for the regression coefficients requires
+         at least two covariates in the model."
+    )
   }
   # check domain of direct estimates
   if (!all(data_obj$y_is >= 0 & data_obj$y_is <= 1)) {
@@ -175,19 +192,19 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
   }
   if (likelihood %in% c("beta", "flexbeta") &&
       (!all(data_obj$y_is != 0) || !all(data_obj$y_is != 1))) {
-    stop("To deal with direct estimates equal to 0 or 1 an inflated model must be chosen")
+    stop("To deal with direct estimates equal to 0 or 1 an inflated model or 'ExtBeta' must be chosen")
   }
   if (!all(data_obj$y_is != 1) &&
-      !(likelihood %in% c("Infbeta1", "Infbeta01"))) {
+      !(likelihood %in% c("Infbeta1", "Infbeta01", "ExtBeta"))) {
     stop(
-      "To deal with direct estimates equal to 1, models 'Infbeta1' or 'Infbeta01' must be chosen"
+      "To deal with direct estimates equal to 1, models 'Infbeta1', 'Infbeta01' or 'ExtBeta' must be chosen"
     )
   }
   if (!all(data_obj$y_is != 0) &&
-      !(likelihood %in% c("Infbeta0",  "Infbeta01"))) { #"Infbeta0alt",
+      !(likelihood %in% c("Infbeta0",  "Infbeta01", "ExtBeta"))) { #"Infbeta0alt",
     stop(
-      "To deal with direct estimates equal to 0, models 'Infbeta0',
-          or 'Infbeta01' must be chosen"
+      "To deal with direct estimates equal to 0, models 'Infbeta0', 'Infbeta01'
+          or 'ExtBeta' must be chosen"
     ) #'Infbeta0alt',
   }
 
@@ -203,6 +220,10 @@ check_data_fit <- function(data_obj, likelihood, domain_size) {
   if (!is.null(domain_size)) {
     if (sum(data_obj$domain_size_n <= 0, na.rm = T) != 0)
       stop("Sizes of the domains uncorrectly specified with negative or null values.")
+  }
+  if (!is.null(household_size)) {
+    if (sum(data_obj$household_size_n <= 0, na.rm = T) != 0)
+      stop("Number of sampled households uncorrectly specified with negative or null values.")
   }
 
 

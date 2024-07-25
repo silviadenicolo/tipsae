@@ -21,9 +21,14 @@ vector<lower=0,upper=1>[likelihood==1 ? M_is:0]  lambda2;
 vector<lower=0>[likelihood==1 ? M_is:0] b2;
 vector<lower=0>[likelihood==1 ? M_is:0] a2;
 
-// likelihood=2
-vector<lower=0,upper=1>[(likelihood==2 && inflation != 1) ? M_is:0] p0;
-vector<lower=0,upper=1>[(likelihood==2 && inflation != 0) ? M_is:0] p1;
+// likelihood=2 (and 3)
+vector<lower=0,upper=1>[((likelihood==2 && inflation != 1) || likelihood==3) ? M_is:0] p0;
+vector<lower=0,upper=1>[((likelihood==2 && inflation != 0) || likelihood==3) ? M_is:0] p1;
+
+// likelihood=3
+vector[likelihood==3 ? 1:0] min_lambda_EB;
+vector[likelihood==3 ? 1:0] lambda_EB;
+vector[likelihood==3 ? 2:0] which_min_EB;
 
 // Random effects
 vector[length_v] v; // Unstructured random effects

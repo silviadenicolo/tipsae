@@ -9,7 +9,10 @@
 #' @param disp_direct Data column name displaying given values of sampling dispersion for each domain. In out-of-sample areas, dispersion must be `NA`.
 #' @param type_disp Parametrization of the dispersion parameter. The choices are variance (`"var"`) or \eqn{\phi_d} + 1 (`"neff"`) parameter.
 #' @param domain_size Data column name indicating domain sizes (optional). In out-of-sample areas, sizes must be `NA`.
-#' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
+#' @param household_size Data column name indicating the number of sample household. Required if `ExtBeta` model is required.
+#' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `ExtBeta`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
+#' @param prior_coeff Prior distribution of the regression coefficients. The choices are `"normal` or `HorseShoe`.
+#' @param p0_HorseShoe If `prior_coeff = "HorseShoe"`, it requires the expected number of relevant covariates.
 #' @param prior_reff Prior distribution of the unstructured random effect. The choices are: `"normal"`, `"t"`, `"VG"`.
 #' @param spatial_error Logical indicating whether to include a spatially structured random effect.
 #' @param spatial_df Object of class `SpatialPolygonsDataFrame` or `sf` with the shapefile of the studied region. Required if `spatial_error = TRUE`.
@@ -88,7 +91,10 @@ fit_sae <- function(formula_fixed,
                     disp_direct,
                     type_disp = c("neff", "var"),
                     domain_size = NULL,
-                    likelihood = c("beta", "flexbeta", "Infbeta0","Infbeta1","Infbeta01"),
+                    household_size = NULL,
+                    likelihood = c("beta", "flexbeta", "Infbeta0","Infbeta1","Infbeta01", "ExtBeta"),
+                    prior_coeff = c("normal", "HorseShoe"),
+                    p0_HorseShoe = NULL,
                     prior_reff = c("normal", "t", "VG"),
                     spatial_error = FALSE,
                     spatial_df = NULL,
@@ -109,9 +115,7 @@ fit_sae <- function(formula_fixed,
   type_disp <- match.arg(type_disp)
   likelihood <- match.arg(likelihood)
   prior_reff <- match.arg(prior_reff)
-
-  prior_coeff <- "normal"
-  p0_HorseShoe <- NULL
+  prior_coeff <- match.arg(prior_coeff)
 
   # check parameters
   check_par_fit(formula_fixed,
@@ -119,6 +123,7 @@ fit_sae <- function(formula_fixed,
                 disp_direct,
                 type_disp,
                 domain_size,
+                household_size,
                 data,
                 likelihood,
                 prior_reff,
@@ -156,7 +161,7 @@ fit_sae <- function(formula_fixed,
   }
 
   # creation data objects
-  data_obj <- create_data(formula_fixed, data, domain_size, domains, disp_direct)
+  data_obj <- create_data(formula_fixed, data, domain_size, household_size, domains, disp_direct)
 
   # spatial error
   data_spatial <- arrange_spatial_structure(spatial_error, spatial_df, data_obj)
@@ -165,7 +170,7 @@ fit_sae <- function(formula_fixed,
   data_temporal <- arrange_temporal_structure(temporal_error, temporal_variable, data_obj, data)
 
   # check data objects
-  check_data_fit(data_obj, likelihood, domain_size)
+  check_data_fit(data_obj, likelihood, prior_coeff, domain_size, household_size)
 
   # Creation stan data object
   standata <- list(
