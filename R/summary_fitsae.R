@@ -210,7 +210,7 @@ summary.fitsae <- function(object,
       }
       sdr <- 1 - post_summ_theta[ , "sd"] / sd_d### here controllare
     }
-    if (object$model_settings$likelihood %in% c("Infbeta0", "Infbeta0alt", "Infbeta1", "Infbeta01") &
+    if (object$model_settings$likelihood %in% c("Infbeta0", "ExtBeta", "Infbeta1", "Infbeta01") &
         object$model_settings$type_disp == "neff") {
       mu <- par[grepl("^mu", par)]
       m <- as.matrix(object$stanfit)[, mu]
@@ -220,7 +220,7 @@ summary.fitsae <- function(object,
         vars <- m * sweep((1 - m), MARGIN = 2, STATS = (object$data_obj$dispersion + 1), FUN = '/') *
            (1 - p) + p * (1 - p)*(1 - m)^2
       }
-      if (object$model_settings$likelihood %in% c("Infbeta0", "Infbeta0alt")) {
+      if (object$model_settings$likelihood %in% c("Infbeta0")) {
         if (object$model_settings$likelihood == "Infbeta0") {
           p0 <- par[grepl("^p0", par)]
           p <- as.matrix(object$stanfit)[, p0]
@@ -230,7 +230,7 @@ summary.fitsae <- function(object,
         vars <- m * sweep((1 - m), MARGIN = 2, STATS = (object$data_obj$dispersion + 1), FUN = '/') *
           (1 - p) + p * (1 - p) * m ^ 2
       }
-      if (object$model_settings$likelihood == "Infbeta01") {
+      if (object$model_settings$likelihood %in% c("Infbeta01", "Extbeta")) {
         p1 <- par[grepl("^p1", par)]
         p_1 <- as.matrix(object$stanfit)[, p1]
         p0 <- par[grepl("^p0", par)]
