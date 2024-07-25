@@ -230,7 +230,7 @@ summary.fitsae <- function(object,
         vars <- m * sweep((1 - m), MARGIN = 2, STATS = (object$data_obj$dispersion + 1), FUN = '/') *
           (1 - p) + p * (1 - p) * m ^ 2
       }
-      if (object$model_settings$likelihood %in% c("Infbeta01", "Extbeta")) {
+      if (object$model_settings$likelihood %in% c("Infbeta01", "ExtBeta")) {
         p1 <- par[grepl("^p1", par)]
         p_1 <- as.matrix(object$stanfit)[, p1]
         p0 <- par[grepl("^p0", par)]
