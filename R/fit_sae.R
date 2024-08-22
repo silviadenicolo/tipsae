@@ -9,7 +9,7 @@
 #' @param disp_direct Data column name displaying given values of sampling dispersion for each domain. In out-of-sample areas, dispersion must be `NA`.
 #' @param type_disp Parametrization of the dispersion parameter. The choices are variance (`"var"`) or \eqn{\phi_d} + 1 (`"neff"`) parameter.
 #' @param domain_size Data column name indicating domain sizes (optional). In out-of-sample areas, sizes must be `NA`.
-#' @param household_size Data column name indicating the number of sample household. Required if `ExtBeta` model is required.
+#' @param household_size Data column name indicating the number of sampled households. Required for the `ExtBeta` likelihood option.
 #' @param likelihood Sampling likelihood to be used. The choices are `"beta"` (default), `"flexbeta"`, `ExtBeta`, `"Infbeta0"`, `"Infbeta1"` and `"Infbeta01"`.
 #' @param prior_coeff Prior distribution of the regression coefficients. The choices are `"normal` or `HorseShoe`.
 #' @param p0_HorseShoe If `prior_coeff = "HorseShoe"`, it requires the expected number of relevant covariates.
