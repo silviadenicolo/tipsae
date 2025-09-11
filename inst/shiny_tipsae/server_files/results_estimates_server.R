@@ -30,13 +30,13 @@ shiny::observe({
 
 ### Text / table outputs ------
 
-output$tab_is <- shiny::renderDataTable(
+output$tab_is <- DT::renderDT(
   options = list(pageLength = 10, scrollX = TRUE), {
     estimates()$in_sample
   })
 
 
-output$tab_oos <- shiny::renderDataTable(
+output$tab_oos <- DT::renderDT(
   options = list(pageLength = 10, scrollX = TRUE), {
     estimates()$out_of_sample
   })

@@ -1,6 +1,6 @@
 Package: tipsae
 Title: Tools for Handling Indices and Proportions in Small Area Estimation
-Version: 1.0.1
+Version: 1.0.3
 Authors@R: 
     c(person(given = "Silvia",
            family = "De Nicolò",
@@ -17,7 +17,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: R.rsp
 RdMacros: Rdpack
 Biarch: true
@@ -53,6 +53,7 @@ Suggests:
     shinyWidgets,
     shinyjs,
     bayesplot,
+    DT (>= 0.32.1),
     loo (>= 2.3.1)
 LinkingTo: 
     BH (>= 1.66.0),

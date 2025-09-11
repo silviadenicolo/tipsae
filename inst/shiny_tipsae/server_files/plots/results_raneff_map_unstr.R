@@ -17,7 +17,7 @@ plot_map_unstr <- shiny::reactive({
 
   map <-  tmap::tm_shape(spatial_df_plot) +
     tmap::tm_polygons("means",
-                      palette = color_palette)
+                      fill.scale = tmap::tm_scale_continuous(values = color_palette))
 
 
 
@@ -26,8 +26,7 @@ plot_map_unstr <- shiny::reactive({
 ### Output: plot and save -----
 
 output$map_unstr <- leaflet::renderLeaflet({
-  tmap::tmap_leaflet(plot_map_unstr()+
-                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+  tmap::tmap_leaflet(plot_map_unstr(), in.shiny = T)
 })
 
 

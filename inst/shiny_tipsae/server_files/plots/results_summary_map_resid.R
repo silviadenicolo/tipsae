@@ -45,7 +45,7 @@ plot_map_resid <- shiny::reactive({
 
       map <-  tmap::tm_shape(spatial_df_plot) +
         tmap::tm_polygons("Residuals",
-                          palette = color_palette)
+                          fill.scale = tmap::tm_scale_continuous(values = color_palette))
 
 
     }
@@ -58,8 +58,7 @@ plot_map_resid <- shiny::reactive({
 ### Output: plot and save -----
 
 output$map_resid <- leaflet::renderLeaflet({
-  tmap::tmap_leaflet(plot_map_resid()+
-                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+  tmap::tmap_leaflet(plot_map_resid(), in.shiny = T)
 })
 
 output$download_map_resid <- shiny::downloadHandler(

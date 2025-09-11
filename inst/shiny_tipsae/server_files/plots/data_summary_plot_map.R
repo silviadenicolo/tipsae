@@ -44,13 +44,13 @@ plot_map_summary <- shiny::reactive({
 
     map <-  tmap::tm_shape(spatial_df_plot) +
       tmap::tm_polygons(name_var,
-                        palette = color_palette)
+                        fill.scale = tmap::tm_scale_continuous(values = color_palette))
 
   }else{
 
     map <-  tmap::tm_shape(map_shp_matching()$spatial_df_tidy) +
       tmap::tm_polygons(name_var,
-                        palette = color_palette)
+                        fill.scale = tmap::tm_scale_continuous(values = color_palette))
 
   }
 
@@ -61,8 +61,7 @@ plot_map_summary <- shiny::reactive({
 ### Output: plot and save -----
 
 output$plot_map_expl <- leaflet::renderLeaflet({
-  tmap::tmap_leaflet(plot_map_summary()+
-                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+  tmap::tmap_leaflet(plot_map_summary(), in.shiny = T)
 })
 
 

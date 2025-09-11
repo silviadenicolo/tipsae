@@ -239,7 +239,7 @@ shiny::outputOptions(output, 'cond_error_smoothing', suspendWhenHidden = FALSE)
 ## Output: visual/data outcomes -------
 
 # Output: data table
-output$data_preview <- shiny::renderDataTable(
+output$data_preview <- DT::renderDT(
   options = list(pageLength = 10, scrollX = TRUE), {
     loaded_data()
   })
@@ -257,7 +257,7 @@ output$error_smoothing <- shiny::renderText({"If a variance smoothing process is
 shiny::observeEvent(input$opendata, {
   shiny::showModal(shiny::modalDialog(
     shiny::tags$head(shiny::tags$style("#showdata{overflow-y:scroll; max-height: 500px;overflow-x:scroll;}")),
-    shiny::dataTableOutput("data_preview"),
+    DT::DTOutput("data_preview"),
     size = "l",
     footer = NULL,
     easyClose = TRUE

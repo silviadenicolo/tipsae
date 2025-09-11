@@ -5,12 +5,12 @@ shiny::tagList(
     shiny::br(),
     shiny::wellPanel(
       shiny::h5(shiny::strong("In-sample areas")),
-      shiny::dataTableOutput("tab_is")
+      DT::DTOutput("tab_is")
     ),
     shiny::wellPanel(
       id = "panel_tab_oos",
       shiny::h5(shiny::strong("Out-of-sample areas")),
-      shiny::dataTableOutput("tab_oos")
+      DT::DTOutput("tab_oos")
     ),
     shiny::downloadButton('download_estimates',"Download the Model-Based Estimates"),
     shiny::conditionalPanel(

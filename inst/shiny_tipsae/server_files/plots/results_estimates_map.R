@@ -58,7 +58,7 @@ plot_map_estimates <- shiny::reactive({
 
     map <-  tmap::tm_shape(spatial_df_plot) +
       tmap::tm_polygons(name_var,
-                        palette = color_palette)
+                        fill.scale = tmap::tm_scale_continuous(values = color_palette))
 
 
   map
@@ -67,8 +67,7 @@ plot_map_estimates <- shiny::reactive({
 ### Output: plot and save -----
 
 output$plot_map_estimates <- leaflet::renderLeaflet({
-  tmap::tmap_leaflet(plot_map_estimates()+
-                       tmap::tm_view(view.legend.position = c("left", "bottom")), in.shiny = T)
+  tmap::tmap_leaflet(plot_map_estimates(), in.shiny = T)
 })
 
 output$download_map_estimates <- shiny::downloadHandler(

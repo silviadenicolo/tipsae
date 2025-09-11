@@ -159,9 +159,9 @@ check_par_fit <- function(formula_fixed,
   if (likelihood %in% c("flexbeta") & type_disp == "neff") {
     stop("With the flexible beta model 'type_disp' can be only 'var'.")
   }
-  if (likelihood %in% c("Infbeta01") & init == "0") {
-    warning("Initial values of probabilities related to 0 and 1 are unconstrained, we suggest to use init='random' to avoid initialization errors.")
-  }
+  # if (likelihood %in% c("Infbeta01") & init == "0") {
+  #   warning("Initial values of probabilities related to 0 and 1 are unconstrained, we suggest to use init='random' to avoid initialization errors.")
+  # }
   if (likelihood %in% c("ExtBeta") & is.null(household_size)) {
     stop("When model 'ExtBeta' is required, argument 'household_size' must be provided.")
   }

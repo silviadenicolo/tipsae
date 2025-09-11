@@ -16,8 +16,8 @@ for(i in 1:M_is) {
   // Other model parameters depending on theta
   for (i in 1:M_is){
     // Probabilities of observing zeros and ones
-    p0[i] = pow(1 + mu[i] * (lambda_EB[1] - 2), m_d[i] - 1) / pow(1 - mu[i], m_d[i] - 2);
-    p1[i] = mu[i] * pow(lambda_EB[1], m_d[i] - 1);
+    p0[i] = exp((m_d[i] - 1.0) * log(1 + mu[i] * (lambda_EB[1] - 2)) - (m_d[i] - 2) * log(1 - mu[i]));
+    p1[i] = exp(log(mu[i]) + (m_d[i] - 1) * log(lambda_EB[1]));
     // Expectation
     theta[i] = mu[i] * (1 - p0[i] - p1[i]) + p1[i];
   }
